@@ -1,0 +1,24 @@
+{
+  "name": "reference-data-api-service",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/UKHomeOffice/reference-data-api-service.git"
+  },
+  "author": "Pedro Miguel Curado",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/UKHomeOffice/reference-data-api-service/issues"
+  },
+  "homepage": "https://github.com/UKHomeOffice/reference-data-api-service#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.16.4",
+    "winston": "^3.2.1"
+  }
+}
