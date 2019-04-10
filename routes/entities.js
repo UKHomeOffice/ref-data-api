@@ -2,7 +2,7 @@ const router = require('express').Router();
 
 // local imports
 const logger = require('../config/logger');
-const { getEntitiesData } = require('../services/entities');
+const { getEntitiesData, getEntityData } = require('../services/entities');
 
 const token = '';
 
@@ -46,3 +46,26 @@ const getEntities = (req, res) => {
     }
   });
 };
+
+/**
+ * return an entity object using the
+ * token passed in the request headers
+ */
+const getEntity = (req, res) => {
+  const { name } = req.params;
+
+  getEntityData(token, name, (error, response, data) => {
+    if (!error && response.statusCode === 200) {
+      res.json(data);
+    } else {
+      res.json({
+        'code': response.statusCode,
+        'error': error,
+        'body': response.body
+      });
+    }
+  });
+};
+
+
+module.exports = { getEntities, getEntity };
