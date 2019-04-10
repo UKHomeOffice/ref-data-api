@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start-dev": "nodemon server.js"
   },
   "repository": {
     "type": "git",
@@ -19,6 +20,12 @@
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.16.4",
+    "request": "^2.88.0",
     "winston": "^3.2.1"
+  },
+  "devDependencies": {
+    "babel-preset-env": "^1.7.0",
+    "babel-register": "^6.26.0",
+    "nodemon": "^1.18.11"
   }
 }
