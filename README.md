@@ -13,5 +13,5 @@ Open your terminal and run the following commands from the project directory.
 $ npm install
 
 # run the api server
-$ node server.js
+$ npm run start-dev
 ```

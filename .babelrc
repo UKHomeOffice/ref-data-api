@@ -1,0 +1,10 @@
+{
+    "presets": [
+        ["@babel/preset-env", {
+            // specifies what kind of ES6 is transpile
+            "targets": {
+                "node": "current"
+            }
+        }]
+    ]
+}
