@@ -35,5 +35,12 @@ const getEntity = async (req, res) => {
   }
 };
 
+const patchEntitySchema = (req, res) => {
+  const { name } = req.params;
 
-module.exports = { getEntities, getEntity };
+  res.json({
+    'message': `Entity '${name}' schema updated`
+  })
+}
+
+module.exports = { getEntities, getEntity, patchEntitySchema };
