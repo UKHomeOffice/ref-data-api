@@ -1,8 +1,7 @@
 const axios = require('axios');
-const request = require('request');
 const util = require('util');
 
-const { jsonify } = require('../helpers');
+const { findObjectByKey, jsonify, stripStringAfterChar } = require('../helpers');
 const { postgrestUrls } = require('../config/core');
 
 /**
@@ -11,7 +10,7 @@ const { postgrestUrls } = require('../config/core');
  * @param {token} Keycloak token
  * @return {result} JSON object
  */
-function getEntitiesData(token) {
+const getEntitiesData = (token) => {
   const entitiesUrl = util.format(postgrestUrls.entities);
   return axios.get(entitiesUrl, {
     headers: {
@@ -44,26 +43,67 @@ function getEntitiesData(token) {
     }
     return result;
   })
-}
+};
 
-const getEntityData = (token, name, callback) => {
+/**
+ * getEntity() returns the data for an entity.
+ *
+ * @param {token} Keycloak token
+ * @param {name} Entity name
+ * @return {object} JSON object
+ */
+const getEntity = (token, name) => {
   const entityUrl = util.format(postgrestUrls.entity, name);
-  const options = {
-    method: 'GET',
-    url: entityUrl,
-    json: true,
+  return axios.get(entityUrl, {
     headers: {
       Authorization: `Bearer ${token}`
     }
-  };
-
-  request(options, (error, response, body) => {
-    if (!error) {
-      callback(error, response, body);
-    } else {
-      callback(error, response, body);
-    }
-  });
+  })
 };
+
+/**
+ * getEntityData() returns a custom object using the data
+ * from entities and entity.
+ *
+ * @param {token} Keycloak token
+ * @param {name} Entity name
+ * @return {object} JSON object
+ */
+const getEntityData = (token, name) => {
+  const entityUrl = util.format(postgrestUrls.entity, name);
+  return axios.all([
+    getEntitiesData(token),
+    getEntity(token, name)
+  ])
+  .then(axios.spread(function (entities, entity) {
+    const {
+      description,
+      dataversion,
+      schema,
+      lastupdated } = findObjectByKey(entities.data, 'entityName', name);
+
+    for (let [key, obj] of Object.entries(schema.properties)) {
+      let schemaDescription = stripStringAfterChar(obj.description, '}');
+      obj.description = jsonify(schemaDescription);
+    }
+
+    return {
+      'status': entity.statusText,
+      'code': entity.status,
+      'entityName': name,
+      'entityLabel': '',
+      'entitySchema': {
+        'description': {
+          description,
+          dataversion,
+          lastupdated
+        },
+        'required': schema.required,
+        'properties': schema.properties
+      },
+      'data': entity.data
+    };
+  }))
+}
 
 module.exports = { getEntitiesData, getEntityData };

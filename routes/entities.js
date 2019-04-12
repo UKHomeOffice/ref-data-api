@@ -19,24 +19,20 @@ const getEntities = async (req, res) => {
   }
 };
 
-/**
- * return an entity object using the
- * token passed in the request headers
- */
-const getEntity = (req, res) => {
+const getEntity = async (req, res) => {
   const { name } = req.params;
 
-  getEntityData(token, name, (error, response, data) => {
-    if (!error && response.statusCode === 200) {
-      res.json(data);
-    } else {
-      res.json({
-        'code': response.statusCode,
-        'error': error,
-        'body': response.body
-      });
-    }
-  });
+  try {
+    const data = await getEntityData(token, name);
+    res.json(data);
+  } catch (error) {
+    logger.error(`Error: ${error}`);
+    res.json({
+      'code': error.response.status,
+      'status': error.response.statusText,
+      'data': error.response.data.message
+    });
+  }
 };
 
 
