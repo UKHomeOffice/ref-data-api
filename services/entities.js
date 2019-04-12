@@ -1,11 +1,13 @@
 const request = require('request');
+const util = require('util');
 
-const { postgrestBaseUrl } = require('../config/core');
+const { postgrestUrls } = require('../config/core');
 
 const getEntitiesData = (token, callback) => {
+  const entitiesUrl = util.format(postgrestUrls.entities);
   const options = {
     method: 'GET',
-    url: postgrestBaseUrl,
+    url: entitiesUrl,
     json: true,
     headers: {
       Authorization: `Bearer ${token}`
@@ -22,9 +24,10 @@ const getEntitiesData = (token, callback) => {
 };
 
 const getEntityData = (token, name, callback) => {
+  const entityUrl = util.format(postgrestUrls.entity, name);
   const options = {
     method: 'GET',
-    url: postgrestBaseUrl + '/' + name,
+    url: entityUrl,
     json: true,
     headers: {
       Authorization: `Bearer ${token}`
