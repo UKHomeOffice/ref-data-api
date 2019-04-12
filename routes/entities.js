@@ -40,7 +40,20 @@ const patchEntitySchema = (req, res) => {
 
   res.json({
     'message': `Entity '${name}' schema updated`
-  })
+  });
 }
 
-module.exports = { getEntities, getEntity, patchEntitySchema };
+const postEntityItem = (req, res) => {
+  const { name } = req.params;
+
+  res.json({
+    'message': `Successfully created a new item in the entity ${name}`
+  });
+}
+
+module.exports = {
+  getEntities,
+  getEntity,
+  patchEntitySchema,
+  postEntityItem
+};
