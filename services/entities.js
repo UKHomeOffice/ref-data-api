@@ -88,8 +88,8 @@ const getEntityData = (token, name) => {
     }
 
     return {
-      'status': entity.statusText,
       'code': entity.status,
+      'status': entity.statusText,
       'entityName': name,
       'entityLabel': '',
       'entitySchema': {
@@ -104,6 +104,6 @@ const getEntityData = (token, name) => {
       'data': entity.data
     };
   }))
-}
+};
 
 module.exports = { getEntitiesData, getEntityData };

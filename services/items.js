@@ -3,23 +3,9 @@ const util = require('util');
 
 // local imports
 const logger = require('../config/logger');
-const { jsonify, stripStringAfterChar } = require('../helpers');
+const { getEntitiesData } = require('./entities');
+const { findObjectByKey, jsonify, stripStringAfterChar } = require('../helpers');
 const { postgrestUrls } = require('../config/core');
-
-/**
- * getEntities() returns all available entities.
- *
- * @param {token} Keycloak token
- * @return {object} JSON object
- */
-function getEntities(token) {
-  const entitiesUrl = util.format(postgrestUrls.entities);
-  return axios.get(entitiesUrl, {
-    headers: {
-      Authorization: `Bearer ${token}`
-    }
-  })
-}
 
 /**
  * getItem() returns the data for an entity item.
@@ -29,14 +15,14 @@ function getEntities(token) {
  * @param {id} Item id
  * @return {object} JSON object
  */
-function getItem(token, name, id) {
+const getItem = (token, name, id) => {
   const itemUrl = util.format(postgrestUrls.item, name, id);
   return axios.get(itemUrl, {
     headers: {
       Authorization: `Bearer ${token}`
     }
   })
-}
+};
 
 /**
  * getItemData() returns a custom object using the data
@@ -47,11 +33,11 @@ function getItem(token, name, id) {
  * @param {id} Item id
  * @return {object} JSON object
  */
-function getItemData(token, name, id) {
+const getItemData = (token, name, id) => {
   const reqStartTime = new Date();
 
   return axios.all([
-    getEntities(token),
+    getEntitiesData(token),
     getItem(token, name, id)
   ]).then(axios.spread(function (entities, item) {
     // temporary functionality/logger to check how
@@ -60,13 +46,15 @@ function getItemData(token, name, id) {
     logger.info('Calling entities and item endpoint took: ' + ((reqEndTime - reqStartTime) / 1000) + ' seconds');
 
     const dataFormatStartTime = new Date();
-    const { summary } = entities.data.paths['/' + name].get;
-    const { description: desc, dataversion: version, schemalastupdated } = jsonify(summary);
-    const { properties } = entities.data.definitions[name];
+    const {
+      description,
+      dataversion,
+      schema,
+      lastupdated } = findObjectByKey(entities.data, 'entityName', name);
 
-    for (let [key, obj] of Object.entries(properties)) {
-      description = stripStringAfterChar(obj.description, '}');
-      obj.description = jsonify(description);
+    for (let [key, obj] of Object.entries(schema.properties)) {
+      let schemaDescription = stripStringAfterChar(obj.description, '}');
+      obj.description = jsonify(schemaDescription);
     }
 
     // temporary functionality/logger to check how
@@ -81,17 +69,17 @@ function getItemData(token, name, id) {
       'entityLabel': '',
       'entitySchema': {
         'description': {
-          'description': desc,
-          'dataversion': version,
-          'lastupdated': schemalastupdated
+          description,
+          dataversion,
+          lastupdated
         },
-        'required': entities.data.definitions[name].required,
-        'properties': properties
+        'required': schema.required,
+        'properties': schema.properties
       },
       'itemid': Number(id),
       'data': item.data
     };
   }))
-}
+};
 
 module.exports = { getItemData };
