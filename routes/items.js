@@ -21,4 +21,12 @@ const getItem = async (req, res) => {
   }
 };
 
-module.exports = { getItem };
+const patchItemField = (req, res) => {
+  const { name, id } = req.params;
+
+  res.json({
+    'message': 'Field updated'
+  });
+}
+
+module.exports = { getItem, patchItemField };
