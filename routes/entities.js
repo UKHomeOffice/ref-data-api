@@ -3,68 +3,36 @@ const router = require('express').Router();
 // local imports
 const logger = require('../config/logger');
 const { getEntitiesData, getEntityData } = require('../services/entities');
+const { token } = require('../config/core');
 
-const token = '';
-
-/**
- * return all entities using the
- * token passed in the request headers
- */
-const getEntities = (req, res) => {
-  getEntitiesData(token, (error, response, data) => {
-    if (!error && response.statusCode === 200) {
-      const result = {
-        'status': response.statusMessage,
-        'code': response.statusCode,
-        'data': []
-      };
-
-      for (const [entity, item] of Object.entries(data.definitions)) {
-        const { summary } = data.paths['/' + entity].get;
-        const { description, schemalastupdated, dataversion } = JSON.parse(summary);
-
-        result['data'].push({
-          description,
-          dataversion,
-          'entityName': entity,
-          'label': '',
-          'schema': {
-            'description': item.description,
-            'required': item.required,
-            'properties': item.properties
-          },
-          'lastupdated': schemalastupdated
-        });
-      }
-      res.json(result);
-    } else {
-      res.json({
-        'code': response.statusCode,
-        'error': error,
-        'body': response.body
-      });
-    }
-  });
+const getEntities = async (req, res) => {
+  try {
+    const data = await getEntitiesData(token);
+    res.json(data);
+  } catch (error) {
+    logger.error(`Error: ${error}`);
+    res.json({
+      'code': error.response.status,
+      'status': error.response.statusText,
+      'data': error.response.data.message
+    });
+  }
 };
 
-/**
- * return an entity object using the
- * token passed in the request headers
- */
-const getEntity = (req, res) => {
+const getEntity = async (req, res) => {
   const { name } = req.params;
 
-  getEntityData(token, name, (error, response, data) => {
-    if (!error && response.statusCode === 200) {
-      res.json(data);
-    } else {
-      res.json({
-        'code': response.statusCode,
-        'error': error,
-        'body': response.body
-      });
-    }
-  });
+  try {
+    const data = await getEntityData(token, name);
+    res.json(data);
+  } catch (error) {
+    logger.error(`Error: ${error}`);
+    res.json({
+      'code': error.response.status,
+      'status': error.response.statusText,
+      'data': error.response.data.message
+    });
+  }
 };
 
 
