@@ -21,6 +21,15 @@ $ npm install
 $ npm run start-dev
 ```
 
+### Running tests
+```bash
+# run mocha tests
+$ npm run test
+
+# run mocha tests with coverage
+$ npm run coverage
+```
+
 ### Endpoints
 GET (All Entities)
 `http://localhost:5000/v1/entities`
