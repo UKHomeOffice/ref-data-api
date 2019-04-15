@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha --recursive",
+    "coverage": "nyc --reporter html --reporter text npm test",
     "start-dev": "nodemon server.js"
   },
   "repository": {
@@ -27,6 +28,11 @@
   "devDependencies": {
     "babel-preset-env": "^1.7.0",
     "babel-register": "^6.26.0",
-    "nodemon": "^1.18.11"
+    "chai": "^4.2.0",
+    "chance": "^1.0.18",
+    "mocha": "^6.1.3",
+    "nock": "^10.0.6",
+    "nodemon": "^1.18.11",
+    "nyc": "^13.3.0"
   }
 }
