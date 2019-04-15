@@ -19,16 +19,15 @@ describe('getEntitiesData', () => {
         'Authorization': `Bearer ${token}`
       }
     })
-      .get('/')
-      .reply(200, entitiesResponse);
+    .get('/')
+    .reply(200, entitiesResponse);
 
-    getEntitiesData(token)
-      .then(entitiesResponse => {
-        expect(typeof entitiesResponse).to.equal('object');
-        expect(entitiesResponse.data).to.have.lengthOf(4);
-        expect(entitiesResponse.data[0].description).to.equal('Work related activities');
-        expect(entitiesResponse.data[0].entityName).to.equal('activities');
-        done();
-      });
+    getEntitiesData(token).then(entitiesResponse => {
+      expect(typeof entitiesResponse).to.equal('object');
+      expect(entitiesResponse.data).to.have.lengthOf(4);
+      expect(entitiesResponse.data[0].description).to.equal('Work related activities');
+      expect(entitiesResponse.data[0].entityName).to.equal('activities');
+      done();
+    });
   });
 });
