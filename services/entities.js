@@ -3,6 +3,7 @@ const util = require('util');
 
 const { findObjectByKey, jsonify, stripStringAfterChar } = require('../helpers');
 const { postgrestUrls } = require('../config/core');
+const logger = require('../config/logger');
 
 /**
  * getEntitiesData() returns all entities.
@@ -70,7 +71,6 @@ const getEntity = (token, name) => {
  * @return {object} JSON object
  */
 const getEntityData = (token, name) => {
-  const entityUrl = util.format(postgrestUrls.entity, name);
   return axios.all([
     getEntitiesData(token),
     getEntity(token, name)
@@ -83,8 +83,13 @@ const getEntityData = (token, name) => {
       lastupdated } = findObjectByKey(entities.data, 'entityName', name);
 
     for (let [key, obj] of Object.entries(schema.properties)) {
-      let schemaDescription = stripStringAfterChar(obj.description, '}');
-      obj.description = jsonify(schemaDescription);
+      try {
+        let schemaDescription = stripStringAfterChar(obj.description, '}');
+        obj.description = jsonify(schemaDescription);
+      } catch (error) {
+        logger.debug(error);
+        logger.debug(`Description not JSON ${obj.description}`);
+      }
     }
 
     return {
