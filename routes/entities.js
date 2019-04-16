@@ -11,11 +11,7 @@ const getEntities = async (req, res) => {
     res.json(data);
   } catch (error) {
     logger.error(`Error: ${error}`);
-    res.json({
-      'code': error.response.status,
-      'status': error.response.statusText,
-      'data': error.response.data.message
-    });
+    res.json({'message': `${error}`});
   }
 };
 
@@ -27,11 +23,7 @@ const getEntity = async (req, res) => {
     res.json(data);
   } catch (error) {
     logger.error(`Error: ${error}`);
-    res.json({
-      'code': error.response.status,
-      'status': error.response.statusText,
-      'data': error.response.data.message
-    });
+    res.json({'message': `${error}`});
   }
 };
 
