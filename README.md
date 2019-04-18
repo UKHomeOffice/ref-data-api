@@ -1,11 +1,14 @@
 # reference-data-api-service
+
 An API service to return data from the reference data postgrest.
 
 ## Requirements
-* npm 6.9.0
-* node v8.10.0
+
+*   npm 6.9.0
+*   node v8.10.0
 
 ## Development
+
 At the moment in order to use this application you will need the Keycloak token.
 The access token can be obtained using postman, once you have the token, place it in
 the `config/core.js` `token` variable.
@@ -22,6 +25,7 @@ $ npm run start-dev
 ```
 
 ### Running tests
+
 ```bash
 # run mocha tests
 $ npm run test
@@ -29,8 +33,21 @@ $ npm run test
 # run mocha tests with coverage
 $ npm run coverage
 ```
+## Building and running in Docker
 
-### Endpoints
+To build the prototype's Docker container:
+
+```
+docker build -t reference-data-api-service .
+```
+
+To run the resulting Docker container:
+
+```
+docker run -p 5000:5000 reference-data-api-service
+```
+
+## Endpoints
 GET (All Entities)
 `http://localhost:5000/v1/entities`
 
