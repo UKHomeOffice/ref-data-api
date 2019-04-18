@@ -22,25 +22,19 @@ pipeline:
       # branch: master
       event: [ push, deployment ]
 
-  # deploy_to_dev:
-  #   image: quay.io/ukhomeofficedigital/kd
-  #   secrets:
-  #     - DEV_HOSTNAME
-  #     - DEV_KEYCLOAK_AUTH_URL
-  #     - DEV_KEYCLOAK_CLIENT_ID
-  #     - DEV_KEYCLOAK_REALM
-  #     - DEV_KUBE_NAMESPACE
-  #     - DEV_KUBE_SERVER
-  #     - DEV_KUBE_TOKEN
-  #   commands:
-  #     - export HOSTNAME=$${DEV_HOSTNAME}
-  #     - export KEYCLOAK_AUTH_URL=$${DEV_KEYCLOAK_AUTH_URL}
-  #     - export KEYCLOAK_CLIENT_ID=$${DEV_KEYCLOAK_CLIENT_ID}
-  #     - export KEYCLOAK_REALM=$${DEV_KEYCLOAK_REALM}
-  #     - export KUBE_NAMESPACE=$${DEV_KUBE_NAMESPACE}
-  #     - export KUBE_SERVER=$${DEV_KUBE_SERVER}
-  #     - export KUBE_TOKEN=$${DEV_KUBE_TOKEN}
-  #     - kd --insecure-skip-tls-verify -f kube/secret.yml -f kube/deployment.yml -f kube/service.yml -f kube/ingress.yml -f kube/network-policy.yml
-  #   when:
-  #     branch: master
-  #     event: [ push, deployment ]
+  deploy_to_dev:
+    image: quay.io/ukhomeofficedigital/kd
+    secrets:
+      - DEV_HOSTNAME
+      - DEV_KUBE_NAMESPACE
+      - DEV_KUBE_SERVER
+      - DEV_KUBE_TOKEN
+    commands:
+      - export HOSTNAME=$${DEV_HOSTNAME}
+      - export KUBE_NAMESPACE=$${DEV_KUBE_NAMESPACE}
+      - export KUBE_SERVER=$${DEV_KUBE_SERVER}
+      - export KUBE_TOKEN=$${DEV_KUBE_TOKEN}
+      - kd --insecure-skip-tls-verify -f kube/deployment.yml -f kube/service.yml -f kube/ingress.yml -f kube/network-policy.yml
+    when:
+      # branch: master
+      event: [ push, deployment ]
