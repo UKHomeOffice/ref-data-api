@@ -39,7 +39,8 @@ const getItemData = (token, name, id) => {
   return axios.all([
     getEntitiesData(token),
     getItem(token, name, id)
-  ]).then(axios.spread(function (entities, item) {
+  ])
+  .then(axios.spread(function (entities, item) {
     // temporary functionality/logger to check how
     // long it takes to call both endpoints
     const reqEndTime = new Date();
@@ -80,6 +81,21 @@ const getItemData = (token, name, id) => {
       'data': item.data
     };
   }))
+  .catch(function (error) {
+    if (error.response) {
+      logger.error(`Error: ${error.response.data.message}`);
+      return ({
+        'code': error.response.status,
+        'status': error.response.statusText,
+        'data': error.response.data.message
+      })
+    } else if (error.request) {
+      return ({'message': error.request});
+    } else {
+      logger.error(`${error.message}`);
+      return ({'message': error.message})
+    }
+  })
 };
 
 module.exports = { getItemData };

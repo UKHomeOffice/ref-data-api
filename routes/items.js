@@ -8,13 +8,8 @@ const { token } = require('../config/core');
 
 const getItem = async (req, res) => {
   const { name, id } = req.params;
-  try {
-    const data = await getItemData(token, name, id);
-    res.json(data);
-  } catch (error) {
-    logger.error(`Error: ${error}`);
-    res.json({'message': `${error}`});
-  }
+  const data = await getItemData(token, name, id);
+  res.json(data);
 };
 
 const patchItemField = (req, res) => {
