@@ -376,8 +376,8 @@ const entityFormattedData = {
 }
 
 module.exports = {
-  entitiesResponse,
   entitiesFormattedData,
+  entitiesResponse,
+  entityFormattedData,
   entityResponse,
-  entityFormattedData
 };
