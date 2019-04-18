@@ -105,7 +105,8 @@ const getEntityData = (token, name) => {
         },
         'required': schema.required,
         'properties': schema.properties
-      }
+      },
+      'data': entity.data
     };
   }))
 };

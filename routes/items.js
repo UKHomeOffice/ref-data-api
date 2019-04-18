@@ -12,12 +12,8 @@ const getItem = async (req, res) => {
     const data = await getItemData(token, name, id);
     res.json(data);
   } catch (error) {
-    logger.error(`Error: ${error.response}`);
-    res.json({
-      'code': error.response.status,
-      'status': error.response.statusText,
-      'data': error.response.data.message
-    })
+    logger.error(`Error: ${error}`);
+    res.json({'message': `${error}`});
   }
 };
 
