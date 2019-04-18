@@ -15,7 +15,6 @@ describe('Test Items Services', () => {
   it('Returns an entity item by id', async () => {
     const name = 'country';
     const id = 3;
-    // const entityUrl = util.format(postgrestUrls.item, name, id);
     nock(entitiesUrl, {
       reqheaders: {
         'Authorization': `Bearer ${token}`
@@ -24,7 +23,6 @@ describe('Test Items Services', () => {
     .persist()
     .intercept('/', 'GET').reply(200, entitiesResponse)
     .intercept('/country?id=eq.3', 'GET').reply(200, itemResponse)
-    // .intercept(entityUrl, 'GET').reply(200, entityResponse)
 
     let data = await getItemData(token, name, id);
     expect(data).to.deep.equal(itemFormattedData);
