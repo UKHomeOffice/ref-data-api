@@ -44,6 +44,21 @@ const getEntitiesData = (token) => {
     }
     return result;
   })
+  .catch(function (error) {
+    if (error.response) {
+      logger.error(`Error: ${error.response.data.message}`);
+      return ({
+        'code': error.response.status,
+        'status': error.response.statusText,
+        'data': error.response.data.message
+      })
+    } else if (error.request) {
+      return ({'message': error.request});
+    } else {
+      logger.error(`${error.message}`);
+      return ({'message': error.message})
+    }
+  })
 };
 
 /**
@@ -109,6 +124,21 @@ const getEntityData = (token, name) => {
       'data': entity.data
     };
   }))
+  .catch(function (error) {
+    if (error.response) {
+      logger.error(`Error: ${error.response.data.message}`);
+      return ({
+        'code': error.response.status,
+        'status': error.response.statusText,
+        'data': error.response.data.message
+      })
+    } else if (error.request) {
+      return ({'message': error.request});
+    } else {
+      logger.error(`${error.message}`);
+      return ({'message': error.message})
+    }
+  })
 };
 
 module.exports = { getEntitiesData, getEntityData };
