@@ -28,4 +28,16 @@ const jsonify = str => JSON.parse(str);
  */
 const findObjectByKey = (arrayOfObjs, key, value) => arrayOfObjs.find(obj => obj[key] == value);
 
-module.exports = { findObjectByKey, jsonify, stripStringAfterChar };
+/**
+ * extractToken() as the name says, extracts the embeded token from
+ * the `authorizationString` which has the following format:
+ * `Bearer asjldfjlajdfaldw8uf9w4rq2fuq9`
+ */
+const extractToken = (authorizationString) => str.split(' ')[1];
+
+module.exports = {
+  extractToken,
+  findObjectByKey,
+  jsonify,
+  stripStringAfterChar
+};
