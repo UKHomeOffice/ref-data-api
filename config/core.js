@@ -10,11 +10,7 @@ const postgrestUrls = {
 const config = {
   postgrestUrls,
   logLevel: process.env.LOG_LEVEL || 'info',
-  port: process.env.PORT || 5000,
-  keycloakAuthUrl: process.env.KEYCLOAK_AUTH_URL,
-  clientId: process.env.KEYCLOAK_CLIENT_ID,
-  realm: process.env.KEYCLOAK_REALM,
-  token: ''
+  port: process.env.PORT || 5000
 };
 
 module.exports = config;
