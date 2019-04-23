@@ -30,8 +30,6 @@ spec:
           value: {{.POSTGREST_BASE_URL}}
         - name: LOG_LEVEL
           value: {{.LOG_LEVEL}}
-        - name: PORT
-          value: {{.PORT}}
         ports:
           - name: api
             containerPort: 5000
