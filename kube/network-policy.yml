@@ -1,0 +1,17 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-ref-data-api
+spec:
+  podSelector:
+    matchLabels:
+      name: ref-data-api
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: ingress-external
+    ports:
+    - protocol: TCP
+      port: 10443

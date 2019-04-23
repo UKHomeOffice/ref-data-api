@@ -1,0 +1,46 @@
+pipeline:
+
+  build:
+    image: quay.io/ukhomeofficedigital/drone-docker
+    commands:
+      - docker build -t reference-data-api-service:$${DRONE_COMMIT_SHA} .
+    when:
+      event: push
+
+  image_to_quay:
+    image: quay.io/ukhomeofficedigital/drone-docker
+    secrets:
+      - DOCKER_USERNAME
+      - DOCKER_PASSWORD
+    registry: quay.io
+    repo: quay.io/ukhomeofficedigital/reference-data-api-service
+    tags:
+      - ${DRONE_BUILD_NUMBER}
+      - ${DRONE_COMMIT_SHA}
+      - latest
+    when:
+      branch: master
+      event: [ push, deployment ]
+
+  deploy_to_dev:
+    image: quay.io/ukhomeofficedigital/kd
+    secrets:
+      - DEV_HOSTNAME
+      - DEV_KUBE_NAMESPACE
+      - DEV_KUBE_SERVER
+      - DEV_KUBE_TOKEN
+      - DEV_LOG_LEVEL
+      - DEV_PORT
+      - DEV_POSTGREST_BASE_URL
+    commands:
+      - export HOSTNAME=$${DEV_HOSTNAME}
+      - export KUBE_NAMESPACE=$${DEV_KUBE_NAMESPACE}
+      - export KUBE_SERVER=$${DEV_KUBE_SERVER}
+      - export KUBE_TOKEN=$${DEV_KUBE_TOKEN}
+      - export LOG_LEVEL=$${DEV_LOG_LEVEL}
+      - export PORT=$${DEV_PORT}
+      - export POSTGREST_BASE_URL=$${DEV_POSTGREST_BASE_URL}
+      - kd --insecure-skip-tls-verify -f kube/deployment.yml -f kube/service.yml -f kube/ingress.yml -f kube/network-policy.yml
+    when:
+      branch: master
+      event: [ push, deployment ]

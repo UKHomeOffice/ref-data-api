@@ -1,0 +1,54 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: ref-data-api
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  template:
+    metadata:
+      labels:
+        name: ref-data-api
+    spec:
+      containers:
+      - name: frontend
+        image: quay.io/ukhomeofficedigital/reference-data-api-service:{{.DRONE_COMMIT_SHA}}
+        imagePullPolicy: Always
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1000
+        resources:
+          requests:
+            cpu: 100m
+            memory: 200Mi
+          limits:
+            cpu: 200m
+            memory: 500Mi
+        env:
+        - name: POSTGREST_BASE_URL
+          value: {{.POSTGREST_BASE_URL}}
+        - name: LOG_LEVEL
+          value: {{.LOG_LEVEL}}
+        - name: PORT
+          value: {{.PORT}}
+        ports:
+          - name: api
+            containerPort: 5000
+
+      - name: proxy
+        image: quay.io/ukhomeofficedigital/nginx-proxy
+        securityContext:
+          runAsNonRoot: true
+        env:
+          - name: PROXY_SERVICE_HOST
+            value: 'http://127.0.0.1'
+          - name: PROXY_SERVICE_PORT
+            value: '5000'
+          - name: LOG_FORMAT_NAME
+            value: 'json'
+          - name: NAXSI_USE_DEFAULT_RULES
+            value: 'FALSE'
+        ports:
+          - name: https
+            containerPort: 10443
