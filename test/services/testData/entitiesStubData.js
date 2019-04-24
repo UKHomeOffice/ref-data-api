@@ -272,8 +272,8 @@ const entitiesResponse = {
 };
 // example of formatted data to be returned by the API
 const entitiesFormattedData = {
-  code: 200,
   status: null,
+  code: 200,
   data: [
     {
       description: 'Work related activities',
