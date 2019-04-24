@@ -14,10 +14,10 @@ const getItem = async (req, res) => {
 };
 
 const patchItemField = (req, res) => {
-  const { name, id } = req.params;
+  const { name, id, field } = req.params;
   const token = extractToken(req.headers.authorization);
   res.json({
-    'message': 'Field updated'
+    'message': `Field '${field}' updated`
   });
 }
 
