@@ -5,10 +5,10 @@ const httpMocks = require('node-mocks-http');
 
 // local imports
 const { entitiesResponse, itemResponse, itemFormattedData } = require ('../services/testData/itemsStubData');
-const { getItem } = require('../../routes/items');
+const { getItem, patchItemField } = require('../../routes/items');
 const { postgrestUrls } = require('../../config/core');
 
-describe('Test Items Routes', () => {
+describe('Items', () => {
   const token = new Chance().hash();
 
   before(function () {
@@ -22,7 +22,7 @@ describe('Test Items Routes', () => {
     .intercept('/country?id=eq.3', 'GET').reply(200, itemResponse)
   });
 
-  it('Should return a json object of an item', async () => {
+  it('Should return an item', async () => {
     const req = httpMocks.createRequest({
       method: 'GET',
       url: '/v1/entities/country/items/3',
@@ -34,6 +34,21 @@ describe('Test Items Routes', () => {
 
     expect(res._isJSON()).to.be.true;
     expect(res._getData()).to.equal(JSON.stringify(itemFormattedData));
+  });
+
+  it('Should return an updated item field', () => {
+    const req = httpMocks.createRequest({
+      method: 'PATCH',
+      url: '/v1/entities/country/items/3',
+      headers: {'authorization': `Bearer ${token}`},
+      params: {'name': 'activities', 'id': 3, 'field': 'iso31661alpha2'}
+    });
+    const res = httpMocks.createResponse();
+    const expectedMessage = "Field 'iso31661alpha2' updated";
+    patchItemField(req, res);
+
+    expect(res._isJSON()).to.be.true;
+    expect(res._getData()).to.equal(JSON.stringify({"message": expectedMessage}));
   });
 });
 
