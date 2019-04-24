@@ -33,7 +33,7 @@ const findObjectByKey = (arrayOfObjs, key, value) => arrayOfObjs.find(obj => obj
  * the `authorizationString` which has the following format:
  * `Bearer asjldfjlajdfaldw8uf9w4rq2fuq9`
  */
-const extractToken = (authorizationString) => str.split(' ')[1];
+const extractToken = (authorizationString) => authorizationString.split(' ')[1];
 
 module.exports = {
   extractToken,
