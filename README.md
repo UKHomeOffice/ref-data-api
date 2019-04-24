@@ -30,20 +30,30 @@ $ npm run start-dev
 # run mocha tests
 $ npm run test
 
+# run mocha tests for a specific file
+$ npm run test test/routes/entities.test.js
+
+# run mocha tests for a specific folder
+$ npm run test test/routes/
+
 # run mocha tests with coverage
 $ npm run coverage
+
+# run mocha tests for a specific file with a breakpoint
+$ mocha --inspect-brk test/routes/entities.test.js
 ```
+
 ## Building and running in Docker
 
 To build the prototype's Docker container:
 
-```
+```bash
 docker build -t reference-data-api-service .
 ```
 
 To run the resulting Docker container:
 
-```
+```bash
 docker run -p 5000:5000 reference-data-api-service
 ```
 

@@ -10,13 +10,17 @@ const {
   entityFormattedData,
   entityResponse
 } = require ('../services/testData/entitiesStubData');
-const { getEntities, getEntity } = require('../../routes/entities');
+const {
+  getEntities,
+  getEntity,
+  patchEntitySchema
+} = require('../../routes/entities');
 const { postgrestUrls } = require('../../config/core');
 
 describe('Test Entities Routes', () => {
   const token = new Chance().hash();
 
-  describe('Entities Routes', () => {
+  describe('Entities', () => {
     before(function () {
       nock(postgrestUrls.entities, {
         reqheaders: {
@@ -27,7 +31,7 @@ describe('Test Entities Routes', () => {
       .reply(200, entitiesResponse);
     });
 
-    it('Should return a json object with all entities', async () => {
+    it('Should return all entities', async () => {
       const req = httpMocks.createRequest({
         method: 'GET',
         url: '/v1/entities',
@@ -39,9 +43,10 @@ describe('Test Entities Routes', () => {
       expect(res._isJSON()).to.be.true;
       expect(res._getData()).to.equal(JSON.stringify(entitiesFormattedData));
     });
+
   })
 
-  describe('Entity Routes', () => {
+  describe('Entity Schema', () => {
     before(function () {
       nock(postgrestUrls.entities, {
         reqheaders: {
@@ -53,7 +58,7 @@ describe('Test Entities Routes', () => {
       .intercept('/activities', 'GET').reply(200, entityResponse)
     });
 
-    it('Should return a json object with an entity schema', async () => {
+    it('Should return an entity schema', async () => {
       const req = httpMocks.createRequest({
         method: 'GET',
         url: '/v1/entities/activities',
@@ -65,6 +70,20 @@ describe('Test Entities Routes', () => {
 
       expect(res._isJSON()).to.be.true;
       expect(res._getData()).to.equal(JSON.stringify(entityFormattedData));
+    });
+
+    it('Should return an updated entity schema', () => {
+      const req = httpMocks.createRequest({
+        method: 'PATCH',
+        url: '/v1/entities/activities',
+        headers: {'authorization': `Bearer ${token}`},
+        params: {'name': 'activities'}
+      });
+      const res = httpMocks.createResponse();
+      patchEntitySchema(req, res);
+
+      expect(res._isJSON()).to.be.true;
+      expect(res._getData()).to.equal(JSON.stringify({"message":"Entity 'activities' schema updated"}));
     });
   });
 });
