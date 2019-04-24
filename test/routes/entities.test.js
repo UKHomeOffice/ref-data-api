@@ -13,7 +13,8 @@ const {
 const {
   getEntities,
   getEntity,
-  patchEntitySchema
+  patchEntitySchema,
+  postEntityItem
 } = require('../../routes/entities');
 const { postgrestUrls } = require('../../config/core');
 
@@ -58,7 +59,7 @@ describe('Test Entities Routes', () => {
       .intercept('/activities', 'GET').reply(200, entityResponse)
     });
 
-    it('Should return an entity schema', async () => {
+    it('Should return an entity', async () => {
       const req = httpMocks.createRequest({
         method: 'GET',
         url: '/v1/entities/activities',
@@ -80,10 +81,26 @@ describe('Test Entities Routes', () => {
         params: {'name': 'activities'}
       });
       const res = httpMocks.createResponse();
+      const expectedMessage = "Entity 'activities' schema updated";
       patchEntitySchema(req, res);
 
       expect(res._isJSON()).to.be.true;
-      expect(res._getData()).to.equal(JSON.stringify({"message":"Entity 'activities' schema updated"}));
+      expect(res._getData()).to.equal(JSON.stringify({"message": expectedMessage}));
+    });
+
+    it('Should return a newly created entity item', () => {
+      const req = httpMocks.createRequest({
+        method: 'POST',
+        url: '/v1/entities/activities',
+        headers: {'authorization': `Bearer ${token}`},
+        params: {'name': 'activities'}
+      });
+      const res = httpMocks.createResponse();
+      const expectedMessage = "Successfully created a new item in the entity 'activities'";
+      postEntityItem(req, res);
+
+      expect(res._isJSON()).to.be.true;
+      expect(res._getData()).to.equal(JSON.stringify({"message": expectedMessage}));
     });
   });
 });

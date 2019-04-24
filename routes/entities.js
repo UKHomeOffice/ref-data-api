@@ -30,7 +30,7 @@ const postEntityItem = (req, res) => {
   const { name } = req.params;
   const token = extractToken(req.headers.authorization);
   res.json({
-    'message': `Successfully created a new item in the entity ${name}`
+    'message': `Successfully created a new item in the entity '${name}'`
   });
 }
 
