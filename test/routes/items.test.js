@@ -4,14 +4,17 @@ const nock = require('nock');
 const httpMocks = require('node-mocks-http');
 
 // local imports
+const logger = require('../../config/logger');
 const { entitiesResponse, itemResponse, itemFormattedData } = require ('../services/testData/itemsStubData');
 const { getItem, patchItemField } = require('../../routes/items');
 const { postgrestUrls } = require('../../config/core');
 
-describe('Items', () => {
+describe('Test Item Routes', () => {
   const token = new Chance().hash();
 
   before(function () {
+    // disable logging
+    logger.silent = true;
     nock(postgrestUrls.entities, {
       reqheaders: {
         'Authorization': `Bearer ${token}`
@@ -50,5 +53,10 @@ describe('Items', () => {
     expect(res._isJSON()).to.be.true;
     expect(res._getData()).to.equal(JSON.stringify({"message": expectedMessage}));
   });
+
+  after(function () {
+    // enable logging
+    logger.silent = false;
+  })
 });
 
