@@ -4,6 +4,7 @@ const nock = require('nock');
 const httpMocks = require('node-mocks-http');
 
 // local imports
+const logger = require('../../config/logger');
 const {
   entitiesFormattedData,
   entitiesResponse,
@@ -18,8 +19,13 @@ const {
 } = require('../../routes/entities');
 const { postgrestUrls } = require('../../config/core');
 
-describe('Test Entities Routes', () => {
+describe('Test Entity Routes', () => {
   const token = new Chance().hash();
+
+  before(function () {
+    // disable logging
+    logger.silent = true;
+  });
 
   describe('Entities', () => {
     before(function () {
@@ -44,7 +50,6 @@ describe('Test Entities Routes', () => {
       expect(res._isJSON()).to.be.true;
       expect(res._getData()).to.equal(JSON.stringify(entitiesFormattedData));
     });
-
   })
 
   describe('Entity Schema', () => {
@@ -103,5 +108,10 @@ describe('Test Entities Routes', () => {
       expect(res._getData()).to.equal(JSON.stringify({"message": expectedMessage}));
     });
   });
+
+  after(function () {
+    // enable logging
+    logger.silent = false;
+  })
 });
 

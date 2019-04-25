@@ -3,6 +3,7 @@ const Chance = require('chance');
 const nock = require('nock');
 
 // local imports
+const logger = require('../../config/logger');
 const {
   entitiesFormattedData,
   entitiesResponse,
@@ -12,8 +13,13 @@ const {
 const { getEntitiesData, getEntityData } = require('../../services/entities');
 const { postgrestUrls } = require('../../config/core');
 
-describe('Test Entities Services', () => {
+describe('Test Entity Services', () => {
   const token = new Chance().hash();
+
+  before(function () {
+    // disable logging
+    logger.silent = true;
+  });
 
   describe('Entities', () => {
     it('Returns all entities', (done) => {
@@ -81,5 +87,10 @@ describe('Test Entities Services', () => {
       let data = await getEntityData(token, name);
       expect(data).to.deep.equal({'code': 401, 'status': null, 'data': 'JWT expired'});
     });
+  });
+
+  after(function () {
+    // enable logging
+    logger.silent = false;
   });
 });

@@ -3,12 +3,18 @@ const Chance = require('chance');
 const nock = require('nock');
 
 // local imports
+const logger = require('../../config/logger');
 const { entitiesResponse, itemResponse, itemFormattedData } = require ('./testData/itemsStubData');
 const { getItemData } = require('../../services/items');
 const { postgrestUrls } = require('../../config/core');
 
-describe('Test Items Services', () => {
+describe('Test Item Services', () => {
   const token = new Chance().hash();
+
+  before(function () {
+    // disable logging
+    logger.silent = true;
+  });
 
   it('Returns an entity item by id', async () => {
     const name = 'country';
@@ -41,5 +47,10 @@ describe('Test Items Services', () => {
 
     let data = await getItemData(token, name, id);
     expect(data).to.deep.equal({'code': 401, 'status': null, 'data': 'JWT expired'});
+  });
+
+  after(function () {
+    // enable logging
+    logger.silent = false;
   });
 });
