@@ -28,9 +28,8 @@ describe('Test Entity Routes', () => {
   });
 
   describe('Entities', () => {
-    before(function () {
-      // disable logging
-      logger.silent = true;
+    it('Should return all entities', async () => {
+      // mock http request
       nock(postgrestUrls.entities, {
         reqheaders: {
           'Authorization': `Bearer ${token}`
@@ -38,9 +37,8 @@ describe('Test Entity Routes', () => {
       })
       .get('/')
       .reply(200, entitiesResponse);
-    });
 
-    it('Should return all entities', async () => {
+      // mock request and response objects
       const req = httpMocks.createRequest({
         method: 'GET',
         url: '/v1/entities',
@@ -52,23 +50,44 @@ describe('Test Entity Routes', () => {
       expect(res._isJSON()).to.be.true;
       expect(res._getData()).to.equal(JSON.stringify(entitiesFormattedData));
     });
-  })
 
-  describe('Entity Schema', () => {
-    before(function () {
-      // disable logging
-      logger.silent = true;
+    it('Should return "401 Unauthorized" when retrieving all entities with an expired token', async () => {
+      // mock http request
       nock(postgrestUrls.entities, {
         reqheaders: {
           'Authorization': `Bearer ${token}`
         }
       })
-      .persist()
+      .get('/')
+      .reply(401, {'message': 'JWT expired'})
+
+      // mock request and response objects
+      const req = httpMocks.createRequest({
+        method: 'GET',
+        url: '/v1/entities',
+        headers: {'authorization': `Bearer ${token}`}
+      });
+      const res = httpMocks.createResponse();
+      const expectedData = {"code":401,"status":null,"data":"JWT expired"};
+      await getEntities(req, res);
+
+      expect(res._isJSON()).to.be.true;
+      expect(res._getData()).to.equal(JSON.stringify(expectedData));
+    });
+  });
+
+  describe('Entity Schema', () => {
+    it('Should return an entity', async () => {
+      // mock http request
+      nock(postgrestUrls.entities, {
+        reqheaders: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
       .intercept('/', 'GET').reply(200, entitiesResponse)
       .intercept('/activities', 'GET').reply(200, entityResponse)
-    });
 
-    it('Should return an entity', async () => {
+      // mock request and response objects
       const req = httpMocks.createRequest({
         method: 'GET',
         url: '/v1/entities/activities',
@@ -112,15 +131,42 @@ describe('Test Entity Routes', () => {
       expect(res._getData()).to.equal(JSON.stringify({"message": expectedMessage}));
     });
 
-    after(function () {
-      // enable logging
-      logger.silent = false;
+    it('Should return "401 Unauthorized" when retrieving an entity with an expired token', async () => {
+      // mock http request
+      nock(postgrestUrls.entities, {
+        reqheaders: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
+      .intercept('/', 'GET').reply(401, {'message': 'JWT expired'})
+      .intercept('/activities', 'GET').reply(401, {'message': 'JWT expired'})
+
+      // mock request and response objects
+      const req = httpMocks.createRequest({
+        method: 'GET',
+        url: '/v1/entities/activities',
+        headers: {'authorization': `Bearer ${token}`},
+        params: {'name': 'activities'}
+      });
+      const res = httpMocks.createResponse();
+      const expectedData = {"code":401,"status":null,"data":"JWT expired"};
+      await getEntity(req, res);
+
+      expect(res._isJSON()).to.be.true;
+      expect(res._getData()).to.equal(JSON.stringify(expectedData));
     });
   });
 
   after(function () {
     // enable logging
     logger.silent = false;
-  })
+  });
+
+  afterEach(function () {
+    // ensure that unused nock interceptors are not left behind
+    if (!nock.isDone()) {
+      nock.cleanAll();
+    }
+  });
 });
 
