@@ -29,6 +29,8 @@ describe('Test Entity Routes', () => {
 
   describe('Entities', () => {
     before(function () {
+      // disable logging
+      logger.silent = true;
       nock(postgrestUrls.entities, {
         reqheaders: {
           'Authorization': `Bearer ${token}`
@@ -54,6 +56,8 @@ describe('Test Entity Routes', () => {
 
   describe('Entity Schema', () => {
     before(function () {
+      // disable logging
+      logger.silent = true;
       nock(postgrestUrls.entities, {
         reqheaders: {
           'Authorization': `Bearer ${token}`
@@ -106,6 +110,11 @@ describe('Test Entity Routes', () => {
 
       expect(res._isJSON()).to.be.true;
       expect(res._getData()).to.equal(JSON.stringify({"message": expectedMessage}));
+    });
+
+    after(function () {
+      // enable logging
+      logger.silent = false;
     });
   });
 

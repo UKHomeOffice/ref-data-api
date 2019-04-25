@@ -22,6 +22,11 @@ describe('Test Entity Services', () => {
   });
 
   describe('Entities', () => {
+    before(function () {
+      // disable logging
+      logger.silent = true;
+    });
+
     it('Returns all entities', (done) => {
       nock(postgrestUrls.entities, {
         reqheaders: {
@@ -54,9 +59,19 @@ describe('Test Entity Services', () => {
         done();
       })
     });
+
+    after(function () {
+      // enable logging
+      logger.silent = false;
+    });
   });
 
   describe('Entity', () => {
+    before(function () {
+      // disable logging
+      logger.silent = true;
+    });
+
     it('Returns an entity by name', async () => {
       const name = 'activities';
       nock(postgrestUrls.entities, {
@@ -86,6 +101,11 @@ describe('Test Entity Services', () => {
 
       let data = await getEntityData(token, name);
       expect(data).to.deep.equal({'code': 401, 'status': null, 'data': 'JWT expired'});
+    });
+
+    after(function () {
+      // enable logging
+      logger.silent = false;
     });
   });
 
