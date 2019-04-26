@@ -1,4 +1,3 @@
-const axios = require('axios');
 const router = require('express').Router();
 
 // local imports
@@ -16,9 +15,10 @@ const getItem = async (req, res) => {
 const patchItemField = (req, res) => {
   const { name, id, field } = req.params;
   const token = extractToken(req.headers.authorization);
+  logger.info(`Updated ${name} field ${field}`);
   res.json({
-    'message': `Field '${field}' updated`
+    'message': `Field '${field}' updated`,
   });
-}
+};
 
 module.exports = { getItem, patchItemField };

@@ -1,4 +1,7 @@
-const expect = require('chai').expect;
+const {
+  after, before, describe, it,
+} = require('mocha');
+const { expect } = require('chai');
 const Chance = require('chance');
 
 // local imports
@@ -8,7 +11,7 @@ const { extractToken } = require('../../helpers');
 describe('Test Helper Functions', () => {
   const token = new Chance().hash();
 
-  before(function () {
+  before(() => {
     // disable logging
     logger.silent = true;
   });
@@ -20,8 +23,8 @@ describe('Test Helper Functions', () => {
     expect(result).to.equal(token);
   });
 
-  after(function () {
+  after(() => {
     // enable logging
     logger.silent = false;
-  })
+  });
 });
