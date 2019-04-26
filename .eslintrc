@@ -3,7 +3,9 @@
     "quote-props": ["error", "always"],
     "func-names": ["error", "never"],
     "no-unused-expressions": "off",
-    "no-underscore-dangle": "off"
+    "no-underscore-dangle": "off",
+    "no-unused-vars": "off",
+    "no-restricted-syntax": "off"
   },
   "extends": "airbnb/base",
   "env": {
