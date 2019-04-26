@@ -5,5 +5,8 @@
     "no-unused-expressions": "off",
     "no-underscore-dangle": "off"
   },
-  "extends": "airbnb/base"
+  "extends": "airbnb/base",
+  "env": {
+    "mocha": true
+  }
 }
