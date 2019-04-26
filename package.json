@@ -7,7 +7,7 @@
     "test": "mocha --recursive",
     "coverage": "nyc --reporter html --reporter text npm test",
     "start-dev": "nodemon server.js",
-    "lint": "eslint -f table ."
+    "lint": "eslint -f table"
   },
   "repository": {
     "type": "git",
