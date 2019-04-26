@@ -21,22 +21,23 @@ const getEntity = async (req, res) => {
 const patchEntitySchema = (req, res) => {
   const { name } = req.params;
   const token = extractToken(req.headers.authorization);
+  logger.info(`Updated ${name} schema`);
   res.json({
-    'message': `Entity '${name}' schema updated`
+    'message': `Entity '${name}' schema updated`,
   });
-}
+};
 
 const postEntityItem = (req, res) => {
   const { name } = req.params;
   const token = extractToken(req.headers.authorization);
   res.json({
-    'message': `Successfully created a new item in the entity '${name}'`
+    'message': `Successfully created a new item in the entity '${name}'`,
   });
-}
+};
 
 module.exports = {
   getEntities,
   getEntity,
   patchEntitySchema,
-  postEntityItem
+  postEntityItem,
 };

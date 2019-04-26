@@ -1,7 +1,9 @@
 {
   "rules": {
     "quote-props": ["error", "always"],
-    "func-names": ["error", "never"]
+    "func-names": ["error", "never"],
+    "no-unused-expressions": "off",
+    "no-underscore-dangle": "off"
   },
   "extends": "airbnb/base"
 }

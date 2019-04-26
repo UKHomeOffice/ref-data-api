@@ -1,4 +1,7 @@
-const expect = require('chai').expect;
+const {
+  after, afterEach, before, describe, it,
+} = require('mocha');
+const { expect } = require('chai');
 const Chance = require('chance');
 const nock = require('nock');
 
@@ -9,14 +12,14 @@ const {
   entitiesResponse,
   entityFormattedData,
   entityResponse,
-} = require ('./testData/entitiesStubData');
+} = require('./testData/entitiesStubData');
 const { getEntitiesData, getEntityData } = require('../../services/entities');
 const { postgrestUrls } = require('../../config/core');
 
 describe('Test Entity Services', () => {
   const token = new Chance().hash();
 
-  before(function () {
+  before(() => {
     // disable logging
     logger.silent = true;
   });
@@ -25,14 +28,14 @@ describe('Test Entity Services', () => {
     it('Returns all entities', (done) => {
       // mock http request
       nock(postgrestUrls.entities, {
-        reqheaders: {
-          'Authorization': `Bearer ${token}`
-        }
+        'reqheaders': {
+          'Authorization': `Bearer ${token}`,
+        },
       })
-      .get('/')
-      .reply(200, entitiesResponse);
+        .get('/')
+        .reply(200, entitiesResponse);
 
-      getEntitiesData(token).then(response => {
+      getEntitiesData(token).then((response) => {
         expect(typeof response).to.equal('object');
         expect(response.data).to.have.lengthOf(2);
         expect(response).to.deep.equal(entitiesFormattedData);
@@ -43,22 +46,22 @@ describe('Test Entity Services', () => {
     it('Should return 401 Unauthorized when retrieving all entities with an expired token', (done) => {
       // mock http request
       nock(postgrestUrls.entities, {
-        reqheaders: {
-          'Authorization': `Bearer ${token}`
-        }
+        'reqheaders': {
+          'Authorization': `Bearer ${token}`,
+        },
       })
-      .get('/')
-      .reply(401, {'message': 'JWT expired'})
+        .get('/')
+        .reply(401, { 'message': 'JWT expired' });
 
-      getEntitiesData(token).then(response => {
-        expect(response).to.deep.equal({'code': 401, 'status': null, 'data': 'JWT expired'});
+      getEntitiesData(token).then((response) => {
+        expect(response).to.deep.equal({ 'code': 401, 'status': null, 'data': 'JWT expired' });
         done();
-      })
+      });
     });
   });
 
   describe('Entity', () => {
-    before(function () {
+    before(() => {
       // disable logging
       logger.silent = true;
     });
@@ -67,14 +70,15 @@ describe('Test Entity Services', () => {
       const name = 'activities';
       // mock http request
       nock(postgrestUrls.entities, {
-        reqheaders: {
-          'Authorization': `Bearer ${token}`
-        }
+        'reqheaders': {
+          'Authorization': `Bearer ${token}`,
+        },
       })
-      .intercept('/', 'GET').reply(200, entitiesResponse)
-      .intercept('/activities', 'GET').reply(200, entityResponse)
+        .intercept('/', 'GET').reply(200, entitiesResponse)
+        .intercept('/activities', 'GET')
+        .reply(200, entityResponse);
 
-      let data = await getEntityData(token, name);
+      const data = await getEntityData(token, name);
       expect(data).to.deep.equal(entityFormattedData);
     });
 
@@ -82,24 +86,25 @@ describe('Test Entity Services', () => {
       const name = 'activities';
       // mock http request
       nock(postgrestUrls.entities, {
-        reqheaders: {
-          'Authorization': `Bearer ${token}`
-        }
+        'reqheaders': {
+          'Authorization': `Bearer ${token}`,
+        },
       })
-      .intercept('/', 'GET').reply(401, {'message': 'JWT expired'})
-      .intercept('/activities', 'GET').reply(401, {'message': 'JWT expired'})
+        .intercept('/', 'GET').reply(401, { 'message': 'JWT expired' })
+        .intercept('/activities', 'GET')
+        .reply(401, { 'message': 'JWT expired' });
 
-      let data = await getEntityData(token, name);
-      expect(data).to.deep.equal({'code': 401, 'status': null, 'data': 'JWT expired'});
+      const data = await getEntityData(token, name);
+      expect(data).to.deep.equal({ 'code': 401, 'status': null, 'data': 'JWT expired' });
     });
   });
 
-  after(function () {
+  after(() => {
     // enable logging
     logger.silent = false;
   });
 
-  afterEach(function () {
+  afterEach(() => {
     // ensure that unused nock interceptors are not left behind
     if (!nock.isDone()) {
       nock.cleanAll();
