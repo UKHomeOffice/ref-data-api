@@ -1,0 +1,4 @@
+node_modules/**
+kube/**
+coverage/**
+.nyc_output/**

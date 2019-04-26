@@ -1,0 +1,7 @@
+{
+  "rules": {
+    "quote-props": ["error", "always"],
+    "func-names": ["error", "never"]
+  },
+  "extends": "airbnb/base"
+}
