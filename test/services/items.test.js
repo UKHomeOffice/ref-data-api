@@ -32,7 +32,7 @@ describe('Test Item Services', () => {
     expect(data).to.deep.equal(itemFormattedData);
   });
 
-  it('Should return 401 Unauthorized for expired tokens', async () => {
+  it('Should return 401 Unauthorized when retrieving an item with an expired token', async () => {
     const name = 'country';
     const id = 3;
     const token = new Chance().hash();
@@ -52,5 +52,12 @@ describe('Test Item Services', () => {
   after(function () {
     // enable logging
     logger.silent = false;
+  });
+
+  afterEach(function () {
+    // ensure that unused nock interceptors are not left behind
+    if (!nock.isDone()) {
+      nock.cleanAll();
+    }
   });
 });

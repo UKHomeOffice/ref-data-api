@@ -2,6 +2,7 @@ const expect = require('chai').expect;
 const Chance = require('chance');
 
 // local imports
+const logger = require('../../config/logger');
 const { extractToken } = require('../../helpers');
 
 describe('Test Helper Functions', () => {

@@ -23,6 +23,7 @@ describe('Test Entity Services', () => {
 
   describe('Entities', () => {
     it('Returns all entities', (done) => {
+      // mock http request
       nock(postgrestUrls.entities, {
         reqheaders: {
           'Authorization': `Bearer ${token}`
@@ -39,8 +40,8 @@ describe('Test Entity Services', () => {
       });
     });
 
-    it('Should return 401 Unauthorized for expired tokens', (done) => {
-      const token = new Chance().hash();
+    it('Should return 401 Unauthorized when retrieving all entities with an expired token', (done) => {
+      // mock http request
       nock(postgrestUrls.entities, {
         reqheaders: {
           'Authorization': `Bearer ${token}`
@@ -57,14 +58,19 @@ describe('Test Entity Services', () => {
   });
 
   describe('Entity', () => {
+    before(function () {
+      // disable logging
+      logger.silent = true;
+    });
+
     it('Returns an entity by name', async () => {
       const name = 'activities';
+      // mock http request
       nock(postgrestUrls.entities, {
         reqheaders: {
           'Authorization': `Bearer ${token}`
         }
       })
-      .persist()
       .intercept('/', 'GET').reply(200, entitiesResponse)
       .intercept('/activities', 'GET').reply(200, entityResponse)
 
@@ -72,15 +78,14 @@ describe('Test Entity Services', () => {
       expect(data).to.deep.equal(entityFormattedData);
     });
 
-    it('Should return 401 Unauthorized for expired tokens', async () => {
+    it('Should return 401 Unauthorized when retrieving an entity with an expired token', async () => {
       const name = 'activities';
-      const token = new Chance().hash();
+      // mock http request
       nock(postgrestUrls.entities, {
         reqheaders: {
           'Authorization': `Bearer ${token}`
         }
       })
-      .persist()
       .intercept('/', 'GET').reply(401, {'message': 'JWT expired'})
       .intercept('/activities', 'GET').reply(401, {'message': 'JWT expired'})
 
@@ -92,5 +97,12 @@ describe('Test Entity Services', () => {
   after(function () {
     // enable logging
     logger.silent = false;
+  });
+
+  afterEach(function () {
+    // ensure that unused nock interceptors are not left behind
+    if (!nock.isDone()) {
+      nock.cleanAll();
+    }
   });
 });
