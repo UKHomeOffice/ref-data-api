@@ -2,8 +2,11 @@ const router = require('express').Router();
 
 // local imports
 const logger = require('../config/logger');
+const pool = require('../db/index');
+const setRole = require('../db/generic');
 const { extractToken } = require('../helpers');
-const { getEntitiesData, getEntityData } = require('../services/entities');
+const { getEntitiesData } = require('../services/entities');
+const { getData, getEntityDescription, getEntitySchema } = require('../db/entities');
 
 const getEntities = async (req, res) => {
   const token = extractToken(req.headers.authorization);
@@ -11,11 +14,38 @@ const getEntities = async (req, res) => {
   res.json(data);
 };
 
-const getEntity = async (req, res) => {
+const getEntity = (req, res) => {
   const { name } = req.params;
-  const token = extractToken(req.headers.authorization);
-  const data = await getEntityData(token, name);
-  res.json(data);
+
+  setRole('readonlyreference')
+    .then(() => {
+      getEntityDescription(name)
+        .then((entityDescription) => {
+          getEntitySchema(name)
+            .then((entitySchema) => {
+              getData(name)
+                .then((data) => {
+                  res.json({
+                    'status': 'success',
+                    'code': 200,
+                    'entityName': name,
+                    'entityLabel': '',
+                    'entitySchema': {
+                      'description': entityDescription.description,
+                      'required': entitySchema.required,
+                      'properties': entitySchema.properties,
+                    },
+                    'data': data,
+                  });
+                })
+                .catch((error) => {
+                  logger.info(`Unable to query table "${name}"`);
+                  logger.error(error);
+                  res.json({ 'message': `Unable to query table "${name}"` });
+                });
+            });
+        });
+    });
 };
 
 const patchEntitySchema = (req, res) => {
