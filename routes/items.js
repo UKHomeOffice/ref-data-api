@@ -8,7 +8,7 @@ const { getEntityDescription, getEntitySchema } = require('../db/entities');
 const { getItemData } = require('../db/items');
 
 const getItem = (req, res) => {
-  const { name:entityName, id } = req.params;
+  const { 'name': entityName, id } = req.params;
   const role = 'readonlyreference';
 
   const promise1 = getEntityDescription(entityName);
