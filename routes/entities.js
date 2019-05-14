@@ -3,49 +3,62 @@ const router = require('express').Router();
 // local imports
 const logger = require('../config/logger');
 const pool = require('../db/index');
-const setRole = require('../db/generic');
 const { extractToken } = require('../helpers');
 const { getEntitiesData } = require('../services/entities');
-const { getData, getEntityDescription, getEntitySchema } = require('../db/entities');
+const { getAllEntities, getEntityData, getEntityDescription, getEntitySchema } = require('../db/entities');
 
 const getEntities = async (req, res) => {
-  const token = extractToken(req.headers.authorization);
-  const data = await getEntitiesData(token);
-  res.json(data);
+  const role = 'readonlyreference';
+  let data = {
+    'status': 'success',
+    'code': 200,
+    'data': [],
+  };
+
+  const entities = await getAllEntities();
+  const promiseArray = entities.map(async entity => {
+    let dataObject = {};
+    dataObject['entityName'] = entity;
+
+    const description = await getEntityDescription(entity);
+    dataObject['description'] = description;
+
+    const schema = await getEntitySchema(role, entity)
+    dataObject['required'] = schema.required;
+    dataObject['properties'] = schema.properties;
+
+    data.data.push(dataObject);
+  });
+
+  Promise.all(promiseArray)
+    .then(() => res.json(data))
+    .catch(error => res.json({ 'message': error.message }));
 };
 
 const getEntity = (req, res) => {
-  const { name } = req.params;
+  const entityName = req.params.name;
+  const role = 'readonlyreference';
+  // const role = 'webanon';
 
-  setRole('readonlyreference')
-    .then(() => {
-      getEntityDescription(name)
-        .then((entityDescription) => {
-          getEntitySchema(name)
-            .then((entitySchema) => {
-              getData(name)
-                .then((data) => {
-                  res.json({
-                    'status': 'success',
-                    'code': 200,
-                    'entityName': name,
-                    'entityLabel': '',
-                    'entitySchema': {
-                      'description': entityDescription.description,
-                      'required': entitySchema.required,
-                      'properties': entitySchema.properties,
-                    },
-                    'data': data,
-                  });
-                })
-                .catch((error) => {
-                  logger.info(`Unable to query table "${name}"`);
-                  logger.error(error);
-                  res.json({ 'message': `Unable to query table "${name}"` });
-                });
-            });
-        });
-    });
+  const promise1 = getEntityDescription(entityName);
+  const promise2 = getEntitySchema(role, entityName);
+  const promise3 = getEntityData(role, entityName);
+
+  Promise.all([promise1, promise2, promise3])
+    .then((resultsArray) => {
+      res.json({
+        'status': 'success',
+        'code': 200,
+        'entityLabel': '',
+        'entitySchema': {
+          'description': resultsArray[0].description,
+          'required': resultsArray[1].required,
+          'properties': resultsArray[1].properties,
+        },
+        'data': resultsArray[2],
+      });
+    })
+    .catch(error => res.json({ 'message': error.message }));
 };
 
 const patchEntitySchema = (req, res) => {
