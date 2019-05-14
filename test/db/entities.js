@@ -6,7 +6,7 @@ const logger = require('../../config/logger');
 const pool = require('../../db/index');
 
 const {
-  getData,
+  getEntityData,
 } = require('../../db/entities');
 
 describe('Test Entity Routes', () => {
@@ -44,7 +44,8 @@ describe('Test Entity Routes', () => {
         ],
       };
       sinon.stub(pool, 'query').resolves(expectedData, null);
-      const result = await getData('country');
+      const result = await getEntityData('country');
+
       expect(result).to.deep.equal(expectedData.rows);
       expect(result[0]).to.include.all.keys(
         'id',
