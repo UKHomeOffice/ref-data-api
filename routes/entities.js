@@ -5,27 +5,32 @@ const logger = require('../config/logger');
 const pool = require('../db/index');
 const { extractToken } = require('../helpers');
 const { getEntitiesData } = require('../services/entities');
-const { getAllEntities, getEntityData, getEntityDescription, getEntitySchema } = require('../db/entities');
+const {
+  getAllEntities,
+  getEntityData,
+  getEntityDescription,
+  getEntitySchema,
+} = require('../db/entities');
 
 const getEntities = async (req, res) => {
   const role = 'readonlyreference';
-  let data = {
+  const data = {
     'status': 'success',
     'code': 200,
     'data': [],
   };
 
   const entities = await getAllEntities();
-  const promiseArray = entities.map(async entity => {
-    let dataObject = {};
-    dataObject['entityName'] = entity;
+  const promiseArray = entities.map(async (entity) => {
+    const dataObject = {};
+    dataObject.entityName = entity;
 
     const description = await getEntityDescription(entity);
-    dataObject['description'] = description;
+    dataObject.description = description;
 
-    const schema = await getEntitySchema(role, entity)
-    dataObject['required'] = schema.required;
-    dataObject['properties'] = schema.properties;
+    const schema = await getEntitySchema(role, entity);
+    dataObject.required = schema.required;
+    dataObject.properties = schema.properties;
 
     data.data.push(dataObject);
   });
