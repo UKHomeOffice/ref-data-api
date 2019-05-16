@@ -1,6 +1,6 @@
 # reference-data-api-service
 
-An API service to return data from the reference data postgrest.
+An API service to return data from the "Reference" database.
 
 ## Requirements
 
@@ -9,9 +9,9 @@ An API service to return data from the reference data postgrest.
 
 ## Development
 
-At the moment in order to use this application you will need the Keycloak token.
-The access token can be obtained using postman, once you have the token, place it in
-the `config/core.js` `token` variable.
+In order to use the API for the development you will need to set the following environment variables:
+
+`REF_DATA_DB_CONNECTION_STRING`
 
 ### Dependencies installation and running server
 Open your terminal and run the following commands from the project directory.
@@ -77,14 +77,14 @@ GET (All Entities)
 GET (Entity)
 `http://localhost:5000/v1/entities/<entity_name>`
 
-PATCH (Entity Schema Field)
+PATCH (Entity Schema Field -> Not implemented yet)
 `http://localhost:5000/v1/entities/<entity_name>`
 
-POST (New Entity Item)
+POST (New Entity Item -> Not implemented yet)
 `http://localhost:5000/v1/entities/<entity_name>`
 
 GET (Item)
 `http://localhost:5000/v1/entities/<entity_name>/items/<item_id>`
 
-PATCH (Item Field)
+PATCH (Item Field -> Not implemented yet)
 `http://localhost:5000/v1/entities/<entity_name>/items/<item_id>`
