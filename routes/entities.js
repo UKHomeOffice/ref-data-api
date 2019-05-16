@@ -4,7 +4,6 @@ const router = require('express').Router();
 const logger = require('../config/logger');
 const pool = require('../db/index');
 const { extractToken } = require('../helpers');
-const { getEntitiesData } = require('../services/entities');
 const {
   getAllEntities,
   getEntityData,
@@ -43,7 +42,6 @@ const getEntities = async (req, res) => {
 const getEntity = (req, res) => {
   const entityName = req.params.name;
   const role = 'readonlyreference';
-  // const role = 'webanon';
 
   const promise1 = getEntityDescription(entityName);
   const promise2 = getEntitySchema(role, entityName);

@@ -8,9 +8,7 @@ const httpMocks = require('node-mocks-http');
 
 // local imports
 const logger = require('../../config/logger');
-const { entitiesResponse, itemResponse, itemFormattedData } = require('../services/testData/itemsStubData');
-const { getItem, patchItemField } = require('../../routes/items');
-const { postgrestUrls } = require('../../config/core');
+const { patchItemField } = require('../../routes/items');
 
 describe('Test Item Routes', () => {
   const token = new Chance().hash();
