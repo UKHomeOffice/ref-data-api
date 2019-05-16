@@ -11,7 +11,9 @@ An API service to return data from the "Reference" database.
 
 In order to use the API for the development you will need to set the following environment variables:
 
-`REF_DATA_DB_CONNECTION_STRING`
+`export REF_DATA_DB_CONNECTION_STRING=postgres://username:password@localhost:5433/dbname`
+
+(if you don't know the database connection details slack Mark Oliver or Pedro Curado).
 
 ### Dependencies installation and running server
 Open your terminal and run the following commands from the project directory.
