@@ -66,25 +66,27 @@ describe('Test Entity Routes', () => {
     logger.silent = true;
   });
 
-  it('GET /v1/entities', () => {
-    let queryStub = sinon.stub(pool, 'query');
-    queryStub.onCall(0).resolves(entities);
-    queryStub.onCall(1).resolves(entityDescription);
-    // set the role
-    queryStub.onCall(2).resolves('SET');
-    // once the role is set, get the entity schema
-    queryStub.onCall(3).resolves(entitySchema);
+  describe('GET /v1/entities', () => {
+    it('Should return all entities on success', () => {
+      let queryStub = sinon.stub(pool, 'query');
+      queryStub.onCall(0).resolves(entities);
+      queryStub.onCall(1).resolves(entityDescription);
+      // set the role
+      queryStub.onCall(2).resolves('SET');
+      // once the role is set, get the entity schema
+      queryStub.onCall(3).resolves(entitySchema);
 
-    return request(app)
-      .get('/v1/entities')
-      .then(response => {
-        expect(response.status).to.equal(200);
-        expect(response.body).to.be.an('object').to.include.all.keys(
-          'code',
-          'data',
-          'status',
-        );
-      });
+      return request(app)
+        .get('/v1/entities')
+        .then(response => {
+          expect(response.status).to.equal(200);
+          expect(response.body).to.be.an('object').to.include.all.keys(
+            'code',
+            'data',
+            'status',
+          );
+        });
+    });
   });
 
   after(() => {
