@@ -28,6 +28,8 @@ spec:
         env:
         - name: DB_CONNECTION_STRING
           value: {{.DB_CONNECTION_STRING}}
+        - name: READ_ONLY_ROLE
+          value: {{.READ_ONLY_ROLE}}
         - name: LOG_LEVEL
           value: {{.LOG_LEVEL}}
         - name: PORT

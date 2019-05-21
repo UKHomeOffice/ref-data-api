@@ -31,6 +31,7 @@ pipeline:
       - DEV_KUBE_TOKEN
       - DEV_LOG_LEVEL
       - DEV_DB_CONNECTION_STRING
+      - DEV_READ_ONLY_ROLE
     commands:
       - export HOSTNAME=$${DEV_HOSTNAME}
       - export KUBE_NAMESPACE=$${DEV_KUBE_NAMESPACE}
@@ -38,6 +39,7 @@ pipeline:
       - export KUBE_TOKEN=$${DEV_KUBE_TOKEN}
       - export LOG_LEVEL=$${DEV_LOG_LEVEL}
       - export DB_CONNECTION_STRING=$${DEV_DB_CONNECTION_STRING}
+      - export READ_ONLY_ROLE=$${DEV_READ_ONLY_ROLE}
       - kd --insecure-skip-tls-verify -f kube/deployment.yml -f kube/service.yml -f kube/ingress.yml -f kube/network-policy.yml
     when:
       branch: master
