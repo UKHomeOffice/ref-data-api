@@ -48,20 +48,17 @@ const getEntitySchema = (role, entityName) => new Promise((resolve, reject) => {
     });
 });
 
-const getAllEntities = () => new Promise((resolve, reject) => {
-  pool.query('SELECT * FROM pg_catalog.pg_tables WHERE schemaname = \'reference\';')
-    .then((data) => {
-      const entitiesData = [];
-      data.rows.map(obj => entitiesData.push(obj.tablename));
-      resolve(entitiesData);
-    })
-    .catch((error) => {
-      const errorMsg = 'Unable to retrieve tables from database';
-      logger.error(errorMsg);
-      logger.error(error);
-      reject(new Error(errorMsg));
-    });
-});
+const getAllEntities = () => pool.query('SELECT * FROM pg_catalog.pg_tables WHERE schemaname = \'reference\';')
+  .then((data) => {
+    const entitiesData = [];
+    data.rows.map(obj => entitiesData.push(obj.tablename));
+    return entitiesData;
+  })
+  .catch((error) => {
+    const errorMsg = 'Unable to retrieve tables from database';
+    logger.error(errorMsg);
+    return new Error(errorMsg);
+  });
 
 const getEntityData = (role, entityName) => new Promise((resolve, reject) => {
   pool.query(`SET ROLE ${role};`)
