@@ -1,6 +1,7 @@
 const router = require('express').Router();
 
 // local imports
+const config = require('../config/core');
 const logger = require('../config/logger');
 const pool = require('../db/index');
 const { extractToken } = require('../helpers');
@@ -12,7 +13,6 @@ const {
 } = require('../db/entities');
 
 const getEntities = async (req, res) => {
-  const role = 'readonlyreference';
   const data = {
     'status': 'success',
     'code': 200,
@@ -34,7 +34,7 @@ const getEntities = async (req, res) => {
     const description = await getEntityDescription(entity);
     dataObject.description = description;
 
-    const schema = await getEntitySchema(role, entity);
+    const schema = await getEntitySchema(config.readOnlyRole, entity);
     dataObject.required = schema.required;
     dataObject.properties = schema.properties;
 
@@ -48,11 +48,10 @@ const getEntities = async (req, res) => {
 
 const getEntity = (req, res) => {
   const entityName = req.params.name;
-  const role = 'readonlyreference';
 
   const promise1 = getEntityDescription(entityName);
-  const promise2 = getEntitySchema(role, entityName);
-  const promise3 = getEntityData(role, entityName);
+  const promise2 = getEntitySchema(config.readOnlyRole, entityName);
+  const promise3 = getEntityData(config.readOnlyRole, entityName);
 
   Promise.all([promise1, promise2, promise3])
     .then((resultsArray) => {
