@@ -1,6 +1,7 @@
 const router = require('express').Router();
 
 // local imports
+const config = require('../config/core');
 const logger = require('../config/logger');
 const pool = require('../db/index');
 const { extractToken } = require('../helpers');
@@ -9,11 +10,10 @@ const { getItemData } = require('../db/items');
 
 const getItem = (req, res) => {
   const { 'name': entityName, id } = req.params;
-  const role = 'readonlyreference';
 
   const promise1 = getEntityDescription(entityName);
-  const promise2 = getEntitySchema(role, entityName);
-  const promise3 = getItemData(role, entityName, id);
+  const promise2 = getEntitySchema(config.readOnlyRole, entityName);
+  const promise3 = getItemData(config.readOnlyRole, entityName, id);
 
   Promise.all([promise1, promise2, promise3])
     .then((resultsArray) => {
