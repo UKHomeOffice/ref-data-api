@@ -20,6 +20,13 @@ const getEntities = async (req, res) => {
   };
 
   const entities = await getAllEntities();
+
+  if (entities.message) {
+    // if an error occurs getting all entities we don't need to
+    // proceed since we would expect entities to be an array
+    return res.json({ 'message': entities.message });
+  }
+
   const promiseArray = entities.map(async (entity) => {
     const dataObject = {};
     dataObject.entityName = entity;

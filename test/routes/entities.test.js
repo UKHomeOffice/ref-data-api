@@ -24,9 +24,9 @@ describe('Test Entity Routes', () => {
   const entityDescription = {
     'rows': [
       {
-        'description': '{"description": "Team", "schemalastupdated": "10/03/2019", "dataversion": 1}'
+        'description': '{"description": "Team", "schemalastupdated": "10/03/2019", "dataversion": 1}',
       },
-    ]
+    ],
   };
   const entitySchema = {
     'rows': [
@@ -35,28 +35,28 @@ describe('Test Entity Routes', () => {
         'is_nullable': 'NO',
         'data_type': 'character varying',
         'character_maximum_length': 330,
-        'description': '{"label": "Identifier", "description": "database unique identity record", "summaryview": "false"}'
+        'description': '{"label": "Identifier", "description": "database unique identity record", "summaryview": "false"}',
       },
-    ]
+    ],
   };
   const entityData = {
     'rows': [
       {
-        "id": "9a42efd1-7483-4946-8bb8-d7bcb9a3bf38",
-        "name": "The Viable Team",
-        "code": "BF0046",
-        "description": null,
-        "costcentrecode": null,
-        "parentteamid": null,
-        "bffunctiontypeid": "3ea8635b-244a-48b8-a0ca-c3c168167161",
-        "ministryid": 1,
-        "departmentid": 1,
-        "directorateid": 3,
-        "branchid": null,
-        "divisionid": null,
-        "commandid": null,
-        "validfrom": null,
-        "validto": null,
+        'id': '9a42efd1-7483-4946-8bb8-d7bcb9a3bf38',
+        'name': 'The Viable Team',
+        'code': 'BF0046',
+        'description': null,
+        'costcentrecode': null,
+        'parentteamid': null,
+        'bffunctiontypeid': '3ea8635b-244a-48b8-a0ca-c3c168167161',
+        'ministryid': 1,
+        'departmentid': 1,
+        'directorateid': 3,
+        'branchid': null,
+        'divisionid': null,
+        'commandid': null,
+        'validfrom': null,
+        'validto': null,
       },
     ],
   };
@@ -68,7 +68,7 @@ describe('Test Entity Routes', () => {
 
   describe('GET /v1/entities', () => {
     it('Should return all entities on success', () => {
-      let queryStub = sinon.stub(pool, 'query');
+      const queryStub = sinon.stub(pool, 'query');
       queryStub.onCall(0).resolves(entities);
       queryStub.onCall(1).resolves(entityDescription);
       // set the role
@@ -78,7 +78,7 @@ describe('Test Entity Routes', () => {
 
       return request(app)
         .get('/v1/entities')
-        .then(response => {
+        .then((response) => {
           expect(response.status).to.equal(200);
           expect(response.body).to.be.an('object').to.include.all.keys(
             'code',
@@ -97,5 +97,4 @@ describe('Test Entity Routes', () => {
   afterEach(() => {
     pool.query.restore();
   });
-
 });

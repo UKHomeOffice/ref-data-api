@@ -8,7 +8,7 @@ const Chance = require('chance');
 const logger = require('../../config/logger');
 const {
   extractToken,
-  jsonify
+  jsonify,
 } = require('../../helpers');
 
 describe('Test Helper Functions', () => {
@@ -20,7 +20,7 @@ describe('Test Helper Functions', () => {
   });
 
   it('Should jsonify an object in a string', () => {
-    const expectedData = {"message": "Hello World!"};
+    const expectedData = { 'message': 'Hello World!' };
     const result = jsonify('{"message": "Hello World!"}');
 
     expect(result).to.be.an('object').to.deep.equal(expectedData);
