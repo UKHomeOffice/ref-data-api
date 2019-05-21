@@ -12,7 +12,7 @@ spec:
         name: ref-data-api
     spec:
       containers:
-      - name: frontend
+      - name: api
         image: quay.io/ukhomeofficedigital/reference-data-api-service:{{.DRONE_COMMIT_SHA}}
         imagePullPolicy: Always
         securityContext:
@@ -26,10 +26,12 @@ spec:
             cpu: 200m
             memory: 500Mi
         env:
-        - name: POSTGREST_BASE_URL
-          value: {{.POSTGREST_BASE_URL}}
+        - name: DB_CONNECTION_STRING
+          value: {{.DB_CONNECTION_STRING}}
         - name: LOG_LEVEL
           value: {{.LOG_LEVEL}}
+        - name: PORT
+          value: 5000
         ports:
           - name: api
             containerPort: 5000

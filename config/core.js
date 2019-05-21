@@ -8,7 +8,7 @@ const postgrestUrls = {
 const config = {
   postgrestUrls,
   'logLevel': process.env.LOG_LEVEL || 'info',
-  'dbConnectionString': process.env.REF_DATA_DB_CONNECTION_STRING || 'postgres://user:pass@localhost:5432/dbname',
+  'dbConnectionString': process.env.DB_CONNECTION_STRING || 'postgres://user:pass@localhost:5432/dbname',
   'port': process.env.PORT || 5000,
 };
 
