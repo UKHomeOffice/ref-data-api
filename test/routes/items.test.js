@@ -3,7 +3,6 @@ const {
 } = require('mocha');
 const { expect } = require('chai');
 const Chance = require('chance');
-const nock = require('nock');
 const httpMocks = require('node-mocks-http');
 
 // local imports
@@ -36,12 +35,5 @@ describe('Test Item Routes', () => {
   after(() => {
     // enable logging
     logger.silent = false;
-  });
-
-  afterEach(() => {
-    // ensure that unused nock interceptors are not left behind
-    if (!nock.isDone()) {
-      nock.cleanAll();
-    }
   });
 });
