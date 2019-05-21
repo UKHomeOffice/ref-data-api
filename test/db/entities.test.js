@@ -26,9 +26,9 @@ describe('Test Entity Queries', () => {
       const obj = {
         'rows': [
           {
-            'description': '{"description": "Countries", "schemalastupdated": "10/03/2019", "dataversion": 1}'
+            'description': '{"description": "Countries", "schemalastupdated": "10/03/2019", "dataversion": 1}',
           },
-        ]
+        ],
       };
       sinon.stub(pool, 'query').resolves(obj);
 
@@ -36,7 +36,7 @@ describe('Test Entity Queries', () => {
         .then((result) => {
           expect(result).to.be.an('object');
           expect(result).to.be.an('object').to.include.all.keys(
-            'description'
+            'description',
           );
           expect(result.description).to.be.an('object').to.include.all.keys(
             'description',
@@ -52,7 +52,7 @@ describe('Test Entity Queries', () => {
 
       return getEntityDescription('country')
         .catch(error => expect(error.message).to.eql(expectedMsg));
-    })
+    });
   });
 
   describe('getEntitySchema', () => {
@@ -60,92 +60,92 @@ describe('Test Entity Queries', () => {
       const obj = {
         'rows': [
           {
-            column_name: 'id',
-            is_nullable: 'NO',
-            data_type: 'integer',
-            character_maximum_length: null,
-            description: '{"label": "Identifier", "description": "database unique identity record", "summaryview": "false"}'
+            'column_name': 'id',
+            'is_nullable': 'NO',
+            'data_type': 'integer',
+            'character_maximum_length': null,
+            'description': '{"label": "Identifier", "description": "database unique identity record", "summaryview": "false"}',
           },
           {
-            column_name: 'nationality',
-            is_nullable: 'NO',
-            data_type: 'character varying',
-            character_maximum_length: 330,
-            description: '{"label": "Identifier", "description": "Nationality names", "summaryview": "true"}'
+            'column_name': 'nationality',
+            'is_nullable': 'NO',
+            'data_type': 'character varying',
+            'character_maximum_length': 330,
+            'description': '{"label": "Identifier", "description": "Nationality names", "summaryview": "true"}',
           },
           {
-            column_name: 'iso31661alpha3',
-            is_nullable: 'YES',
-            data_type: 'character varying',
-            character_maximum_length: 3,
-            description: '{"label": "3 digit alpha code", "description": "Country 3 Character alpha code", "summaryview": "true"}'
+            'column_name': 'iso31661alpha3',
+            'is_nullable': 'YES',
+            'data_type': 'character varying',
+            'character_maximum_length': 3,
+            'description': '{"label": "3 digit alpha code", "description": "Country 3 Character alpha code", "summaryview": "true"}',
           },
           {
-            column_name: 'iso31661alpha2',
-            is_nullable: 'YES',
-            data_type: 'character varying',
-            character_maximum_length: 2,
-            description: '{"label": "2 digit alpha code", "description": "Country 2 Character alpha code", "summaryview": "true"}'
+            'column_name': 'iso31661alpha2',
+            'is_nullable': 'YES',
+            'data_type': 'character varying',
+            'character_maximum_length': 2,
+            'description': '{"label": "2 digit alpha code", "description": "Country 2 Character alpha code", "summaryview": "true"}',
           },
           {
-            column_name: 'visarequired',
-            is_nullable: 'NO',
-            data_type: 'boolean',
-            character_maximum_length: null,
-            description: '{"label": "Visa required", "description": "Is VISA required to visit UK", "summaryview": "false"}'
+            'column_name': 'visarequired',
+            'is_nullable': 'NO',
+            'data_type': 'boolean',
+            'character_maximum_length': null,
+            'description': '{"label": "Visa required", "description": "Is VISA required to visit UK", "summaryview": "false"}',
           },
           {
-            column_name: 'evwoptional',
-            is_nullable: 'NO',
-            data_type: 'boolean',
-            character_maximum_length: null,
-            description: '{"label": "Optional - EVW", "description": "Is Electronic Visa Waver optional to visit UK", "summaryview": "false"}'
+            'column_name': 'evwoptional',
+            'is_nullable': 'NO',
+            'data_type': 'boolean',
+            'character_maximum_length': null,
+            'description': '{"label": "Optional - EVW", "description": "Is Electronic Visa Waver optional to visit UK", "summaryview": "false"}',
           },
           {
-            column_name: 'diplomaticexception',
-            is_nullable: 'NO',
-            data_type: 'boolean',
-            character_maximum_length: null,
-            description: '{"label": "Exception - Diplomatic", "description": "Are there diplomatic exceptions for visiting the UK", "summaryview": "false"}'
+            'column_name': 'diplomaticexception',
+            'is_nullable': 'NO',
+            'data_type': 'boolean',
+            'character_maximum_length': null,
+            'description': '{"label": "Exception - Diplomatic", "description": "Are there diplomatic exceptions for visiting the UK", "summaryview": "false"}',
           },
           {
-            column_name: 'specialexception',
-            is_nullable: 'NO',
-            data_type: 'boolean',
-            character_maximum_length: null,
-            description: '{"label": "Exception - Special", "description": "Are there special exceptions for visiting the UK", "summaryview": "false"}'
+            'column_name': 'specialexception',
+            'is_nullable': 'NO',
+            'data_type': 'boolean',
+            'character_maximum_length': null,
+            'description': '{"label": "Exception - Special", "description": "Are there special exceptions for visiting the UK", "summaryview": "false"}',
           },
           {
-            column_name: 'countryid',
-            is_nullable: 'YES',
-            data_type: 'integer',
-            character_maximum_length: null,
-            description: '{"label": "Linked country id", "description": "Country link to Country dataset", "summaryview": "false"}'
+            'column_name': 'countryid',
+            'is_nullable': 'YES',
+            'data_type': 'integer',
+            'character_maximum_length': null,
+            'description': '{"label": "Linked country id", "description": "Country link to Country dataset", "summaryview": "false"}',
           },
           {
-            column_name: 'validfrom',
-            is_nullable: 'YES',
-            data_type: 'date',
-            character_maximum_length: null,
-            description: '{"label": "Valid from date", "description": "Item valid from date", "summaryview" : "false"}'
+            'column_name': 'validfrom',
+            'is_nullable': 'YES',
+            'data_type': 'date',
+            'character_maximum_length': null,
+            'description': '{"label": "Valid from date", "description": "Item valid from date", "summaryview" : "false"}',
           },
           {
-            column_name: 'validto',
-            is_nullable: 'YES',
-            data_type: 'date',
-            character_maximum_length: null,
-            description: '{"label": "Valid to date", "description": "Item valid to date", "summaryview" : "false"}'
+            'column_name': 'validto',
+            'is_nullable': 'YES',
+            'data_type': 'date',
+            'character_maximum_length': null,
+            'description': '{"label": "Valid to date", "description": "Item valid to date", "summaryview" : "false"}',
           },
-        ]
+        ],
       };
-      expectedData = {
+      const expectedData = {
         'required': [
           'id',
           'nationality',
           'visarequired',
           'evwoptional',
           'diplomaticexception',
-          'specialexception'
+          'specialexception',
         ],
         'properties': {
           'id': {
@@ -155,8 +155,8 @@ describe('Test Entity Queries', () => {
             'description': {
               'label': 'Identifier',
               'description': 'database unique identity record',
-              'summaryview': 'false'
-            }
+              'summaryview': 'false',
+            },
           },
           'nationality': {
             'maxLength': 330,
@@ -165,8 +165,8 @@ describe('Test Entity Queries', () => {
             'description': {
               'label': 'Identifier',
               'description': 'Nationality names',
-              'summaryview': 'true'
-            }
+              'summaryview': 'true',
+            },
           },
           'iso31661alpha3': {
             'maxLength': 3,
@@ -175,8 +175,8 @@ describe('Test Entity Queries', () => {
             'description': {
               'label': '3 digit alpha code',
               'description': 'Country 3 Character alpha code',
-              'summaryview': 'true'
-            }
+              'summaryview': 'true',
+            },
           },
           'iso31661alpha2': {
             'maxLength': 2,
@@ -185,8 +185,8 @@ describe('Test Entity Queries', () => {
             'description': {
               'label': '2 digit alpha code',
               'description': 'Country 2 Character alpha code',
-              'summaryview': 'true'
-            }
+              'summaryview': 'true',
+            },
           },
           'visarequired': {
             'maxLength': null,
@@ -195,8 +195,8 @@ describe('Test Entity Queries', () => {
             'description': {
               'label': 'Visa required',
               'description': 'Is VISA required to visit UK',
-              'summaryview': 'false'
-            }
+              'summaryview': 'false',
+            },
           },
           'evwoptional': {
             'maxLength': null,
@@ -205,8 +205,8 @@ describe('Test Entity Queries', () => {
             'description': {
               'label': 'Optional - EVW',
               'description': 'Is Electronic Visa Waver optional to visit UK',
-              'summaryview': 'false'
-            }
+              'summaryview': 'false',
+            },
           },
           'diplomaticexception': {
             'maxLength': null,
@@ -215,8 +215,8 @@ describe('Test Entity Queries', () => {
             'description': {
               'label': 'Exception - Diplomatic',
               'description': 'Are there diplomatic exceptions for visiting the UK',
-              'summaryview': 'false'
-            }
+              'summaryview': 'false',
+            },
           },
           'specialexception': {
             'maxLength': null,
@@ -225,8 +225,8 @@ describe('Test Entity Queries', () => {
             'description': {
               'label': 'Exception - Special',
               'description': 'Are there special exceptions for visiting the UK',
-              'summaryview': 'false'
-            }
+              'summaryview': 'false',
+            },
           },
           'countryid': {
             'maxLength': null,
@@ -235,8 +235,8 @@ describe('Test Entity Queries', () => {
             'description': {
               'label': 'Linked country id',
               'description': 'Country link to Country dataset',
-              'summaryview': 'false'
-            }
+              'summaryview': 'false',
+            },
           },
           'validfrom': {
             'maxLength': null,
@@ -245,8 +245,8 @@ describe('Test Entity Queries', () => {
             'description': {
               'label': 'Valid from date',
               'description': 'Item valid from date',
-              'summaryview': 'false'
-            }
+              'summaryview': 'false',
+            },
           },
           'validto': {
             'maxLength': null,
@@ -255,10 +255,10 @@ describe('Test Entity Queries', () => {
             'description': {
               'label': 'Valid to date',
               'description': 'Item valid to date',
-              'summaryview': 'false'
-            }
-          }
-       }
+              'summaryview': 'false',
+            },
+          },
+        },
       };
       sinon.stub(pool, 'query').resolves(obj);
 

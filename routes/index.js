@@ -8,9 +8,9 @@ const items = require('./items');
 
 const app = express();
 const corsConfiguration = {
-  origin: '*',
-  methods: ['GET', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  'origin': '*',
+  'methods': ['GET', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
+  'allowedHeaders': ['Content-Type', 'Authorization'],
 };
 app.use(cors(corsConfiguration));
 app.options('*', cors(corsConfiguration));

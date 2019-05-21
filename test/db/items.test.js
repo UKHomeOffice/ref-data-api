@@ -48,7 +48,7 @@ describe('Test Item Queries', () => {
             'validfrom',
             'validto',
           );
-        })
+        });
     });
 
     it('Should reject with an error if the role, table or id, do not exist', () => {
@@ -57,6 +57,6 @@ describe('Test Item Queries', () => {
 
       return getItemData('readonly', 'country', 175)
         .catch(error => expect(error.message).to.eql(expectedMsg));
-    })
+    });
   });
 });
