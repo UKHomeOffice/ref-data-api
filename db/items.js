@@ -13,7 +13,7 @@ const getItemData = (role, tableName, objId) => new Promise((resolve, reject) =>
     .catch((error) => {
       const errorMsg = `Unable to retrieve data from table ${tableName} row id ${objId}`;
       logger.error(errorMsg);
-      logger.error(error);
+      logger.error(error.stack)
       reject(new Error(errorMsg));
     });
 });

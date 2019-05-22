@@ -13,7 +13,7 @@ const getEntityDescription = tableName => new Promise((resolve, reject) => {
     .catch((error) => {
       const errorMsg = `Unable to retrieve description from table ${tableName}`;
       logger.error(errorMsg);
-      logger.error(error);
+      logger.error(error.stack)
       reject(new Error(errorMsg));
     });
 });
@@ -43,7 +43,7 @@ const getEntitySchema = (role, entityName) => new Promise((resolve, reject) => {
     .catch((error) => {
       const errorMsg = `Unable to retrieve schema from table ${entityName}`;
       logger.error(errorMsg);
-      logger.error(error);
+      logger.error(error.stack)
       reject(new Error(errorMsg));
     });
 });
@@ -57,6 +57,7 @@ const getAllEntities = () => pool.query('SELECT * FROM pg_catalog.pg_tables WHER
   .catch((error) => {
     const errorMsg = 'Unable to retrieve tables from database';
     logger.error(errorMsg);
+    logger.error(error.stack)
     return new Error(errorMsg);
   });
 
@@ -67,7 +68,7 @@ const getEntityData = (role, entityName) => new Promise((resolve, reject) => {
     .catch((error) => {
       const errorMsg = `Unable to retrieve data from table ${entityName}`;
       logger.error(errorMsg);
-      logger.error(error);
+      logger.error(error.stack)
       reject(new Error(errorMsg));
     });
 });
