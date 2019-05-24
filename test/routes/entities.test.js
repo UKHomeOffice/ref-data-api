@@ -1,6 +1,5 @@
-const request = require('supertest');
-const express = require('express');
 const nock = require('nock');
+const request = require('supertest');
 const sinon = require('sinon');
 const { expect } = require('chai');
 
@@ -107,12 +106,12 @@ describe('Test Entity Routes', () => {
         });
     });
 
-    it('Should submit a new entity item request successfully', () => {
+    it('Should submit a successful request to create new entity item', () => {
       const date = new Date();
       const utcTimestampString = date.toUTCString();
 
       // new object to be submitted to Camunda
-      const newEntityItem = {
+      const body = {
         'iso31661alpha2': 'FJ',
         'iso31661alpha3': 'FJI',
         'name': 'Fiji',
@@ -121,7 +120,7 @@ describe('Test Entity Routes', () => {
         'iso31661numeric': '242',
       };
 
-      const payload = {
+      const newEntityItem = {
         'variables': {
           'action': {
             'value': 'POST',
@@ -131,7 +130,7 @@ describe('Test Entity Routes', () => {
             'value': 'Item',
             'type': 'String',
           },
-          'entityname': {
+          'entityName': {
             'value': 'country',
             'type': 'String',
           },
@@ -139,8 +138,8 @@ describe('Test Entity Routes', () => {
             'value': utcTimestampString,
             'type': 'String',
           },
-          'newItem': {
-            'value': JSON.stringify(newEntityItem),
+          'changeRequested': {
+            'value': JSON.stringify(body),
             'type': 'json',
           },
         },
@@ -148,7 +147,7 @@ describe('Test Entity Routes', () => {
 
       // mock Camunda response
       nock(config.camundaUrls.baseUrl)
-        .post('/engine-rest/process-definition/key/reference-data-approval/submit-form', payload)
+        .post('/engine-rest/process-definition/key/reference-data-approval/submit-form', newEntityItem)
         .reply(200, {
           'businessKey': null,
           'caseInstanceId': null,
@@ -169,7 +168,7 @@ describe('Test Entity Routes', () => {
       // hit API /v1/entities/country
       return request(app)
         .post('/v1/entities/country')
-        .send(newEntityItem)
+        .send(body)
         .set('Accept', 'application/json')
         .then((response) => {
           expect(response.status).to.equal(200);
