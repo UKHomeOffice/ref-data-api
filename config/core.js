@@ -1,7 +1,7 @@
 const camundaBaseUrl = process.env.CAMUNDA_BASE_URL || 'http://localhost:8080';
 const camundaUrls = {
   'baseUrl': camundaBaseUrl,
-  'postEntityItem': `${camundaBaseUrl}/engine-rest/process-definition/key/reference-data-approval/submit-form`,
+  'submitRequest': `${camundaBaseUrl}/engine-rest/process-definition/key/reference-data-approval/submit-form`,
 };
 
 const config = {
