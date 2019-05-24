@@ -102,7 +102,7 @@ const postEntityItem = (req, res) => {
         'value': 'Item',
         'type': 'String',
       },
-      'entityname': {
+      'entityName': {
         'value': name,
         'type': 'String',
       },
@@ -110,14 +110,14 @@ const postEntityItem = (req, res) => {
         'value': utcTimestampString,
         'type': 'String',
       },
-      'newItem': {
+      'changeRequested': {
         'value': JSON.stringify(body),
         'type': 'json',
       },
     },
   };
 
-  axios.post(config.camundaUrls.postEntityItem, newEntityItem)
+  axios.post(config.camundaUrls.submitRequest, newEntityItem)
     .then((response) => {
       logger.info('New entity item requested');
       logger.info(response.data);
