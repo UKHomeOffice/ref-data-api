@@ -1,3 +1,4 @@
+const axios = require('axios');
 const router = require('express').Router();
 
 // local imports
@@ -80,11 +81,57 @@ const patchEntitySchema = (req, res) => {
 };
 
 const postEntityItem = (req, res) => {
+  const { body } = req;
   const { name } = req.params;
-  const token = extractToken(req.headers.authorization);
-  res.json({
-    'message': `Successfully created a new item in the entity '${name}'`,
-  });
+
+
+  if (Object.entries(body).length === 0 && body.constructor === Object) {
+    return res.status(400).json({ 'message': 'Invalid JSON object' });
+  }
+
+  const date = new Date();
+  const utcTimestampString = date.toUTCString();
+
+  const newEntityItem = {
+    'variables': {
+      'action': {
+        'value': 'POST',
+        'type': 'String'
+      },
+      'object': {
+        'value': 'Item',
+        'type': 'String'
+      },
+      'entityname': {
+        'value': name,
+        'type': 'String'
+      },
+      'requestedDateTime': {
+        'value': utcTimestampString,
+        'type': 'String'
+      },
+      'newItem': {
+        'value': JSON.stringify(body),
+        'type': 'json'
+      }
+    }
+  };
+
+  axios.post(config.camundaUrls.postEntityItem, newEntityItem)
+    .then((response) => {
+      logger.info('New entity item requested');
+      logger.info(response.data);
+      res.status(200).json(
+        {
+          'status': 200,
+          'requestId': response.data.id
+        }
+      );
+    })
+    .catch((error) => {
+      logger.error(error.stack);
+      res.status(400).json({});
+    });
 };
 
 module.exports = {
