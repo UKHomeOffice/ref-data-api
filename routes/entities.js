@@ -96,25 +96,25 @@ const postEntityItem = (req, res) => {
     'variables': {
       'action': {
         'value': 'POST',
-        'type': 'String'
+        'type': 'String',
       },
       'object': {
         'value': 'Item',
-        'type': 'String'
+        'type': 'String',
       },
       'entityname': {
         'value': name,
-        'type': 'String'
+        'type': 'String',
       },
       'requestedDateTime': {
         'value': utcTimestampString,
-        'type': 'String'
+        'type': 'String',
       },
       'newItem': {
         'value': JSON.stringify(body),
-        'type': 'json'
-      }
-    }
+        'type': 'json',
+      },
+    },
   };
 
   axios.post(config.camundaUrls.postEntityItem, newEntityItem)
@@ -124,8 +124,8 @@ const postEntityItem = (req, res) => {
       res.status(200).json(
         {
           'status': 200,
-          'requestId': response.data.id
-        }
+          'requestId': response.data.id,
+        },
       );
     })
     .catch((error) => {

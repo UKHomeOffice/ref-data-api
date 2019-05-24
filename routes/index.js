@@ -16,7 +16,7 @@ const corsConfiguration = {
 };
 app.use(cors(corsConfiguration));
 // 'extended': 'true' allows the values of the objects passed, to be of any type
-app.use(bodyParser.urlencoded({'extended': 'true'}));
+app.use(bodyParser.urlencoded({ 'extended': 'true' }));
 app.use(bodyParser.json());
 
 app.options('*', cors(corsConfiguration));

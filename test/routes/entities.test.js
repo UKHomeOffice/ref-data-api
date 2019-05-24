@@ -11,7 +11,6 @@ const logger = require('../../config/logger');
 const pool = require('../../db/index');
 
 describe('Test Entity Routes', () => {
-
   before(() => {
     // disable logging
     logger.silent = true;
@@ -104,7 +103,7 @@ describe('Test Entity Routes', () => {
         .set('Accept', 'application/json')
         .then((response) => {
           expect(response.status).to.equal(400);
-          expect(response.body).to.deep.equal({'message': 'Invalid JSON object'});
+          expect(response.body).to.deep.equal({ 'message': 'Invalid JSON object' });
         });
     });
 
@@ -119,32 +118,32 @@ describe('Test Entity Routes', () => {
         'name': 'Fiji',
         'continent': 'OC',
         'dial': '679',
-        'iso31661numeric': '242'
+        'iso31661numeric': '242',
       };
 
       const payload = {
         'variables': {
           'action': {
             'value': 'POST',
-            'type': 'String'
+            'type': 'String',
           },
           'object': {
             'value': 'Item',
-            'type': 'String'
+            'type': 'String',
           },
           'entityname': {
             'value': 'country',
-            'type': 'String'
+            'type': 'String',
           },
           'requestedDateTime': {
             'value': utcTimestampString,
-            'type': 'String'
+            'type': 'String',
           },
           'newItem': {
             'value': JSON.stringify(newEntityItem),
-            'type': 'json'
-          }
-        }
+            'type': 'json',
+          },
+        },
       };
 
       // mock Camunda response
@@ -153,18 +152,18 @@ describe('Test Entity Routes', () => {
         .reply(200, {
           'businessKey': null,
           'caseInstanceId': null,
-          'definitionId': "reference-data-approval:1:961a6e12-7ba7-11e9-b1ca-024207321f63",
+          'definitionId': 'reference-data-approval:1:961a6e12-7ba7-11e9-b1ca-024207321f63',
           'ended': false,
-          'id': "b7ef3ef1-7d61-11e9-9d6b-0242ef52c696",
+          'id': 'b7ef3ef1-7d61-11e9-9d6b-0242ef52c696',
           'links': [
             {
-              'href': "http://localhost:8080/engine-rest/process-instance/b7ef3ef1-7d61-11e9-9d6b-0242ef52c696",
-              'method': "GET",
-              'rel': "self"
-            }
+              'href': 'http://localhost:8080/engine-rest/process-instance/b7ef3ef1-7d61-11e9-9d6b-0242ef52c696',
+              'method': 'GET',
+              'rel': 'self',
+            },
           ],
           'suspended': false,
-          'tenantId': null
+          'tenantId': null,
         });
 
       // hit API /v1/entities/country
@@ -174,7 +173,7 @@ describe('Test Entity Routes', () => {
         .set('Accept', 'application/json')
         .then((response) => {
           expect(response.status).to.equal(200);
-          expect(response.body).to.deep.equal({status: 200, requestId: "b7ef3ef1-7d61-11e9-9d6b-0242ef52c696"});
+          expect(response.body).to.deep.equal({ 'status': 200, 'requestId': 'b7ef3ef1-7d61-11e9-9d6b-0242ef52c696' });
         });
     });
   });
