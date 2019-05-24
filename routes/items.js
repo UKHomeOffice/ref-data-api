@@ -68,7 +68,7 @@ const patchItemField = (req, res) => {
         'value': JSON.stringify(body),
         'type': 'json',
       },
-    }
+    },
   };
 
   axios.post(config.camundaUrls.submitRequest, updateItemField)

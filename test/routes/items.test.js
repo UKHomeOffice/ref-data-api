@@ -39,8 +39,8 @@ describe('Test Item Routes', () => {
         'item': 3,
         'field': 'iso31661alpha2',
         'newValue': 'AB',
-        'validfrom': null,
-        'validto': null
+        'validFrom': null,
+        'validTo': null,
       };
 
       const updateItemField = {
@@ -65,7 +65,7 @@ describe('Test Item Routes', () => {
             'value': JSON.stringify(body),
             'type': 'json',
           },
-        }
+        },
       };
 
       // nock Camunda response
