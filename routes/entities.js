@@ -1,5 +1,6 @@
 const axios = require('axios');
-const router = require('express').Router();
+// const router = require('express').Router();
+const { validationResult } = require('express-validator/check');
 
 // local imports
 const config = require('../config/core');
@@ -72,12 +73,56 @@ const getEntity = (req, res) => {
 };
 
 const patchEntitySchema = (req, res) => {
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ 'errors': errors.array() });
+  }
+
+  const { body } = req;
   const { name } = req.params;
-  const token = extractToken(req.headers.authorization);
-  logger.info(`Updated ${name} schema`);
-  res.json({
-    'message': `Entity '${name}' schema updated`,
-  });
+  const date = new Date();
+  const utcTimeStampString = date.toUTCString();
+  const updateEntitySchema = {
+    'variables': {
+      'action': {
+        'value': 'PATCH',
+        'type': 'string',
+      },
+      'object': {
+        'value': 'Schema',
+        'type': 'string',
+      },
+      'entityName': {
+        'value': name,
+        'type': 'string',
+      },
+      'requestedDateTime': {
+        'value': utcTimeStampString,
+        'type': 'string',
+      },
+      'changeRequested': {
+        'value': JSON.stringify(body),
+        'type': 'json',
+      },
+    },
+  };
+
+  axios.post(config.camundaUrls.submitRequest, updateEntitySchema)
+    .then((response) => {
+      logger.info('Schema field value update requested');
+      logger.info(response.data);
+      res.status(200).json(
+        {
+          'status': 200,
+          'requestId': response.data.id,
+        },
+      );
+    })
+    .catch((error) => {
+      logger.error(error.stack);
+      res.status(400).json({'error': error.message});
+    });
 };
 
 const postEntityItem = (req, res) => {
