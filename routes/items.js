@@ -1,5 +1,6 @@
 const axios = require('axios');
 const router = require('express').Router();
+const { validationResult } = require('express-validator/check');
 
 // local imports
 const config = require('../config/core');
@@ -36,16 +37,17 @@ const getItem = (req, res) => {
 };
 
 const patchItemField = (req, res) => {
-  const { body } = req;
-  const { name, id } = req.params;
+  const errors = validationResult(req);
 
-  if (Object.entries(body).length === 0 && body.constructor === Object) {
-    return res.status(400).json({ 'message': 'Invalid JSON object' });
+  if (!errors.isEmpty()) {
+    logger.error(errors.array);
+    return res.status(422).json({ 'errors': errors.array() });
   }
 
+  const { body } = req;
+  const { name, id } = req.params;
   const date = new Date();
   const utcTimeStampString = date.toUTCString();
-
   const updateItemField = {
     'variables': {
       'action': {
