@@ -16,9 +16,23 @@ describe('Test Item Routes', () => {
   });
 
   describe('PATCH /v1/entities/:name/items/:id', () => {
-    it('Should return 400 Bad Request if the payload is an empty object or null', () => {
-      // create an invalid JSON object
-      const body = null;
+    it('Should return an array with errors if the payload is empty', () => {
+      // create an empty payload
+      const body = {};
+      const expectedErrors = {
+        'errors': [
+          {
+            'location': 'body',
+            'param': 'field',
+            'msg': 'Invalid value'
+          },
+          {
+            'location': 'body',
+            'param': 'newValue',
+            'msg': 'Invalid value'
+          },
+        ]
+      }
 
       // hit API /v1/entities/country/items/3
       return request(app)
@@ -26,8 +40,8 @@ describe('Test Item Routes', () => {
         .send(body)
         .set('Accept', 'application/json')
         .then((response) => {
-          expect(response.status).to.equal(400);
-          expect(response.body).to.deep.equal({ 'message': 'Invalid JSON object' });
+          expect(response.status).to.equal(422);
+          expect(response.body).to.deep.equal(expectedErrors);
         });
     });
 
@@ -39,7 +53,7 @@ describe('Test Item Routes', () => {
         'item': 3,
         'field': 'iso31661alpha2',
         'newValue': 'AB',
-        'validFrom': null,
+        'validFrom': '10/08/2020',
         'validTo': null,
       };
 
