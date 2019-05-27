@@ -32,10 +32,10 @@ app.patch(
     check('id').not().isEmpty().trim(),
     check('field').not().isEmpty().trim(),
     check('newValue').not().isEmpty().trim(),
-    check('validFrom').optional({'nullable': true}).trim(),
-    check('validTo').optional({'nullable': true}).trim(),
+    check('validFrom').optional({ 'nullable': true }).trim(),
+    check('validTo').optional({ 'nullable': true }).trim(),
   ],
-  items.patchItemField
+  items.patchItemField,
 );
 
 module.exports = app;

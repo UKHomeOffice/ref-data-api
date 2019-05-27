@@ -24,15 +24,15 @@ describe('Test Item Routes', () => {
           {
             'location': 'body',
             'param': 'field',
-            'msg': 'Invalid value'
+            'msg': 'Invalid value',
           },
           {
             'location': 'body',
             'param': 'newValue',
-            'msg': 'Invalid value'
+            'msg': 'Invalid value',
           },
-        ]
-      }
+        ],
+      };
 
       // hit API /v1/entities/country/items/3
       return request(app)
