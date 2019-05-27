@@ -50,7 +50,7 @@ describe('Test Item Routes', () => {
       const utcTimeStampString = date.toUTCString();
 
       const body = {
-        'item': 3,
+        'id': 3,
         'field': 'iso31661alpha2',
         'newValue': 'AB',
         'validFrom': '10/08/2020',
@@ -102,7 +102,7 @@ describe('Test Item Routes', () => {
           'tenantId': null,
         });
 
-      // hit API /v1/entities/country
+      // hit API /v1/entities/country/items/3
       return request(app)
         .patch('/v1/entities/country/items/3')
         .send(body)

@@ -90,6 +90,120 @@ describe('Test Entity Routes', () => {
     });
   });
 
+  describe('PATCH /v1/entities/:name', () => {
+    it('Should return an array with errors if the payload is empty', () => {
+      // create an empty payload
+      const body = {};
+      const expectedErrors = {
+        "errors": [
+          {
+            "location": "body",
+            "param": "entity",
+            "msg": "Invalid value"
+          },
+          {
+            "location": "body",
+            "param": "field",
+            "msg": "Invalid value"
+          },
+          {
+            "location": "body",
+            "param": "newValue",
+            "msg": "Invalid value"
+          },
+          {
+            "location": "body",
+            "param": "validFrom",
+            "msg": "Invalid value"
+          },
+          {
+            "location": "body",
+            "param": "validTo",
+            "msg": "Invalid value"
+          }
+        ]
+      }
+
+      // hit API /v1/entities/country
+      return request(app)
+        .patch('/v1/entities/country')
+        .send(body)
+        .set('Accept', 'application/json')
+        .then((response) => {
+          expect(response.status).to.equal(422);
+          expect(response.body).to.deep.equal(expectedErrors);
+        });
+    });
+
+    it('Should submit a successful request to update schema field', () => {
+      const date = new Date();
+      const utcTimeStampString = date.toUTCString();
+
+      const body = {
+        'entity': 'country',
+        'field': 'description',
+        'newValue': 'This entity list all the existing countries up to 2019',
+        'validFrom': '10/08/2019',
+        'validTo': null,
+      };
+
+      const newEntityItem = {
+        'variables': {
+          'action': {
+            'value': 'PATCH',
+            'type': 'string',
+          },
+          'object': {
+            'value': 'Schema',
+            'type': 'string',
+          },
+          'entityName': {
+            'value': 'country',
+            'type': 'string',
+          },
+          'requestedDateTime': {
+            'value': utcTimeStampString,
+            'type': 'string',
+          },
+          'changeRequested': {
+            'value': JSON.stringify(body),
+            'type': 'json',
+          },
+        },
+      };
+
+      // mock Camunda response
+      nock(config.camundaUrls.baseUrl)
+        .post('/engine-rest/process-definition/key/reference-data-approval/submit-form', newEntityItem)
+        .reply(200, {
+          'businessKey': null,
+          'caseInstanceId': null,
+          'definitionId': 'reference-data-approval:1:961a6e12-7ba7-11e9-b1ca-024207321f63',
+          'ended': false,
+          'id': 'b7ef3ef1-7d61-11e9-9d6b-0242ef52c696',
+          'links': [
+            {
+              'href': 'http://localhost:8080/engine-rest/process-instance/b7ef3ef1-7d61-11e9-9d6b-0242ef52c696',
+              'method': 'GET',
+              'rel': 'self',
+            },
+          ],
+          'suspended': false,
+          'tenantId': null,
+        });
+
+      // hit API /v1/entities/country
+      return request(app)
+        .patch('/v1/entities/country')
+        .send(body)
+        .set('Accept', 'application/json')
+        .then((response) => {
+          expect(response.status).to.equal(200);
+          expect(response.body).to.deep.equal({ 'status': 200, 'requestId': 'b7ef3ef1-7d61-11e9-9d6b-0242ef52c696' });
+        });
+    });
+  });
+
   describe('POST /v1/entities/:name', () => {
     it('Should return error if the payload is not an object', () => {
       // create an invalid JSON object
