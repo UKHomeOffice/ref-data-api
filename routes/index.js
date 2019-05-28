@@ -1,7 +1,7 @@
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const express = require('express');
-// const router = require('express').Router();
+const { check } = require('express-validator/check');
 
 // local imports
 const entities = require('./entities');
@@ -26,6 +26,16 @@ app.get('/v1/entities/:name', entities.getEntity);
 app.patch('/v1/entities/:name', entities.patchEntitySchema);
 app.post('/v1/entities/:name', entities.postEntityItem);
 app.get('/v1/entities/:name/items/:id', items.getItem);
-app.patch('/v1/entities/:name/items/:id', items.patchItemField);
+app.patch(
+  '/v1/entities/:name/items/:id',
+  [
+    check('id').not().isEmpty().trim(),
+    check('field').not().isEmpty().trim(),
+    check('newValue').not().isEmpty().trim(),
+    check('validFrom').optional({ 'nullable': true }).trim(),
+    check('validTo').optional({ 'nullable': true }).trim(),
+  ],
+  items.patchItemField,
+);
 
 module.exports = app;

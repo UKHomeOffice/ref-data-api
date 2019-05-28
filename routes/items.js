@@ -1,4 +1,6 @@
+const axios = require('axios');
 const router = require('express').Router();
+const { validationResult } = require('express-validator/check');
 
 // local imports
 const config = require('../config/core');
@@ -35,12 +37,57 @@ const getItem = (req, res) => {
 };
 
 const patchItemField = (req, res) => {
-  const { name, id, field } = req.params;
-  const token = extractToken(req.headers.authorization);
-  logger.info(`Updated ${name} field ${field}`);
-  res.json({
-    'message': `Field '${field}' updated`,
-  });
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    logger.error(errors.array);
+    return res.status(422).json({ 'errors': errors.array() });
+  }
+
+  const { body } = req;
+  const { name, id } = req.params;
+  const date = new Date();
+  const utcTimeStampString = date.toUTCString();
+  const updateItemField = {
+    'variables': {
+      'action': {
+        'value': 'PATCH',
+        'type': 'String',
+      },
+      'object': {
+        'value': 'Item',
+        'type': 'String',
+      },
+      'entityName': {
+        'value': name,
+        'type': 'String',
+      },
+      'requestedDateTime': {
+        'value': utcTimeStampString,
+        'type': 'String',
+      },
+      'changeRequested': {
+        'value': JSON.stringify(body),
+        'type': 'json',
+      },
+    },
+  };
+
+  axios.post(config.camundaUrls.submitRequest, updateItemField)
+    .then((response) => {
+      logger.info('Item field value update requested');
+      logger.info(response.data);
+      res.status(200).json(
+        {
+          'status': 200,
+          'requestId': response.data.id,
+        },
+      );
+    })
+    .catch((error) => {
+      logger.error(error.stack);
+      res.status(400).json({});
+    });
 };
 
 module.exports = { getItem, patchItemField };
