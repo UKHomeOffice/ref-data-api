@@ -49,27 +49,54 @@ const getEntities = async (req, res) => {
 };
 
 const getEntity = (req, res) => {
-  const entityName = req.params.name;
+  // set default to `false`
+  const { schemaOnly = 'false' } = req.query;
+  const { name:entityName } = req.params;
 
-  const promise1 = getEntityDescription(entityName);
-  const promise2 = getEntitySchema(config.readOnlyRole, entityName);
-  const promise3 = getEntityData(config.readOnlyRole, entityName);
+  const entityDescription = getEntityDescription(entityName);
+  const entitySchema = getEntitySchema(config.readOnlyRole, entityName);
 
-  Promise.all([promise1, promise2, promise3])
-    .then((resultsArray) => {
-      res.json({
-        'status': 'success',
-        'code': 200,
-        'entityLabel': '',
-        'entitySchema': {
-          'description': resultsArray[0].description,
-          'required': resultsArray[1].required,
-          'properties': resultsArray[1].properties,
-        },
-        'data': resultsArray[2],
+  // no data is required, only the entity schema which includes
+  // description, required and properties
+  if (schemaOnly === 'true') {
+    Promise.all([entityDescription, entitySchema])
+      .then((resultsArray) => {
+        res.json({
+          'status': 'success',
+          'code': 200,
+          'entityLabel': '',
+          'entitySchema': {
+            'description': resultsArray[0].description,
+            'required': resultsArray[1].required,
+            'properties': resultsArray[1].properties,
+          },
+        });
+      })
+      .catch((error) => {
+        logger.error(error.stack);
+        res.json({ 'error': error.message })
       });
-    })
-    .catch(error => res.json({ 'message': error.message }));
+  } else {
+    const entityData = getEntityData(config.readOnlyRole, entityName);
+    Promise.all([entityDescription, entitySchema, entityData])
+      .then((resultsArray) => {
+        res.json({
+          'status': 'success',
+          'code': 200,
+          'entityLabel': '',
+          'entitySchema': {
+            'description': resultsArray[0].description,
+            'required': resultsArray[1].required,
+            'properties': resultsArray[1].properties,
+          },
+          'data': resultsArray[2],
+        });
+      })
+      .catch((error) => {
+        logger.error(error.stack);
+        res.json({ 'error': error.message })
+      });
+  };
 };
 
 const patchEntitySchema = (req, res) => {
