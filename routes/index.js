@@ -23,7 +23,17 @@ app.options('*', cors(corsConfiguration));
 
 app.get('/v1/entities', entities.getEntities);
 app.get('/v1/entities/:name', entities.getEntity);
-app.patch('/v1/entities/:name', entities.patchEntitySchema);
+app.patch(
+  '/v1/entities/:name',
+  [
+    check('entity').not().isEmpty().trim(),
+    check('field').not().isEmpty().trim(),
+    check('newValue').not().isEmpty().trim(),
+    check('validFrom').exists().trim(),
+    check('validTo').exists().trim(),
+  ],
+  entities.patchEntitySchema
+);
 app.post('/v1/entities/:name', entities.postEntityItem);
 app.get('/v1/entities/:name/items/:id', items.getItem);
 app.patch(
