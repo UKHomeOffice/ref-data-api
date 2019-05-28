@@ -95,34 +95,34 @@ describe('Test Entity Routes', () => {
       // create an empty payload
       const body = {};
       const expectedErrors = {
-        "errors": [
+        'errors': [
           {
-            "location": "body",
-            "param": "entity",
-            "msg": "Invalid value"
+            'location': 'body',
+            'param': 'entity',
+            'msg': 'Invalid value',
           },
           {
-            "location": "body",
-            "param": "field",
-            "msg": "Invalid value"
+            'location': 'body',
+            'param': 'field',
+            'msg': 'Invalid value',
           },
           {
-            "location": "body",
-            "param": "newValue",
-            "msg": "Invalid value"
+            'location': 'body',
+            'param': 'newValue',
+            'msg': 'Invalid value',
           },
           {
-            "location": "body",
-            "param": "validFrom",
-            "msg": "Invalid value"
+            'location': 'body',
+            'param': 'validFrom',
+            'msg': 'Invalid value',
           },
           {
-            "location": "body",
-            "param": "validTo",
-            "msg": "Invalid value"
-          }
-        ]
-      }
+            'location': 'body',
+            'param': 'validTo',
+            'msg': 'Invalid value',
+          },
+        ],
+      };
 
       // hit API /v1/entities/country
       return request(app)

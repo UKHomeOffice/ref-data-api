@@ -32,7 +32,7 @@ app.patch(
     check('validFrom').exists().trim(),
     check('validTo').exists().trim(),
   ],
-  entities.patchEntitySchema
+  entities.patchEntitySchema,
 );
 app.post('/v1/entities/:name', entities.postEntityItem);
 app.get('/v1/entities/:name/items/:id', items.getItem);

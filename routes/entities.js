@@ -51,7 +51,7 @@ const getEntities = async (req, res) => {
 const getEntity = (req, res) => {
   // set default to `false`
   const { schemaOnly = 'false' } = req.query;
-  const { name:entityName } = req.params;
+  const { name: entityName } = req.params;
 
   const entityDescription = getEntityDescription(entityName);
   const entitySchema = getEntitySchema(config.readOnlyRole, entityName);
@@ -74,7 +74,7 @@ const getEntity = (req, res) => {
       })
       .catch((error) => {
         logger.error(error.stack);
-        res.json({ 'error': error.message })
+        res.json({ 'error': error.message });
       });
   } else {
     const entityData = getEntityData(config.readOnlyRole, entityName);
@@ -94,9 +94,9 @@ const getEntity = (req, res) => {
       })
       .catch((error) => {
         logger.error(error.stack);
-        res.json({ 'error': error.message })
+        res.json({ 'error': error.message });
       });
-  };
+  }
 };
 
 const patchEntitySchema = (req, res) => {
@@ -148,7 +148,7 @@ const patchEntitySchema = (req, res) => {
     })
     .catch((error) => {
       logger.error(error.stack);
-      res.status(400).json({'error': error.message});
+      res.status(400).json({ 'error': error.message });
     });
 };
 
