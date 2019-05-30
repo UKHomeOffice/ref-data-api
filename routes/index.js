@@ -1,11 +1,10 @@
-const axios = require('axios');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const express = require('express');
+const jwtDecode = require('jwt-decode');
 const { check } = require('express-validator/check');
 
 // local imports
-const config = require('../config/core');
 const entities = require('./entities');
 const items = require('./items');
 const logger = require('../config/logger');
@@ -23,28 +22,23 @@ app.use(bodyParser.json());
 // check each request for authorization token
 app.use((req, res, next) => {
   if (req.headers.authorization) {
-    const headers = {
-      'headers': {
-        'Authorization': req.headers.authorization
-      },
-    };
-    axios(config.keycloakUserInfoUrl, headers)
-      .then((response) => {
-        // if the status is not 'OK' the token is invalid
-        if (response.status !== 200) {
-          logger.error('Invalid authorization token - Unauthorized');
-          res.status(401).json({ 'error': 'Unauthorized' });
-        }
-        // pass the user info returned by keycloak by storing in `res.locals`
-        res.locals.user = response.data;
-        logger.info(`Request by ${res.locals.user.name}, ${res.locals.user.email}`);
-        // the authorization token is valid, process request
-        next()
-      })
-      .catch((error) => {
-        logger.error(error.message);
-        return new Error(error.stack);
-      });
+    // decode the keycloak jwt token
+    const token = jwtDecode(req.headers.authorization);
+    const tokenExpiryDate = new Date(token.exp * 1000);
+    const currentDate = new Date();
+
+    // check if the token expiry time is in the future
+    if (currentDate.getTime() < tokenExpiryDate.getTime()) {
+      logger.info(`Request by ${token.name}, ${token.email} - Token valid`);
+      logger.info(`Token valid until - ${tokenExpiryDate.toTimeString()}`);
+      res.locals.user = token;
+      // process request
+      next();
+    } else {
+      logger.error(`Request by ${token.name}, ${token.email} - Unauthorized - Token expired`);
+      logger.error(`Token expired at - ${tokenExpiryDate.toTimeString()}`);
+      res.status(401).json({ 'error': 'Unauthorized' });
+    }
   } else {
     // no authorization token was passed, don't process the request further
     res.status(401).json({ 'error': 'Unauthorized' });

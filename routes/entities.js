@@ -35,7 +35,7 @@ const getEntities = async (req, res) => {
     const description = await getEntityDescription(entity);
     dataObject.description = description;
 
-    const schema = await getEntitySchema(config.readOnlyRole, entity);
+    const schema = await getEntitySchema(res.locals.user.refdbrole, entity);
     dataObject.required = schema.required;
     dataObject.properties = schema.properties;
 
@@ -50,10 +50,10 @@ const getEntities = async (req, res) => {
 const getEntity = (req, res) => {
   // set default to `false`
   const { schemaOnly = 'false' } = req.query;
-  const { name: entityName } = req.params;
+  const { 'name': entityName } = req.params;
 
   const entityDescription = getEntityDescription(entityName);
-  const entitySchema = getEntitySchema(config.readOnlyRole, entityName);
+  const entitySchema = getEntitySchema(res.locals.user.refdbrole, entityName);
 
   // no data is required, only the entity schema which includes
   // description, required and properties
@@ -76,7 +76,7 @@ const getEntity = (req, res) => {
         res.json({ 'error': error.message });
       });
   } else {
-    const entityData = getEntityData(config.readOnlyRole, entityName);
+    const entityData = getEntityData(res.locals.user.refdbrole, entityName);
     Promise.all([entityDescription, entitySchema, entityData])
       .then((resultsArray) => {
         res.json({
