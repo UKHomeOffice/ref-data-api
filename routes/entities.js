@@ -1,5 +1,4 @@
 const axios = require('axios');
-// const router = require('express').Router();
 const { validationResult } = require('express-validator/check');
 
 // local imports

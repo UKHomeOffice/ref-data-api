@@ -14,8 +14,8 @@ const getItem = (req, res) => {
   const { 'name': entityName, id } = req.params;
 
   const promise1 = getEntityDescription(entityName);
-  const promise2 = getEntitySchema(config.readOnlyRole, entityName);
-  const promise3 = getItemData(config.readOnlyRole, entityName, id);
+  const promise2 = getEntitySchema(res.locals.user.refdbrole, entityName);
+  const promise3 = getItemData(res.locals.user.refdbrole, entityName, id);
 
   Promise.all([promise1, promise2, promise3])
     .then((resultsArray) => {
