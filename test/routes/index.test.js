@@ -6,13 +6,13 @@ const { expect } = require('chai');
 const app = require('../../routes');
 const logger = require('../../config/logger');
 
-describe('Test Item Routes', () => {
+describe('Test Index Router', () => {
   before(() => {
     // disable logging
     logger.silent = true;
   });
 
-  describe('PATCH /v1/entities/:name/items/:id', () => {
+  describe('Request Attempt /v1/entities/:name/items/:id', () => {
     // create a token with an expiry date 2 hours in the past
     const expiryTime = new Date();
     expiryTime.setHours(expiryTime.getHours() - 2);
@@ -25,7 +25,7 @@ describe('Test Item Routes', () => {
     const secret = 'super-secret-19';
     const token = jwtSimple.encode(payload, secret);
 
-    it('Should return an unauthorized error when passing an expired token', () => request(app)
+    it('Should return an unauthorized request error when passing an expired token', () => request(app)
       .patch('/v1/entities/country/items/3')
       .set('Authorization', `Bearer ${token}`)
       .then((response) => {
@@ -34,7 +34,7 @@ describe('Test Item Routes', () => {
         expect(response.body).to.deep.equal({ 'error': 'Unauthorized' });
       }));
 
-    it('Should return an unauthorized error when no token is passed in request headers', () => request(app)
+    it('Should return an unauthorized request error when no token is passed in request headers', () => request(app)
       .patch('/v1/entities/country/items/3')
       .then((response) => {
         expect(response.status).to.equal(401);
