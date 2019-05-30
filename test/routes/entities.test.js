@@ -1,3 +1,4 @@
+const jwtSimple = require('jwt-simple');
 const nock = require('nock');
 const request = require('supertest');
 const sinon = require('sinon');
@@ -68,6 +69,18 @@ describe('Test Entity Routes', () => {
       ],
     };
 
+    // create a token with an expiry date 1 hour in the future
+    const expiryTime = new Date();
+    expiryTime.setHours(expiryTime.getHours() + 1);
+    const payload = {
+      'name': 'Pedro Curado',
+      'email': 'pedro@mail.com',
+      'exp': expiryTime.getTime(),
+      'refdbrole': 'readonlyreference',
+    };
+    const secret = 'super-secret-19';
+    const token = jwtSimple.encode(payload, secret);
+
     it('Should return all entities on success', () => {
       const queryStub = sinon.stub(pool, 'query');
       queryStub.onCall(0).resolves(entities);
@@ -79,6 +92,7 @@ describe('Test Entity Routes', () => {
 
       return request(app)
         .get('/v1/entities')
+        .set('Authorization', 'Bearer ' + token)
         .then((response) => {
           expect(response.status).to.equal(200);
           expect(response.body).to.be.an('object').to.include.all.keys(
@@ -91,6 +105,18 @@ describe('Test Entity Routes', () => {
   });
 
   describe('PATCH /v1/entities/:name', () => {
+    // create a token with an expiry date 1 hour in the future
+    const expiryTime = new Date();
+    expiryTime.setHours(expiryTime.getHours() + 1);
+    const payload = {
+      'name': 'Pedro Curado',
+      'email': 'pedro@mail.com',
+      'exp': expiryTime.getTime(),
+      'refdbrole': 'readonlyreference',
+    };
+    const secret = 'super-secret-19';
+    const token = jwtSimple.encode(payload, secret);
+
     it('Should return an array with errors if the payload is empty', () => {
       // create an empty payload
       const body = {};
@@ -127,6 +153,7 @@ describe('Test Entity Routes', () => {
       // hit API /v1/entities/country
       return request(app)
         .patch('/v1/entities/country')
+        .set('Authorization', `Bearer ${token}`)
         .send(body)
         .set('Accept', 'application/json')
         .then((response) => {
@@ -195,6 +222,7 @@ describe('Test Entity Routes', () => {
       // hit API /v1/entities/country
       return request(app)
         .patch('/v1/entities/country')
+        .set('Authorization', `Bearer ${token}`)
         .send(body)
         .set('Accept', 'application/json')
         .then((response) => {
@@ -205,6 +233,18 @@ describe('Test Entity Routes', () => {
   });
 
   describe('POST /v1/entities/:name', () => {
+    // create a token with an expiry date 1 hour in the future
+    const expiryTime = new Date();
+    expiryTime.setHours(expiryTime.getHours() + 1);
+    const payload = {
+      'name': 'Pedro Curado',
+      'email': 'pedro@mail.com',
+      'exp': expiryTime.getTime(),
+      'refdbrole': 'readonlyreference',
+    };
+    const secret = 'super-secret-19';
+    const token = jwtSimple.encode(payload, secret);
+
     it('Should return error if the payload is not an object', () => {
       // create an invalid JSON object
       const newEntityItem = {};
@@ -212,6 +252,7 @@ describe('Test Entity Routes', () => {
       // hit API /v1/entities/country
       return request(app)
         .post('/v1/entities/country')
+        .set('Authorization', `Bearer ${token}`)
         .send(newEntityItem)
         .set('Accept', 'application/json')
         .then((response) => {
@@ -282,6 +323,7 @@ describe('Test Entity Routes', () => {
       // hit API /v1/entities/country
       return request(app)
         .post('/v1/entities/country')
+        .set('Authorization', `Bearer ${token}`)
         .send(body)
         .set('Accept', 'application/json')
         .then((response) => {

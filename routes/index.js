@@ -24,7 +24,7 @@ app.use((req, res, next) => {
   if (req.headers.authorization) {
     // decode the keycloak jwt token
     const token = jwtDecode(req.headers.authorization);
-    const tokenExpiryDate = new Date(token.exp * 1000);
+    const tokenExpiryDate = new Date(token.exp);
     const currentDate = new Date();
 
     // check if the token expiry time is in the future
