@@ -1,4 +1,5 @@
 const httpMocks = require('node-mocks-http');
+const jwtSimple = require('jwt-simple');
 const nock = require('nock');
 const request = require('supertest');
 const { expect } = require('chai');
@@ -16,6 +17,18 @@ describe('Test Item Routes', () => {
   });
 
   describe('PATCH /v1/entities/:name/items/:id', () => {
+    // create a token with an expiry date 1 hour in the future
+    const expiryTime = new Date();
+    expiryTime.setHours(expiryTime.getHours() + 1);
+    const payload = {
+      'name': 'Pedro Curado',
+      'email': 'pedro@mail.com',
+      'exp': expiryTime.getTime(),
+      'refdbrole': 'readonlyreference',
+    };
+    const secret = 'super-secret-19';
+    const token = jwtSimple.encode(payload, secret);
+
     it('Should return an array with errors if the payload is empty', () => {
       // create an empty payload
       const body = {};
@@ -37,6 +50,7 @@ describe('Test Item Routes', () => {
       // hit API /v1/entities/country/items/3
       return request(app)
         .patch('/v1/entities/country/items/3')
+        .set('Authorization', `Bearer ${token}`)
         .send(body)
         .set('Accept', 'application/json')
         .then((response) => {
@@ -105,6 +119,7 @@ describe('Test Item Routes', () => {
       // hit API /v1/entities/country/items/3
       return request(app)
         .patch('/v1/entities/country/items/3')
+        .set('Authorization', `Bearer ${token}`)
         .send(body)
         .set('Accept', 'application/json')
         .then((response) => {
@@ -113,7 +128,6 @@ describe('Test Item Routes', () => {
         });
     });
   });
-
 
   after(() => {
     // enable logging

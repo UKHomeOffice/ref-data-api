@@ -1,6 +1,7 @@
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const express = require('express');
+const jwtDecode = require('jwt-decode');
 const { check } = require('express-validator/check');
 
 // local imports
@@ -18,6 +19,31 @@ app.use(cors(corsConfiguration));
 // 'extended': 'true' allows the values of the objects passed, to be of any type
 app.use(bodyParser.urlencoded({ 'extended': 'true' }));
 app.use(bodyParser.json());
+// check each request for authorization token
+app.use((req, res, next) => {
+  if (req.headers.authorization) {
+    // decode the keycloak jwt token
+    const token = jwtDecode(req.headers.authorization);
+    const tokenExpiryDate = new Date(token.exp);
+    const currentDate = new Date();
+
+    // check if the token expiry time is in the future
+    if (currentDate.getTime() < tokenExpiryDate.getTime()) {
+      logger.info(`Request by ${token.name}, ${token.email} - Token valid`);
+      logger.info(`Token valid until - ${tokenExpiryDate.toTimeString()}`);
+      res.locals.user = token;
+      // process request
+      next();
+    } else {
+      logger.error(`Request by ${token.name}, ${token.email} - Unauthorized - Token expired`);
+      logger.error(`Token expired at - ${tokenExpiryDate.toTimeString()}`);
+      res.status(401).json({ 'error': 'Unauthorized' });
+    }
+  } else {
+    // no authorization token was passed, don't process the request further
+    res.status(401).json({ 'error': 'Unauthorized' });
+  }
+});
 
 app.options('*', cors(corsConfiguration));
 
