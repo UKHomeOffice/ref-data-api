@@ -92,7 +92,7 @@ describe('Test Entity Routes', () => {
 
       return request(app)
         .get('/v1/entities')
-        .set('Authorization', 'Bearer ' + token)
+        .set('Authorization', `Bearer ${token}`)
         .then((response) => {
           expect(response.status).to.equal(200);
           expect(response.body).to.be.an('object').to.include.all.keys(
