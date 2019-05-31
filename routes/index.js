@@ -2,6 +2,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const express = require('express');
 const jwtDecode = require('jwt-decode');
+const moment = require('moment');
 const { check } = require('express-validator/check');
 
 // local imports
@@ -24,19 +25,19 @@ app.use((req, res, next) => {
   if (req.headers.authorization) {
     // decode the keycloak jwt token
     const token = jwtDecode(req.headers.authorization);
-    const tokenExpiryDate = new Date(token.exp * 1000);
-    const currentDate = new Date();
+    const tokenExpiryDate = moment(token.exp * 1000);
+    const currentDate = moment(new Date());
 
     // check if the token expiry time is in the future
-    if (currentDate.toLocaleTimeString() < tokenExpiryDate.toLocaleTimeString()) {
+    if (currentDate.unix() < tokenExpiryDate.unix()) {
       logger.info(`Request by ${token.name}, ${token.email} - Token valid`);
-      logger.info(`Token valid until - ${tokenExpiryDate.toTimeString()}`);
+      logger.info(`Token valid until - ${tokenExpiryDate.format()}`);
       res.locals.user = token;
       // process request
       next();
     } else {
       logger.error(`Request by ${token.name}, ${token.email} - Unauthorized - Token expired`);
-      logger.error(`Token expired at - ${tokenExpiryDate.toTimeString()}`);
+      logger.error(`Token expired at - ${tokenExpiryDate.format()}`);
       res.status(401).json({ 'error': 'Unauthorized' });
     }
   } else {
