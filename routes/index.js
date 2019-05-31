@@ -24,11 +24,11 @@ app.use((req, res, next) => {
   if (req.headers.authorization) {
     // decode the keycloak jwt token
     const token = jwtDecode(req.headers.authorization);
-    const tokenExpiryDate = new Date(token.exp);
+    const tokenExpiryDate = new Date(token.exp * 1000);
     const currentDate = new Date();
 
     // check if the token expiry time is in the future
-    if (currentDate.getTime() < tokenExpiryDate.getTime()) {
+    if (currentDate.toLocaleTimeString() < tokenExpiryDate.toLocaleTimeString()) {
       logger.info(`Request by ${token.name}, ${token.email} - Token valid`);
       logger.info(`Token valid until - ${tokenExpiryDate.toTimeString()}`);
       res.locals.user = token;

@@ -14,12 +14,13 @@ describe('Test Index Router', () => {
 
   describe('Request Attempt /v1/entities/:name/items/:id', () => {
     // create a token with an expiry date 2 hours in the past
-    const expiryTime = new Date();
+    let expiryTime = new Date();
     expiryTime.setHours(expiryTime.getHours() - 2);
+    expiryTime = Math.round(expiryTime / 1000);
     const payload = {
       'name': 'Pedro Curado',
       'email': 'pedro@mail.com',
-      'exp': expiryTime.getTime(),
+      'exp': expiryTime,
       'refdbrole': 'readonlyreference',
     };
     const secret = 'super-secret-19';

@@ -18,12 +18,13 @@ describe('Test Item Routes', () => {
 
   describe('PATCH /v1/entities/:name/items/:id', () => {
     // create a token with an expiry date 1 hour in the future
-    const expiryTime = new Date();
+    let expiryTime = new Date();
     expiryTime.setHours(expiryTime.getHours() + 1);
+    expiryTime = Math.round(expiryTime / 1000);
     const payload = {
       'name': 'Pedro Curado',
       'email': 'pedro@mail.com',
-      'exp': expiryTime.getTime(),
+      'exp': expiryTime,
       'refdbrole': 'readonlyreference',
     };
     const secret = 'super-secret-19';
