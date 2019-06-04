@@ -15,7 +15,7 @@ describe('Test Database Utils', () => {
       const queryParams = 'id=eq.3';
       const expectedQueryFilter = 'id = 3';
 
-      queryFilter = queryFilterDecode(queryParams);
+      const queryFilter = queryFilterDecode(queryParams);
 
       expect(queryFilter).to.be.a('string');
       expect(queryFilter).to.equal(expectedQueryFilter);
@@ -25,7 +25,7 @@ describe('Test Database Utils', () => {
       const queryParams = 'country=eq.Portugal';
       const expectedQueryFilter = 'country = \'Portugal\'';
 
-      queryFilter = queryFilterDecode(queryParams);
+      const queryFilter = queryFilterDecode(queryParams);
 
       expect(queryFilter).to.be.a('string');
       expect(queryFilter).to.equal(expectedQueryFilter);
@@ -35,7 +35,7 @@ describe('Test Database Utils', () => {
       const queryParams = 'validfrom=eq.null';
       const expectedQueryFilter = 'validfrom IS NULL';
 
-      queryFilter = queryFilterDecode(queryParams);
+      const queryFilter = queryFilterDecode(queryParams);
 
       expect(queryFilter).to.be.a('string');
       expect(queryFilter).to.equal(expectedQueryFilter);
@@ -45,7 +45,7 @@ describe('Test Database Utils', () => {
       const queryParams = 'country=neq.Spain';
       const expectedQueryFilter = 'country != \'Spain\'';
 
-      queryFilter = queryFilterDecode(queryParams);
+      const queryFilter = queryFilterDecode(queryParams);
 
       expect(queryFilter).to.be.a('string');
       expect(queryFilter).to.equal(expectedQueryFilter);
@@ -55,7 +55,7 @@ describe('Test Database Utils', () => {
       const queryParams = 'validfrom=neq.null';
       const expectedQueryFilter = 'validfrom IS NOT NULL';
 
-      queryFilter = queryFilterDecode(queryParams);
+      const queryFilter = queryFilterDecode(queryParams);
 
       expect(queryFilter).to.be.a('string');
       expect(queryFilter).to.equal(expectedQueryFilter);
@@ -65,7 +65,7 @@ describe('Test Database Utils', () => {
       const queryParams = 'region=in.%28EU%29';
       const expectedQueryFilter = 'region IN (\'EU\')';
 
-      queryFilter = queryFilterDecode(queryParams);
+      const queryFilter = queryFilterDecode(queryParams);
 
       expect(queryFilter).to.be.a('string');
       expect(queryFilter).to.equal(expectedQueryFilter);
@@ -75,7 +75,7 @@ describe('Test Database Utils', () => {
       const queryParams = 'country=eq.Portugal&region=in.%28EU,%20AS%29';
       const expectedQueryFilter = 'country = \'Portugal\' AND region IN (\'EU\', \'AS\')';
 
-      queryFilter = queryFilterDecode(queryParams);
+      const queryFilter = queryFilterDecode(queryParams);
 
       expect(queryFilter).to.be.a('string');
       expect(queryFilter).to.equal(expectedQueryFilter);

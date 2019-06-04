@@ -6,7 +6,6 @@ const config = require('../config/core');
 const logger = require('../config/logger');
 const pool = require('../db/index');
 const queryFilterDecode = require('../db/utils');
-const { extractToken } = require('../helpers');
 const {
   getAllEntities,
   getEntityData,

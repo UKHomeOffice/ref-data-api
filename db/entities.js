@@ -64,10 +64,9 @@ const getEntityData = (role, entityName, filters) => pool.query(`SET ROLE ${role
     if (filters === null) {
       logger.info(`Running query SELECT * FROM ${entityName};`);
       return pool.query(`SELECT * FROM ${entityName};`);
-    } else {
-      logger.info(`Running query SELECT * FROM ${entityName} WHERE ${filters};`);
-      return pool.query(`SELECT * FROM ${entityName} WHERE ${filters};`);
     }
+    logger.info(`Running query SELECT * FROM ${entityName} WHERE ${filters};`);
+    return pool.query(`SELECT * FROM ${entityName} WHERE ${filters};`);
   })
   .then(data => data.rows)
   .catch((error) => {
