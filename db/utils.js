@@ -1,4 +1,4 @@
-// queryFilterDecode is a function that takes a string 
+// queryFilterDecode is a function that takes a string
 // with query parameters and decodes it to be used in a postgres database
 function queryFilterDecode(queryParams) {
   let queryFilter = '';
@@ -8,18 +8,18 @@ function queryFilterDecode(queryParams) {
   queryParams.map((params) => {
     // 'id=eq.3' -> ['id', 'eq' '3']
     params = params.replace('=', ' ')
-                   .replace('.', ' ')
-                   .split(' ');
+      .replace('.', ' ')
+      .split(' ');
     let [field, filter, value] = params;
     let isNull = false;
 
     if (filter !== 'in' && isNaN(value) && value !== 'null') {
       value = `'${value}'`;
-    } else if (isNaN(value) && value == 'null') {
+    } else if (isNaN(value) && value === 'null') {
       isNull = true;
       value = value.toUpperCase();
     }
-    
+
     if (filter === 'eq' && !isNull) {
       // 'continent = \'Asia\''
       filter = '=';
@@ -35,10 +35,11 @@ function queryFilterDecode(queryParams) {
     } else {
       filter = 'IN';
       value = value.replace('%28', '')
-                   .replace('%29', '')
-                   .replace(/%20/g, ' ');
-      let values = value.split(',');
-      value = values.map(value => value.trim());
+        .replace('%29', '')
+        .replace(/%20/g, ' ');
+
+      const values = value.split(',');
+      value = values.map(val => val.trim());
       value = `'${value.join("', '")}'`;
       value = `(${value})`;
     }
