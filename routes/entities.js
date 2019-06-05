@@ -5,7 +5,7 @@ const { validationResult } = require('express-validator/check');
 const config = require('../config/core');
 const logger = require('../config/logger');
 const pool = require('../db/index');
-const { extractToken } = require('../helpers');
+const queryFilterDecode = require('../db/utils');
 const {
   getAllEntities,
   getEntityData,
@@ -51,45 +51,49 @@ const getEntity = (req, res) => {
   // set default to `false`
   const { schemaOnly = 'false' } = req.query;
   const { 'name': entityName } = req.params;
+  const queryParams = req.url.split('?')[1];
+  let queryFilters = null;
+
+  if (queryParams) {
+    queryFilters = queryFilterDecode(queryParams);
+  }
 
   const entityDescription = getEntityDescription(entityName);
   const entitySchema = getEntitySchema(res.locals.user.refdbrole, entityName);
+  const dataObject = {
+    'status': 'success',
+    'code': 200,
+    'entityLabel': '',
+    'entitySchema': {
+      'description': {},
+      'required': {},
+      'properties': {},
+    },
+  };
 
   // no data is required, only the entity schema which includes
   // description, required and properties
   if (schemaOnly === 'true') {
     Promise.all([entityDescription, entitySchema])
       .then((resultsArray) => {
-        res.json({
-          'status': 'success',
-          'code': 200,
-          'entityLabel': '',
-          'entitySchema': {
-            'description': resultsArray[0].description,
-            'required': resultsArray[1].required,
-            'properties': resultsArray[1].properties,
-          },
-        });
+        dataObject.entitySchema.description = resultsArray[0].description;
+        dataObject.entitySchema.required = resultsArray[1].required;
+        dataObject.entitySchema.properties = resultsArray[1].properties;
+        res.json(dataObject);
       })
       .catch((error) => {
         logger.error(error.stack);
         res.json({ 'error': error.message });
       });
   } else {
-    const entityData = getEntityData(res.locals.user.refdbrole, entityName);
+    const entityData = getEntityData(res.locals.user.refdbrole, entityName, queryFilters);
     Promise.all([entityDescription, entitySchema, entityData])
       .then((resultsArray) => {
-        res.json({
-          'status': 'success',
-          'code': 200,
-          'entityLabel': '',
-          'entitySchema': {
-            'description': resultsArray[0].description,
-            'required': resultsArray[1].required,
-            'properties': resultsArray[1].properties,
-          },
-          'data': resultsArray[2],
-        });
+        dataObject.entitySchema.description = resultsArray[0].description;
+        dataObject.entitySchema.required = resultsArray[1].required;
+        dataObject.entitySchema.properties = resultsArray[1].properties;
+        dataObject.data = resultsArray[2];
+        res.json(dataObject);
       })
       .catch((error) => {
         logger.error(error.stack);

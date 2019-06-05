@@ -1,12 +1,10 @@
 const axios = require('axios');
-const router = require('express').Router();
 const { validationResult } = require('express-validator/check');
 
 // local imports
 const config = require('../config/core');
 const logger = require('../config/logger');
 const pool = require('../db/index');
-const { extractToken } = require('../helpers');
 const { getEntityDescription, getEntitySchema } = require('../db/entities');
 const { getItemData } = require('../db/items');
 

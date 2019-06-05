@@ -59,8 +59,15 @@ const getAllEntities = () => pool.query('SELECT * FROM pg_catalog.pg_tables WHER
     return new Error(errorMsg);
   });
 
-const getEntityData = (role, entityName) => pool.query(`SET ROLE ${role};`)
-  .then(() => pool.query(`SELECT * FROM ${entityName};`))
+const getEntityData = (role, entityName, filters) => pool.query(`SET ROLE ${role};`)
+  .then(() => {
+    if (filters === null) {
+      logger.info(`Running query SELECT * FROM ${entityName};`);
+      return pool.query(`SELECT * FROM ${entityName};`);
+    }
+    logger.info(`Running query SELECT * FROM ${entityName} WHERE ${filters};`);
+    return pool.query(`SELECT * FROM ${entityName} WHERE ${filters};`);
+  })
   .then(data => data.rows)
   .catch((error) => {
     const errorMsg = `Unable to retrieve data from table ${entityName}`;

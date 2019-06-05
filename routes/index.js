@@ -30,14 +30,12 @@ app.use((req, res, next) => {
 
     // check if the token expiry time is in the future
     if (currentDate.unix() < tokenExpiryDate.unix()) {
-      logger.info(`Request by ${token.name}, ${token.email} - Token valid`);
-      logger.info(`Token valid until - ${tokenExpiryDate.format()}`);
+      logger.info(`${req.method} - ${req.url} - Request by ${token.name}, ${token.email} - Token valid until - ${tokenExpiryDate.format()}`);
       res.locals.user = token;
       // process request
       next();
     } else {
-      logger.error(`Request by ${token.name}, ${token.email} - Unauthorized - Token expired`);
-      logger.error(`Token expired at - ${tokenExpiryDate.format()}`);
+      logger.error(`${req.method} - ${req.url} - Request by ${token.name}, ${token.email} - Unauthorized - Token expired at ${tokenExpiryDate.format()}`);
       res.status(401).json({ 'error': 'Unauthorized' });
     }
   } else {

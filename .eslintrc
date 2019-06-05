@@ -5,7 +5,13 @@
     "no-unused-expressions": "off",
     "no-underscore-dangle": "off",
     "no-unused-vars": "off",
-    "no-restricted-syntax": "off"
+    "no-restricted-syntax": "off",
+    "no-param-reassign": "off",
+    "no-restricted-globals": "off",
+    "array-callback-return": "off",
+    "prefer-const": "off",
+    "consistent-return": "off",
+    "prefer-destructuring": "off",
   },
   "extends": "airbnb/base",
   "env": {
