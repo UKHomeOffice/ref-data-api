@@ -51,6 +51,8 @@ spec:
             value: 'json'
           - name: NAXSI_USE_DEFAULT_RULES
             value: 'FALSE'
+          - name: ENABLE_UUID_PARAM
+            value: 'FALSE'
         ports:
           - name: https
             containerPort: 10443
