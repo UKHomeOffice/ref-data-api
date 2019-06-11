@@ -2,21 +2,21 @@
 const logger = require('../config/logger');
 const pool = require('./index');
 
-const getEntityDescription = (tableName) => {
+const getEntityDescription = (tableName) => new Promise((resolve, reject) => {
   const query = {
     'text': `SELECT obj_description($1::regclass, 'pg_class')
             AS description;`,
     'values': [tableName],
   };
-  return pool.query(query)
-    .then(data => ({ 'description': JSON.parse(data.rows[0].description) }))
+  pool.query(query)
+    .then(data => resolve({ 'description': JSON.parse(data.rows[0].description) }))
     .catch((error) => {
       const errorMsg = `Unable to retrieve description from table ${tableName}`;
       logger.error(errorMsg);
       logger.error(error.stack);
-      return new Error(errorMsg);
+      reject(new Error(errorMsg));
     });
-};
+});
 
 const getEntitySchema = (role, entityName) => pool.query(`SET ROLE ${role};`)
   .then(() => pool.query(`SELECT column_name, is_nullable, data_type, character_maximum_length,
@@ -59,22 +59,26 @@ const getAllEntities = () => pool.query('SELECT * FROM pg_catalog.pg_tables WHER
     return new Error(errorMsg);
   });
 
-const getEntityData = (role, entityName, filters) => pool.query(`SET ROLE ${role};`)
-  .then(() => {
-    if (filters === null) {
-      logger.info(`Running query SELECT * FROM ${entityName};`);
-      return pool.query(`SELECT * FROM ${entityName};`);
-    }
-    logger.info(`Running query SELECT * FROM ${entityName} WHERE ${filters};`);
-    return pool.query(`SELECT * FROM ${entityName} WHERE ${filters};`);
-  })
-  .then(data => data.rows)
-  .catch((error) => {
-    const errorMsg = `Unable to retrieve data from table ${entityName}`;
-    logger.error(errorMsg);
-    logger.error(error.stack);
-    return new Error(errorMsg);
-  });
+const getEntityData = (role, entityName, filters) => new Promise((resolve, reject) => {
+  pool.query(`SET ROLE ${role};`)
+    .then(() => {
+      if (filters === null) {
+        logger.info(`Running query SELECT * FROM ${entityName};`);
+        return pool.query(`SELECT * FROM ${entityName};`);
+      } else {
+        logger.info(`Running query SELECT * FROM ${entityName} WHERE ${filters};`);
+        return pool.query(`SELECT * FROM ${entityName} WHERE ${filters};`);
+      }
+    })
+    .then(data => resolve(data.rows))
+    .catch((error) => {
+      const errorMsg = `Unable to retrieve data from table ${entityName}`;
+      logger.error(errorMsg);
+      logger.error(error.stack);
+      error.message = errorMsg;
+      reject(new Error(errorMsg));
+    });
+});
 
 module.exports = {
   getAllEntities,
