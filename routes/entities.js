@@ -25,26 +25,28 @@ const getEntities = async (req, res) => {
   if (entities.message) {
     // if an error occurs getting all entities we don't need to
     // proceed since we would expect entities to be an array
-    return res.json({ 'message': entities.message });
+    return res.status(400).json({ 'error': entities.message });
   }
 
   const promiseArray = entities.map(async (entity) => {
-    const dataObject = {};
-    dataObject.entityName = entity;
+    if (entity !== 'flywayreferencehistory') {
+      const dataObject = {};
+      dataObject.entityName = entity;
 
-    const description = await getEntityDescription(entity);
-    dataObject.description = description;
+      const description = await getEntityDescription(entity);
+      dataObject.description = description;
 
-    const schema = await getEntitySchema(res.locals.user.refdbrole, entity);
-    dataObject.required = schema.required;
-    dataObject.properties = schema.properties;
+      const schema = await getEntitySchema(res.locals.user.refdbrole, entity);
+      dataObject.required = schema.required;
+      dataObject.properties = schema.properties;
 
-    data.data.push(dataObject);
+      data.data.push(dataObject);
+    }
   });
 
   Promise.all(promiseArray)
-    .then(() => res.json(data))
-    .catch(error => res.json({ 'message': error.message }));
+    .then(() => res.status(200).json(data))
+    .catch(error => res.status(400).json({ 'error': error.message }));
 };
 
 const getEntity = (req, res) => {
@@ -54,7 +56,7 @@ const getEntity = (req, res) => {
   const queryParams = req.url.split('?')[1];
   let queryFilters = null;
 
-  if (queryParams) {
+  if (!schemaOnly && queryParams) {
     queryFilters = queryFilterDecode(queryParams);
   }
 
@@ -79,25 +81,26 @@ const getEntity = (req, res) => {
         dataObject.entitySchema.description = resultsArray[0].description;
         dataObject.entitySchema.required = resultsArray[1].required;
         dataObject.entitySchema.properties = resultsArray[1].properties;
-        res.json(dataObject);
+        res.status(200).json(dataObject);
       })
       .catch((error) => {
         logger.error(error.stack);
-        res.json({ 'error': error.message });
+        res.status(400).json({ 'error': error.message });
       });
   } else {
     const entityData = getEntityData(res.locals.user.refdbrole, entityName, queryFilters);
+
     Promise.all([entityDescription, entitySchema, entityData])
       .then((resultsArray) => {
         dataObject.entitySchema.description = resultsArray[0].description;
         dataObject.entitySchema.required = resultsArray[1].required;
         dataObject.entitySchema.properties = resultsArray[1].properties;
         dataObject.data = resultsArray[2];
-        res.json(dataObject);
+        res.status(200).json(resultsArray);
       })
       .catch((error) => {
         logger.error(error.stack);
-        res.json({ 'error': error.message });
+        res.status(400).json({ 'error': error.message });
       });
   }
 };
@@ -159,8 +162,9 @@ const postEntityItem = (req, res) => {
   const { body } = req;
   const { name } = req.params;
 
-
   if (Object.entries(body).length === 0 && body.constructor === Object) {
+    logger.error('Invalid JSON');
+    logger.error(body);
     return res.status(400).json({ 'message': 'Invalid JSON object' });
   }
 
@@ -205,6 +209,7 @@ const postEntityItem = (req, res) => {
     })
     .catch((error) => {
       logger.error(error.stack);
+      logger.info(error.message);
       res.status(400).json({});
     });
 };
