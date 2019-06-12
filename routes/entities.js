@@ -34,11 +34,11 @@ const getEntities = async (req, res) => {
       dataObject.entityName = entity;
 
       const description = await getEntityDescription(entity);
-      dataObject.description = description;
+      dataObject.schema = description;
 
       const schema = await getEntitySchema(res.locals.user.refdbrole, entity);
-      dataObject.required = schema.required;
-      dataObject.properties = schema.properties;
+      dataObject.schema.required = schema.required;
+      dataObject.schema.properties = schema.properties;
 
       data.data.push(dataObject);
     }
