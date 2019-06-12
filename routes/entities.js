@@ -96,7 +96,7 @@ const getEntity = (req, res) => {
         dataObject.entitySchema.required = resultsArray[1].required;
         dataObject.entitySchema.properties = resultsArray[1].properties;
         dataObject.data = resultsArray[2];
-        res.status(200).json(resultsArray);
+        res.status(200).json(dataObject);
       })
       .catch((error) => {
         logger.error(error.stack);
