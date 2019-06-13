@@ -14,6 +14,13 @@ pipeline:
     when:
       event: push
 
+  lint_checks:
+    image: quay.io/ukhomeofficedigital/drone-docker
+    commands:
+      - docker run -t reference-data-api-service:$${DRONE_COMMIT_SHA} sh -c "npm run lint -- ."
+    when:
+      event: push
+
   image_to_quay:
     image: quay.io/ukhomeofficedigital/drone-docker
     secrets:
