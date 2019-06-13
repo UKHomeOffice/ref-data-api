@@ -7,6 +7,13 @@ pipeline:
     when:
       event: push
 
+  unit_tests:
+    image: quay.io/ukhomeofficedigital/drone-docker
+    commands:
+      - docker run -t reference-data-api-service:$${DRONE_COMMIT_SHA} sh -c "npm run test"
+    when:
+      event: push
+
   image_to_quay:
     image: quay.io/ukhomeofficedigital/drone-docker
     secrets:
