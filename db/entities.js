@@ -2,7 +2,7 @@
 const logger = require('../config/logger');
 const pool = require('./index');
 
-const getEntityDescription = (tableName) => new Promise((resolve, reject) => {
+const getEntityDescription = tableName => new Promise((resolve, reject) => {
   const query = {
     'text': `SELECT obj_description($1::regclass, 'pg_class')
             AS description;`,
@@ -65,10 +65,9 @@ const getEntityData = (role, entityName, filters) => new Promise((resolve, rejec
       if (filters === null) {
         logger.info(`Running query SELECT * FROM ${entityName};`);
         return pool.query(`SELECT * FROM ${entityName};`);
-      } else {
-        logger.info(`Running query SELECT * FROM ${entityName} WHERE ${filters};`);
-        return pool.query(`SELECT * FROM ${entityName} WHERE ${filters};`);
       }
+      logger.info(`Running query SELECT * FROM ${entityName} WHERE ${filters};`);
+      return pool.query(`SELECT * FROM ${entityName} WHERE ${filters};`);
     })
     .then(data => resolve(data.rows))
     .catch((error) => {
