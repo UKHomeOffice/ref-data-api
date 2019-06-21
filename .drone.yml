@@ -27,7 +27,7 @@ pipeline:
       - latest
     when:
       branch: master
-      event: [ push, deployment ]
+      event: push
 
   deploy_to_dev:
     image: quay.io/ukhomeofficedigital/kd
@@ -50,4 +50,27 @@ pipeline:
       - kd --insecure-skip-tls-verify -f kube/deployment.yml -f kube/service.yml -f kube/ingress.yml -f kube/network-policy.yml
     when:
       branch: master
-      event: [ push, deployment ]
+      event: push
+
+  deploy_to_prod:
+    image: quay.io/ukhomeofficedigital/kd
+    secrets:
+      - PROD_HOSTNAME
+      - PROD_KUBE_NAMESPACE
+      - PROD_KUBE_SERVER
+      - PROD_KUBE_TOKEN
+      - PROD_LOG_LEVEL
+      - PROD_DB_CONNECTION_STRING
+      - PROD_READ_ONLY_ROLE
+    commands:
+      - export HOSTNAME=$${PROD_HOSTNAME}
+      - export KUBE_NAMESPACE=$${PROD_KUBE_NAMESPACE}
+      - export KUBE_SERVER=$${PROD_KUBE_SERVER}
+      - export KUBE_TOKEN=$${PROD_KUBE_TOKEN}
+      - export LOG_LEVEL=$${PROD_LOG_LEVEL}
+      - export DB_CONNECTION_STRING=$${PROD_DB_CONNECTION_STRING}
+      - export READ_ONLY_ROLE=$${PROD_READ_ONLY_ROLE}
+      - kd --insecure-skip-tls-verify -f kube/deployment.yml -f kube/service.yml -f kube/ingress.yml -f kube/network-policy.yml
+    when:
+      event: deployment
+      environment: production
