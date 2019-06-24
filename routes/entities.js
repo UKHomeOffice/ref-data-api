@@ -65,6 +65,7 @@ const getEntity = (req, res) => {
   const dataObject = {
     'status': 'success',
     'code': 200,
+    'entityName': entityName,
     'entityLabel': '',
     'entitySchema': {
       'description': {},
