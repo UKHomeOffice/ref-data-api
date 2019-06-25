@@ -56,9 +56,14 @@ const getEntity = (req, res) => {
   const queryParams = req.url.split('?')[1];
   let queryFilters = null;
 
+  logger.debug(`schemaOnly: ${schemaOnly}`);
+  logger.debug(`queryFilters: ${queryFilters}`);
+
   if (!schemaOnly && queryParams) {
     queryFilters = queryFilterDecode(queryParams);
   }
+
+  logger.debug(`queryFilters: ${queryFilters}`);
 
   const entityDescription = getEntityDescription(entityName);
   const entitySchema = getEntitySchema(res.locals.user.refdbrole, entityName);
@@ -89,6 +94,7 @@ const getEntity = (req, res) => {
         res.status(400).json({ 'error': error.message });
       });
   } else {
+    logger.debug({ url: req.url, filters: queryFilters });
     const entityData = getEntityData(res.locals.user.refdbrole, entityName, queryFilters);
 
     Promise.all([entityDescription, entitySchema, entityData])
