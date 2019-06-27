@@ -14,22 +14,21 @@ const getItem = (req, res) => {
   const promise1 = getEntityDescription(entityName);
   const promise2 = getEntitySchema(res.locals.user.refdbrole, entityName);
   const promise3 = getItemData(res.locals.user.refdbrole, entityName, id);
+  const dataObject = {
+    'status': 'success',
+    'code': 200,
+    'entityName': entityName,
+    'entitySchema': {},
+  };
 
   Promise.all([promise1, promise2, promise3])
     .then((resultsArray) => {
-      res.json({
-        'status': 'success',
-        'code': 200,
-        'entityLabel': '',
-        'entityName': resultsArray[0].label,
-        'entitySchema': {
-          'description': resultsArray[0],
-          'required': resultsArray[1].required,
-          'properties': resultsArray[1].properties,
-        },
-        'itemId': resultsArray[2].id,
-        'data': resultsArray[2],
-      });
+      dataObject.entitySchema = resultsArray[0].description;
+      dataObject.entitySchema.required = resultsArray[1].required;
+      dataObject.entitySchema.properties = resultsArray[1].properties;
+      dataObject.itemId = resultsArray[2].id;
+      dataObject.data = resultsArray[2];
+      res.status(200).json(dataObject);
     })
     .catch(error => res.json({ 'message': error.message }));
 };
