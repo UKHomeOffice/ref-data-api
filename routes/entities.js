@@ -31,6 +31,7 @@ const getEntities = async (req, res) => {
   const promiseArray = entities.map(async (entity) => {
     if (entity !== 'flywayreferencehistory') {
       const dataObject = {};
+      dataObject.entityName = entity;
 
       const description = await getEntityDescription(entity);
       dataObject.schema = description.description;
