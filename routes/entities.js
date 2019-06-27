@@ -31,9 +31,9 @@ const getEntities = async (req, res) => {
   const promiseArray = entities.map(async (entity) => {
     if (entity !== 'flywayreferencehistory') {
       const dataObject = {};
-      dataObject.entityName = entity;
 
       const description = await getEntityDescription(entity);
+      dataObject.entityName = description.label;
       dataObject.schema = description;
 
       const schema = await getEntitySchema(res.locals.user.refdbrole, entity);
@@ -66,7 +66,6 @@ const getEntity = (req, res) => {
     'status': 'success',
     'code': 200,
     'entityName': entityName,
-    'entityLabel': '',
     'entitySchema': {
       'description': {},
       'required': {},
@@ -79,6 +78,7 @@ const getEntity = (req, res) => {
   if (schemaOnly === 'true') {
     Promise.all([entityDescription, entitySchema])
       .then((resultsArray) => {
+        dataObject.entityLabel = resultsArray[0].description.label;
         dataObject.entitySchema.description = resultsArray[0].description;
         dataObject.entitySchema.required = resultsArray[1].required;
         dataObject.entitySchema.properties = resultsArray[1].properties;
@@ -93,6 +93,7 @@ const getEntity = (req, res) => {
 
     Promise.all([entityDescription, entitySchema, entityData])
       .then((resultsArray) => {
+        dataObject.entityLabel = resultsArray[0].description.label;
         dataObject.entitySchema.description = resultsArray[0].description;
         dataObject.entitySchema.required = resultsArray[1].required;
         dataObject.entitySchema.properties = resultsArray[1].properties;

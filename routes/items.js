@@ -21,7 +21,7 @@ const getItem = (req, res) => {
         'status': 'success',
         'code': 200,
         'entityLabel': '',
-        'entityName': entityName,
+        'entityName': resultsArray[0].label,
         'entitySchema': {
           'description': resultsArray[0],
           'required': resultsArray[1].required,
