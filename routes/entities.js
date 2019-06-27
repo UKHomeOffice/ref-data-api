@@ -56,7 +56,7 @@ const getEntity = (req, res) => {
   const queryParams = req.url.split('?')[1];
   let queryFilters = null;
 
-  if (!schemaOnly && queryParams) {
+  if (schemaOnly === 'false' && queryParams) {
     queryFilters = queryFilterDecode(queryParams);
   }
 
