@@ -33,8 +33,7 @@ const getEntities = async (req, res) => {
       const dataObject = {};
 
       const description = await getEntityDescription(entity);
-      dataObject.entityName = description.label;
-      dataObject.schema = description;
+      dataObject.schema = description.description;
 
       const schema = await getEntitySchema(res.locals.user.refdbrole, entity);
       dataObject.schema.required = schema.required;
@@ -67,7 +66,6 @@ const getEntity = (req, res) => {
     'code': 200,
     'entityName': entityName,
     'entitySchema': {
-      'description': {},
       'required': {},
       'properties': {},
     },
@@ -78,8 +76,7 @@ const getEntity = (req, res) => {
   if (schemaOnly === 'true') {
     Promise.all([entityDescription, entitySchema])
       .then((resultsArray) => {
-        dataObject.entityLabel = resultsArray[0].description.label;
-        dataObject.entitySchema.description = resultsArray[0].description;
+        dataObject.entitySchema = resultsArray[0].description;
         dataObject.entitySchema.required = resultsArray[1].required;
         dataObject.entitySchema.properties = resultsArray[1].properties;
         res.status(200).json(dataObject);
@@ -93,8 +90,7 @@ const getEntity = (req, res) => {
 
     Promise.all([entityDescription, entitySchema, entityData])
       .then((resultsArray) => {
-        dataObject.entityLabel = resultsArray[0].description.label;
-        dataObject.entitySchema.description = resultsArray[0].description;
+        dataObject.entitySchema = resultsArray[0].description;
         dataObject.entitySchema.required = resultsArray[1].required;
         dataObject.entitySchema.properties = resultsArray[1].properties;
         dataObject.data = resultsArray[2];
