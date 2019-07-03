@@ -3,7 +3,9 @@ This repository contains an API service used to return data from the "Reference"
 
 # Requirements  
 Use of this API will require access to a Node.js environment as well as the npm (node package manager). The most recent distribution of Node.js can be found at:
+
 https://nodejs.org/en/
+
 Alternatively, you can use Homebrew to install the required packages, using command:
 
 ```bash
@@ -65,13 +67,9 @@ $ mocha --inspect-brk test/routes/entities.test.js
 
 ## Running linter
 A linter is designed to analyse source code and flag any programming errors, bugs, suspicious constructor stylistic errors. In order to run the linter using the `$ npm run lint` command you must first specify at least the directory in which you wish to run the linter. 
+
 In order to add any additional arguments, add -- (double dash) before any argument you wish to pass, e.g.
 
-
-```bash
-$ npm run lint
-```
-To add any additional arguments, add -- (double dash) before any argument you wish to pass, e.g.
 
 ```bash
 # run lint in the current directory
@@ -80,6 +78,7 @@ $ npm run lint -- .
 # run lint in the routes directory and fix all issues
 $ npm run lint -- ./routes/ --fix
 ```
+
 
 ## Building and running Docker
 To build the prototype's Docker container:
