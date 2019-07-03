@@ -1,32 +1,49 @@
 # reference-data-api-service
+This repository contains an API service used to return data from the "Reference" database. 
 
-An API service to return data from the "Reference" database.
+# Requirements  
+Use of this API will require access to a Node.js environment as well as the nmp (node package manager). The most recent distribution of Node.js can be found at:
+https://nodejs.org/en/
+Alternatively, you can use Homebrew to install the required packages, using command:
+```sh
+$ brew install node
+$ brew install npm
+```
+The Node.js installation will include a version of npm in the installations. 
+As a minimum, this AIP requires:
+- node V8.10.0
+- npm 6.9.0
 
-## Requirements
+If you already have these packages installed, you can check your current version or upgrade to the latest distribution using the commands:
+```sh
+## Check current installed version.
+$ node -v
+$ npm -v
+## Update to latest version.
+$ brew upgrade <package_name>
+```
+For further documentation regarding Homebrew visit:
+https://brew.sh
 
-*   npm 6.9.0
-*   node v8.10.0
-
-## Development
-
-In order to use the API for the development you will need to set the following environment variables:
-
+# Development
+To utilise the API for the development you will first need to set the following environment variables:
 `export DB_CONNECTION_STRING=postgres://username:password@localhost:5433/dbname`
 
-### Dependencies installation and running server
-Open your terminal and run the following commands from the project directory.
-
+## Dependencies installation and running server
+In order to run the api service, you will need to enter the following commands, in terminal, from the project directory. 
 ```bash
 # install dependencies
-$ npm install
+$ npn install
 
 # run the api server
 $ npm run start-dev
 ```
+This will first install the dependencies required to run the server, then initialise said server.
 
-### Running tests
+## Running tests
+The repository contains several test designed to ensure the reference data api service is running correctly. Again, in terminal, input the following commands in order to run the tests and confirm everything is working as expected.
 
-```bash
+```sh
 # run mocha tests
 $ npm run test
 
@@ -44,11 +61,12 @@ $ mocha --inspect-brk test/routes/entities.test.js
 ```
 
 ## Running linter
-
-To run the linter using the `npm run lint` command you have to specify at least the directory you want linter to run.
-
-To specify the directory and any additional arguments you need to add `--` (double dash) before the arguments you want to pass, e.g.
-```bash
+A linter is designed to analyse source code and flag any programming errors, bugs, suspicious constructor stylistic  to run. Then entre the command
+```sh
+$ npm run lint
+```
+To add any additional arguments, add -- (double dash) before any argument you wish to pass, e.g.
+```sh
 # run lint in the current directory
 $ npm run lint -- .
 
@@ -56,35 +74,13 @@ $ npm run lint -- .
 $ npm run lint -- ./routes/ --fix
 ```
 
-## Building and running in Docker
-
+## Building and running Docker
 To build the prototype's Docker container:
-
-```bash
-docker build -t reference-data-api-service .
-```
+```docker build -t reference-data-api-service .```
 
 To run the resulting Docker container:
-
-```bash
-docker run -p 5000:5000 reference-data-api-service
-```
+```docker run -p 5000:5000 reference-data-api-service```
 
 ## Endpoints
-GET (All Entities)
-`http://localhost:5000/v1/entities`
+https://app.swaggerhub.com/apis/Viable-Data/Reference-Data-Service-API/0.0.1
 
-GET (Entity)
-`http://localhost:5000/v1/entities/<entity_name>`
-
-PATCH (Entity Schema Field -> Not implemented yet)
-`http://localhost:5000/v1/entities/<entity_name>`
-
-POST (New Entity Item -> Not implemented yet)
-`http://localhost:5000/v1/entities/<entity_name>`
-
-GET (Item)
-`http://localhost:5000/v1/entities/<entity_name>/items/<item_id>`
-
-PATCH (Item Field -> Not implemented yet)
-`http://localhost:5000/v1/entities/<entity_name>/items/<item_id>`
