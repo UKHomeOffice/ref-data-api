@@ -76,10 +76,14 @@ $ npm run lint -- ./routes/ --fix
 
 ## Building and running Docker
 To build the prototype's Docker container:
-```docker build -t reference-data-api-service .```
+```sh
+docker build -t reference-data-api-service .
+```
 
 To run the resulting Docker container:
-```docker run -p 5000:5000 reference-data-api-service```
+```sh
+docker run -p 5000:5000 reference-data-api-service
+```
 
 ## Endpoints
 https://app.swaggerhub.com/apis/Viable-Data/Reference-Data-Service-API/0.0.1
