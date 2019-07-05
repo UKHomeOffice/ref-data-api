@@ -1,32 +1,43 @@
-# reference-data-api-service
+## Reference Data API Service
 
-An API service to return data from the "Reference" database.
+This API forms part of a Reference Data Service that is being developed by the UK Home Office. It provides a private API for integration with web applications and other systems.
 
 ## Requirements
 
-*   npm 6.9.0
-*   node v8.10.0
+* npm 6.9.0 (minimum working version)
+* node v8.10.0 (minimum working version)
 
-## Development
+## Usage
 
-In order to use the API for the development you will need to set the following environment variables:
+To use this API first clone this repo
 
-`export DB_CONNECTION_STRING=postgres://username:password@localhost:5433/dbname`
-
-### Dependencies installation and running server
-Open your terminal and run the following commands from the project directory.
-
-```bash
-# install dependencies
-$ npm install
-
-# run the api server
-$ npm run start-dev
+```sh
+git@github.com:UKHomeOffice/reference-data-api-service.git
 ```
 
-### Running tests
+### Development without Docker
 
-```bash
+Once you've cloned the project, set the following environment variables
+
+```sh
+export DB_CONNECTION_STRING=postgres://username:password@localhost:5433/dbname
+```
+
+Install project dependencies
+
+```sh
+$ npm install
+```
+
+Run the API server
+
+```sh
+npm run start-dev
+```
+
+#### Runing tests
+
+```sh
 # run mocha tests
 $ npm run test
 
@@ -43,12 +54,12 @@ $ npm run coverage
 $ mocha --inspect-brk test/routes/entities.test.js
 ```
 
-## Running linter
+#### Running linter
+To run the linter using the npm run lint command you have to specify at least the directory you want linter to run.
 
-To run the linter using the `npm run lint` command you have to specify at least the directory you want linter to run.
+To specify the directory and any additional arguments you need to add -- (double dash) before the arguments you want to pass, e.g.
 
-To specify the directory and any additional arguments you need to add `--` (double dash) before the arguments you want to pass, e.g.
-```bash
+```sh
 # run lint in the current directory
 $ npm run lint -- .
 
@@ -56,35 +67,56 @@ $ npm run lint -- .
 $ npm run lint -- ./routes/ --fix
 ```
 
-## Building and running in Docker
+## Development with Docker
 
-To build the prototype's Docker container:
+Once you've cloned the project, build the prototype Docker container
 
-```bash
+```sh
 docker build -t reference-data-api-service .
 ```
 
-To run the resulting Docker container:
+To run the resulting Docker container
 
-```bash
+```sh
 docker run -p 5000:5000 reference-data-api-service
 ```
 
+Running tests (from outside the Docker container)
+
+```sh
+docker run -t reference-data-api-service:<tag> sh -c "npm run test"
+```
+
+Running linter (from outside the Docker container)
+
+```sh
+docker run -t reference-data-api-service:<tag> sh -c "npm run lint -- ."
+```
+
+If you prefer to run tests or linter from within the container
+
+1. run the Docker container with `docker run -p 5000:5000 reference-data-api-service`
+
+2. go into the container by opening a new terminal tab and execute `docker exect -it <docker_container_id> sh`
+
+Once inside the container to run tests execute
+
+```sh
+$ npm run test
+```
+
+And to run linter execute
+
+```sh
+$ npm run lint -- .
+
+```
+
 ## Endpoints
-GET (All Entities)
-`http://localhost:5000/v1/entities`
+The API interface uses OpenAPI 3.0 and is documented in Swagger
 
-GET (Entity)
-`http://localhost:5000/v1/entities/<entity_name>`
+https://app.swaggerhub.com/apis/Viable-Data/Reference-Data-Service-API/0.0.1
 
-PATCH (Entity Schema Field -> Not implemented yet)
-`http://localhost:5000/v1/entities/<entity_name>`
+and on GitHub
 
-POST (New Entity Item -> Not implemented yet)
-`http://localhost:5000/v1/entities/<entity_name>`
-
-GET (Item)
-`http://localhost:5000/v1/entities/<entity_name>/items/<item_id>`
-
-PATCH (Item Field -> Not implemented yet)
-`http://localhost:5000/v1/entities/<entity_name>/items/<item_id>`
+https://github.com/UKHomeOffice/reference-data-governance-api-spec
