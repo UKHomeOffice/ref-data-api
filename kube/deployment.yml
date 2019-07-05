@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   name: ref-data-api
 spec:
-  replicas: 1
+  replicas: 3
   revisionHistoryLimit: 3
   template:
     metadata:

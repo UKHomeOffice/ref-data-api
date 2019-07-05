@@ -15,4 +15,5 @@ EXPOSE 5000
 
 USER ${USERMAP_UID}
 
+HEALTHCHECK --interval=10s --timeout=2s --start-period=15s CMD node healthcheck.js
 CMD ["npm","start"]
