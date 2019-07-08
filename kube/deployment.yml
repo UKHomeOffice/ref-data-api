@@ -32,6 +32,14 @@ spec:
             - /src/healthcheck.js
           initialDelaySeconds: 30
           periodSeconds: 30
+        readinessProbe:
+          exec:
+            command:
+              - node
+              - /src/healthcheck.js
+          initialDelaySeconds: 5
+          periodSeconds: 5
+
         env:
         - name: DB_CONNECTION_STRING
           value: {{.DB_CONNECTION_STRING}}
