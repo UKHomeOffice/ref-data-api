@@ -9,7 +9,7 @@ const options = {
 };
 
 request(options, (error, response, body) => {
-  if (response.statusCode === 200) {
+  if (response && response.statusCode === 200) {
     // eslint-disable-next-line no-console
     console.log(`STATUS: ${response.statusCode}`);
     process.exit(0);
