@@ -44,7 +44,7 @@ app.use((req, res, next) => {
     // don't process the request further
     res.status(401).json({ 'error': 'Unauthorized' });
   } else {
-    // process request
+    // process request for `/_health`
     next();
   }
 });
