@@ -3,13 +3,13 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: ref-data-api
-strategy:
-  type: RollingUpdate
-  rollingUpdate:
-    maxUnavailable: 33%
-    maxSurge: 1
 spec:
   replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 33%
+      maxSurge: 1
   revisionHistoryLimit: 3
   template:
     metadata:
