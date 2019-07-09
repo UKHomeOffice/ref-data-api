@@ -3,8 +3,13 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: ref-data-api
+strategy:
+  type: RollingUpdate
+  rollingUpdate:
+    maxUnavailable: 33%
+    maxSurge: 1
 spec:
-  replicas: 1
+  replicas: 3
   revisionHistoryLimit: 3
   template:
     metadata:
@@ -25,6 +30,21 @@ spec:
           limits:
             cpu: 200m
             memory: 500Mi
+        livenessProbe:
+          exec:
+            command:
+            - node
+            - /src/healthcheck.js
+          initialDelaySeconds: 30
+          periodSeconds: 30
+        readinessProbe:
+          exec:
+            command:
+              - node
+              - /src/healthcheck.js
+          initialDelaySeconds: 5
+          periodSeconds: 5
+
         env:
         - name: DB_CONNECTION_STRING
           value: {{.DB_CONNECTION_STRING}}

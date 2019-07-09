@@ -7,6 +7,7 @@ const { check } = require('express-validator/check');
 
 // local imports
 const entities = require('./entities');
+const health = require('./health');
 const items = require('./items');
 const logger = require('../config/logger');
 
@@ -38,14 +39,19 @@ app.use((req, res, next) => {
       logger.error(`${req.method} - ${req.url} - Request by ${token.name}, ${token.email} - Unauthorized - Token expired at ${tokenExpiryDate.format()}`);
       res.status(401).json({ 'error': 'Unauthorized' });
     }
-  } else {
-    // no authorization token was passed, don't process the request further
+  } else if (req.path !== '/_health') {
+    // not an health check and no authorization token was passed,
+    // don't process the request further
     res.status(401).json({ 'error': 'Unauthorized' });
+  } else {
+    // process request
+    next();
   }
 });
 
 app.options('*', cors(corsConfiguration));
 
+app.get('/_health', health);
 app.get('/v1/entities', entities.getEntities);
 app.get('/v1/entities/:name', entities.getEntity);
 app.patch(
