@@ -1,10 +1,7 @@
 const request = require('request');
 
-// local imports
-const config = require('./config/core');
-
 const options = {
-  'url': `${config.hostname}/_health`,
+  'url': '127.0.0.1:5000/_health',
   'timeout': 2000,
 };
 
