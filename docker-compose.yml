@@ -16,7 +16,7 @@ services:
     environment:
       POSTGRES_DB: postgres
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: mysecretpassword
+      POSTGRES_PASSWORD: secret
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
@@ -24,14 +24,7 @@ services:
       retries: 5
       start_period: 20s
     ports:
-      - 5433:5432
-    labels:
-      - "traefik.enable=false"
-
-  flyway_build:
-    build: .
-    container_name: flyway_build
-    image: quay.io/ukhomeofficedigital/refdata:latest
+      - "5432:5432"
 
   public_refdata_flyway:
     image: quay.io/ukhomeofficedigital/refdata:latest
@@ -41,14 +34,15 @@ services:
     environment:
       POSTGRES_DB: postgres
       POSTGRES_SERVER: postgres_refdata
-      POSTGRES_PORT: 5432
+      POSTGRES_PORT: "5432"
+      POSTGRES_OPTIONS:
       FLYWAY_INIT_USER: postgres
       FLYWAY_INIT_PASSWORD: secret
       FLYWAY_PLACEHOLDERS_REFERENCE_DB_NAME: refdata
       FLYWAY_PLACEHOLDERS_REFERENCE_OWNER_NAME: ownerofdataref
       FLYWAY_PLACEHOLDERS_REFERENCE_OWNER_PASSWORD: test
       FLYWAY_PLACEHOLDERS_REFERENCE_SCHEMA: reference
-      FLYWAY_PLACEHOLDERS_GOVERNANCE_OWNER_NAME: ownerofdataref
+      FLYWAY_PLACEHOLDERS_GOVERNANCE_OWNER_NAME: ownerofgovdata
       FLYWAY_PLACEHOLDERS_GOVERNANCE_OWNER_PASSWORD: test1
       FLYWAY_PLACEHOLDERS_GOVERNANCE_SCHEMA: governance
       FLYWAY_PLACEHOLDERS_REFERENCE_AUTHENTICATOR_USER: defref1
@@ -63,49 +57,3 @@ services:
       FLYWAY_PLACEHOLDERS_GOVERNANCE_READONLY_USER: govreadonlyuser
     depends_on:
       - postgres_refdata
-    labels:
-      - "traefik.enable=false"
-
-  postgrest_reference:
-    image: quay.io/ukhomeofficedigital/postgrest
-    restart: on-failure
-    container_name: postgrest_reference
-    environment:
-      PGRST_DB_URI: "postgres://authenticatorreference:auth1234@postgres_refdata:5432/reference"
-      PGRST_DB_ANON_ROLE: webanon
-      PGRST_SECRET_IS_BASE64: "false"
-      PGRST_JWT_AUD: postgrest-refdata
-      PGRST_ROLE_CLAIM_KEY: .refdbrole
-      PGRST_DB_SCHEMA: reference
-      PGRST_SERVER_PROXY_URI: "http://localhost:3000/"
-    depends_on:
-      - postgres_refdata
-      - public_refdata_flyway
-    labels:
-      - "traefik.enable=true"
-      - "traefik.frontend.rule=Host:postgrest_reference.${DOMAINNAME}"
-      - "traefik.port=3000"
-      - "traefik.protocol=http"
-      - "traefik.docker.network=web"
-
-  postgrest_governance:
-    image: quay.io/ukhomeofficedigital/postgrest
-    restart: on-failure
-    container_name: postgrest_governance
-    environment:
-      PGRST_DB_URI: "postgres://authenticatorgovernance:auth1234@postgres_refdata:5432/reference"
-      PGRST_DB_ANON_ROLE: webanongovernance
-      PGRST_SECRET_IS_BASE64: "false"
-      PGRST_JWT_AUD: postgrest-governance
-      PGRST_ROLE_CLAIM_KEY: .govdbrole
-      PGRST_DB_SCHEMA: governance
-      PGRST_SERVER_PROXY_URI: "http://localhost:3000/"
-    depends_on:
-      - postgres_refdata
-      - public_refdata_flyway
-    labels:
-      - "traefik.enable=true"
-      - "traefik.frontend.rule=Host:postgrest_governance.${DOMAINNAME}"
-      - "traefik.port=3000"
-      - "traefik.protocol=http"
-      - "traefik.docker.network=web"
