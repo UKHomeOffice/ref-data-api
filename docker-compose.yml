@@ -24,7 +24,7 @@ services:
       retries: 5
       start_period: 20s
     ports:
-      - "5432:5432"
+      - "5433:5432"
 
   public_refdata_flyway:
     image: quay.io/ukhomeofficedigital/refdata:latest
