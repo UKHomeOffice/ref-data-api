@@ -59,6 +59,29 @@ pipeline:
       branch: master
       event: push
 
+  deploy_to_staging:
+    image: quay.io/ukhomeofficedigital/kd
+    secrets:
+      - STAGING_HOSTNAME
+      - STAGING_KUBE_NAMESPACE
+      - STAGING_KUBE_SERVER
+      - STAGING_KUBE_TOKEN
+      - STAGING_LOG_LEVEL
+      - STAGING_DB_CONNECTION_STRING
+      - STAGING_READ_ONLY_ROLE
+    commands:
+      - export HOSTNAME=$${STAGING_HOSTNAME}
+      - export KUBE_NAMESPACE=$${STAGING_KUBE_NAMESPACE}
+      - export KUBE_SERVER=$${STAGING_KUBE_SERVER}
+      - export KUBE_TOKEN=$${STAGING_KUBE_TOKEN}
+      - export LOG_LEVEL=$${STAGING_LOG_LEVEL}
+      - export DB_CONNECTION_STRING=$${STAGING_DB_CONNECTION_STRING}
+      - export READ_ONLY_ROLE=$${STAGING_READ_ONLY_ROLE}
+      - kd --insecure-skip-tls-verify -f kube/deployment.yml -f kube/service.yml -f kube/ingress.yml -f kube/network-policy.yml
+    when:
+      event: deployment
+      environment: staging
+
   deploy_to_prod:
     image: quay.io/ukhomeofficedigital/kd
     secrets:
