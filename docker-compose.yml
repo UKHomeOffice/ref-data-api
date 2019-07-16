@@ -1,22 +1,14 @@
 version: '3.7'
 
-
-volumes:
-  postgres_data_refdata:
-    driver: local
-
-
 services:
   postgres_refdata:
     image: postgres:10-alpine
     restart: on-failure
     container_name: postgres_refdata
-    volumes:
-      - postgres_data_refdata:/var/lib/postgresql/data
     environment:
       POSTGRES_DB: postgres
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: secret
+      POSTGRES_PASSWORD: mysecretpassword
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
@@ -24,36 +16,46 @@ services:
       retries: 5
       start_period: 20s
     ports:
-      - "5433:5432"
+      - 5433:5432
+    networks:
+      - db
 
   public_refdata_flyway:
-    image: quay.io/ukhomeofficedigital/refdata:latest
+    image: quay.io/ukhomeofficedigital/docker-flyway:0c81630decc5d7f6c6ec9070d7475b3f3f084153
     container_name: public_refdata_flyway
-    command: /docker/run.sh
-    working_dir: /
+    command: /mnt/docker/run.sh
+    working_dir: /mnt
     environment:
       POSTGRES_DB: postgres
       POSTGRES_SERVER: postgres_refdata
-      POSTGRES_PORT: "5432"
-      POSTGRES_OPTIONS:
+      POSTGRES_PORT: 5432
       FLYWAY_INIT_USER: postgres
-      FLYWAY_INIT_PASSWORD: secret
-      FLYWAY_PLACEHOLDERS_REFERENCE_DB_NAME: refdata
-      FLYWAY_PLACEHOLDERS_REFERENCE_OWNER_NAME: ownerofdataref
-      FLYWAY_PLACEHOLDERS_REFERENCE_OWNER_PASSWORD: test
+      FLYWAY_INIT_PASSWORD: mysecretpassword
+      FLYWAY_PLACEHOLDERS_REFERENCE_DB_NAME: reference
+      FLYWAY_PLACEHOLDERS_REFERENCE_OWNER_NAME: ownerreference
+      FLYWAY_PLACEHOLDERS_REFERENCE_OWNER_PASSWORD: mysecretpassword
       FLYWAY_PLACEHOLDERS_REFERENCE_SCHEMA: reference
-      FLYWAY_PLACEHOLDERS_GOVERNANCE_OWNER_NAME: ownerofgovdata
-      FLYWAY_PLACEHOLDERS_GOVERNANCE_OWNER_PASSWORD: test1
+      FLYWAY_PLACEHOLDERS_GOVERNANCE_OWNER_NAME: ownergovernance
+      FLYWAY_PLACEHOLDERS_GOVERNANCE_OWNER_PASSWORD: mysecretpassword
       FLYWAY_PLACEHOLDERS_GOVERNANCE_SCHEMA: governance
-      FLYWAY_PLACEHOLDERS_REFERENCE_AUTHENTICATOR_USER: defref1
-      FLYWAY_PLACEHOLDERS_REFERENCE_AUTHENTICATOR_PASSWORD: test2
-      FLYWAY_PLACEHOLDERS_REFERENCE_ANON_USER: refanonuser
-      FLYWAY_PLACEHOLDERS_REFERENCE_SERVICE_USER: refserviceuser
-      FLYWAY_PLACEHOLDERS_REFERENCE_READONLY_USER: refreadonlyuser
-      FLYWAY_PLACEHOLDERS_GOVERNANCE_AUTHENTICATOR_USER: govuser1
-      FLYWAY_PLACEHOLDERS_GOVERNANCE_AUTHENTICATOR_PASSWORD: test3
-      FLYWAY_PLACEHOLDERS_GOVERNANCE_ANON_USER: govanonuser
-      FLYWAY_PLACEHOLDERS_GOVERNANCE_SERVICE_USER: govserviceuser
-      FLYWAY_PLACEHOLDERS_GOVERNANCE_READONLY_USER: govreadonlyuser
+      FLYWAY_PLACEHOLDERS_REFERENCE_AUTHENTICATOR_USER: authenticatorreference
+      FLYWAY_PLACEHOLDERS_REFERENCE_AUTHENTICATOR_PASSWORD: auth1234
+      FLYWAY_PLACEHOLDERS_REFERENCE_ANON_USER: webanon
+      FLYWAY_PLACEHOLDERS_REFERENCE_SERVICE_USER: servicereference
+      FLYWAY_PLACEHOLDERS_REFERENCE_READONLY_USER: readonlyreference
+      FLYWAY_PLACEHOLDERS_GOVERNANCE_AUTHENTICATOR_USER: authenticatorgovernance
+      FLYWAY_PLACEHOLDERS_GOVERNANCE_AUTHENTICATOR_PASSWORD: auth1234
+      FLYWAY_PLACEHOLDERS_GOVERNANCE_ANON_USER: webanongovernance
+      FLYWAY_PLACEHOLDERS_GOVERNANCE_SERVICE_USER: servicegovernance
+      FLYWAY_PLACEHOLDERS_GOVERNANCE_READONLY_USER: readonlygovernance
+    volumes:
+      - ${PUBLIC_REFDATA_FLYWAY}:/mnt
     depends_on:
       - postgres_refdata
+    networks:
+      - db
+
+networks:
+  db:
+    external:
+      name: db
