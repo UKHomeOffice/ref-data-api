@@ -102,14 +102,13 @@ If you prefer to run tests or linter from within the container
 Once inside the container to run tests execute
 
 ```sh
-$ npm run test
+npm run test
 ```
 
 And to run linter execute
 
 ```sh
-$ npm run lint -- .
-
+npm run lint -- .
 ```
 
 ## Endpoints
@@ -120,3 +119,42 @@ https://app.swaggerhub.com/apis/Viable-Data/Reference-Data-Service-API/0.0.1
 and on GitHub
 
 https://github.com/UKHomeOffice/reference-data-governance-api-spec
+
+## Local environment setup with Docker
+
+To have a local copy of the reference data you can run the following which will start a postgres docker container which you can connect to and seed the data.
+
+* Clone the repo:
+
+  ```bash
+  git clone git@github.com:UKHomeOffice/RefData.git
+  ```
+
+* Switch into the cloned directory and then create a .env file containing the full path to the cloned repo. e.g:
+
+  ```bash
+  PUBLIC_REFDATA_FLYWAY=/Users/XXX/GIT/cop/RefData
+  ```
+
+* Run the command to start docker
+
+```bash
+docker network create db
+docker-compose up -d
+docker logs public_refdata_flyway -f
+```
+
+Upon completion the database will be up and accessible via port tcp/5433. The docker compose file contains the different users and secrets which allow connecting to the different roles. An example to connect as the main root owner (not advised for service accounts which should use the authenticator user and switch role):
+
+```bash
+psql postgres://ownerreference:mysecretpassword@localhost:5433/reference
+set search_path reference
+```
+
+### Note
+
+To clean up the running instance and take it down run:
+
+```bash
+docker-compose rm -vs
+```
