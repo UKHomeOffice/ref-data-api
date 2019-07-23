@@ -2,9 +2,9 @@ const { expect } = require('chai');
 const sinon = require('sinon');
 
 // local imports
-const logger = require('../../config/logger');
-const pool = require('../../db/index');
-const { getItemData } = require('../../db/items');
+const logger = require('../../app/config/logger');
+const pool = require('../../app/db/index');
+const { getItemData } = require('../../app/db/items');
 
 describe('Test Item Queries', () => {
   before(() => {

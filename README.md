@@ -128,19 +128,15 @@ To have a local copy of the reference data you can run the following which will 
 
   ```bash
   git clone git@github.com:UKHomeOffice/RefData.git
-  ```
-
-* Switch into the cloned directory and then create a .env file containing the full path to the cloned repo. e.g:
-
-  ```bash
-  PUBLIC_REFDATA_FLYWAY=/Users/XXX/GIT/cop/RefData
+  git clone PRIVATE_REF_DATA
   ```
 
 * Run the command to start docker
 
 ```bash
 docker network create db
-docker-compose up -d
+docker network create web
+KEYCLOAK_URL=http://keycloak.lodev.xyz/auth/realms/dev CLIENT_ID=refdata-api PUBLIC_REFDATA_FLYWAY=/Users/XXX/GIT/cop/RefData PRIVATE_REFDATA_FLYWAY=/Users/XXX/GIT/cop/private_refdata docker-compose up -d
 docker logs public_refdata_flyway -f
 ```
 

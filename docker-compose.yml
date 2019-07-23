@@ -23,7 +23,10 @@ services:
   public_refdata_flyway:
     image: quay.io/ukhomeofficedigital/docker-flyway:0c81630decc5d7f6c6ec9070d7475b3f3f084153
     container_name: public_refdata_flyway
-    command: /mnt/docker/run.sh
+    command: >
+      sh -c "/mnt/docker/run.sh &&
+             cd /mnt/private-refdata && 
+             /mnt/private-refdata/docker/run.sh"
     working_dir: /mnt
     environment:
       POSTGRES_DB: postgres
@@ -42,7 +45,7 @@ services:
       FLYWAY_PLACEHOLDERS_REFERENCE_AUTHENTICATOR_PASSWORD: auth1234
       FLYWAY_PLACEHOLDERS_REFERENCE_ANON_USER: webanon
       FLYWAY_PLACEHOLDERS_REFERENCE_SERVICE_USER: servicereference
-      FLYWAY_PLACEHOLDERS_REFERENCE_READONLY_USER: readonlyreference
+      FLYWAY_PLACEHOLDERS_REFERENCE_READONLY_USER: refreadonly
       FLYWAY_PLACEHOLDERS_GOVERNANCE_AUTHENTICATOR_USER: authenticatorgovernance
       FLYWAY_PLACEHOLDERS_GOVERNANCE_AUTHENTICATOR_PASSWORD: auth1234
       FLYWAY_PLACEHOLDERS_GOVERNANCE_ANON_USER: webanongovernance
@@ -50,12 +53,43 @@ services:
       FLYWAY_PLACEHOLDERS_GOVERNANCE_READONLY_USER: readonlygovernance
     volumes:
       - ${PUBLIC_REFDATA_FLYWAY}:/mnt
+      - ${PRIVATE_REFDATA_FLYWAY}:/mnt/private-refdata
     depends_on:
       - postgres_refdata
     networks:
       - db
 
+  ref_data_api:
+    build: .
+    image: quay.io/ukhomeofficedigital/reference-data-api-service:dev
+    command: npm run start-dev
+    volumes:
+      - ./app:/src/app
+    environment:
+      LOG_LEVEL: debug
+      PORT: 5001
+      DB_CONNECTION_STRING: postgres://authenticatorreference:auth1234@postgres_refdata:5432/reference
+      CLIENT_ID: ${CLIENT_ID}
+      KEYCLOAK_URL: ${KEYCLOAK_URL}
+    depends_on:
+      - postgres_refdata
+      - public_refdata_flyway
+    healthcheck:
+      test: ["CMD-SHELL", "node", "/src/app/healthcheck.js"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    ports:
+     - 5001:5001
+    networks:
+      - db
+      - web
+
 networks:
   db:
     external:
       name: db
+  web:
+    external:
+      name: web

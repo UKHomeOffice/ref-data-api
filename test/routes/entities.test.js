@@ -5,10 +5,10 @@ const sinon = require('sinon');
 const { expect } = require('chai');
 
 // local imports
-const app = require('../../routes');
-const config = require('../../config/core');
-const logger = require('../../config/logger');
-const pool = require('../../db/index');
+const app = require('../../app/routes');
+const config = require('../../app/config/core');
+const logger = require('../../app/config/logger');
+const pool = require('../../app/db/index');
 
 describe('Test Entity Routes', () => {
   before(() => {

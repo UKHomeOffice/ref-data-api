@@ -5,10 +5,10 @@ const request = require('supertest');
 const { expect } = require('chai');
 
 // local imports
-const app = require('../../routes');
-const config = require('../../config/core');
-const logger = require('../../config/logger');
-const { patchItemField } = require('../../routes/items');
+const app = require('../../app/routes');
+const config = require('../../app/config/core');
+const logger = require('../../app/config/logger');
+const { patchItemField } = require('../../app/routes/items');
 
 describe('Test Item Routes', () => {
   before(() => {

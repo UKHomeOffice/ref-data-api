@@ -34,14 +34,14 @@ spec:
           exec:
             command:
             - node
-            - /src/healthcheck.js
+            - /src/app/healthcheck.js
           initialDelaySeconds: 30
           periodSeconds: 30
         readinessProbe:
           exec:
             command:
               - node
-              - /src/healthcheck.js
+              - /src/app/healthcheck.js
           initialDelaySeconds: 5
           periodSeconds: 5
 

@@ -2,14 +2,14 @@ const { expect } = require('chai');
 const sinon = require('sinon');
 
 // local imports
-const logger = require('../../config/logger');
-const pool = require('../../db/index');
+const logger = require('../../app/config/logger');
+const pool = require('../../app/db/index');
 const {
   getAllEntities,
   getEntityDescription,
   getEntitySchema,
   getEntityData,
-} = require('../../db/entities');
+} = require('../../app/db/entities');
 
 describe('Test Entity Queries', () => {
   before(() => {

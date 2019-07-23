@@ -3,8 +3,8 @@ const request = require('supertest');
 const { expect } = require('chai');
 
 // local imports
-const app = require('../../routes');
-const logger = require('../../config/logger');
+const app = require('../../app/routes');
+const logger = require('../../app/config/logger');
 
 describe('Test Index Router', () => {
   before(() => {
