@@ -79,7 +79,7 @@ describe('Test Entity Routes', () => {
       'exp': expiryTime,
       'refdbrole': 'refreadonly',
       'iss': config.iss,
-      'aud': ['operational-data-api'],
+      'aud': ['operational-data-api', 'refdata-api'],
     };
     const secret = 'super-secret-19';
     const token = jwtSimple.encode(payload, secret);
@@ -118,7 +118,7 @@ describe('Test Entity Routes', () => {
       'exp': expiryTime,
       'refdbrole': 'refreadonly',
       'iss': config.iss,
-      'aud': ['operational-data-api'],
+      'aud': ['operational-data-api', 'refdata-api'],
     };
     const secret = 'super-secret-19';
     const token = jwtSimple.encode(payload, secret);
@@ -249,7 +249,7 @@ describe('Test Entity Routes', () => {
       'exp': expiryTime,
       'refdbrole': 'refreadonly',
       'iss': config.iss,
-      'aud': ['operational-data-api'],
+      'aud': ['operational-data-api', 'refdata-api'],
     };
     const secret = 'super-secret-19';
     const token = jwtSimple.encode(payload, secret);
