@@ -26,6 +26,8 @@ describe('Test Item Routes', () => {
       'email': 'pedro@mail.com',
       'exp': expiryTime,
       'refdbrole': 'readonlyreference',
+      'iss': config.iss,
+      'aud': ['operational-data-api'],
     };
     const secret = 'super-secret-19';
     const token = jwtSimple.encode(payload, secret);

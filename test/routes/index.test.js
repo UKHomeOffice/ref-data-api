@@ -21,7 +21,7 @@ describe('Test Index Router', () => {
       'name': 'Pedro Curado',
       'email': 'pedro@mail.com',
       'exp': expiryTime,
-      'refdbrole': 'readonlyreference',
+      'refdbrole': 'refreadonly',
     };
     const secret = 'super-secret-19';
     const token = jwtSimple.encode(payload, secret);

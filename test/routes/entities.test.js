@@ -77,7 +77,9 @@ describe('Test Entity Routes', () => {
       'name': 'Pedro Curado',
       'email': 'pedro@mail.com',
       'exp': expiryTime,
-      'refdbrole': 'readonlyreference',
+      'refdbrole': 'refreadonly',
+      'iss': config.iss,
+      'aud': ['operational-data-api'],
     };
     const secret = 'super-secret-19';
     const token = jwtSimple.encode(payload, secret);
@@ -114,7 +116,9 @@ describe('Test Entity Routes', () => {
       'name': 'Pedro Curado',
       'email': 'pedro@mail.com',
       'exp': expiryTime,
-      'refdbrole': 'readonlyreference',
+      'refdbrole': 'refreadonly',
+      'iss': config.iss,
+      'aud': ['operational-data-api'],
     };
     const secret = 'super-secret-19';
     const token = jwtSimple.encode(payload, secret);
@@ -243,7 +247,9 @@ describe('Test Entity Routes', () => {
       'name': 'Pedro Curado',
       'email': 'pedro@mail.com',
       'exp': expiryTime,
-      'refdbrole': 'readonlyreference',
+      'refdbrole': 'refreadonly',
+      'iss': config.iss,
+      'aud': ['operational-data-api'],
     };
     const secret = 'super-secret-19';
     const token = jwtSimple.encode(payload, secret);
