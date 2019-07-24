@@ -21,15 +21,19 @@ function queryFilterDecode(queryParams) {
     }
 
     if (filter === 'gt' && !isNull) {
+      // 'sum IS GREATER THAN \'3\''
       filter = '>';
     } else if (filter === 'gte' && !isNull) {
+      // 'sum IS GREATER THAN or EQUAL to \'3\''
       filter = '>=';
     } else if (filter === 'lt' && !isNull) {
+      // 'sum IS LESS THAN \'3\''
       filter = '<';
     } else if (filter === 'lte' && !isNull) {
+      // 'sum IS LESS THAN or EQUAL to \'3\''
       filter = '<=';
     } else if (filter === 'eq' && !isNull) {
-      // 'continent != \'Asia\''
+      // 'continent = \'Asia\''
       filter = '=';
     } else if (filter === 'eq' && isNull) {
       // 'validfrom IS NULL'
