@@ -5,10 +5,10 @@ const sinon = require('sinon');
 const { expect } = require('chai');
 
 // local imports
-const app = require('../../routes');
-const config = require('../../config/core');
-const logger = require('../../config/logger');
-const pool = require('../../db/index');
+const app = require('../../app/routes');
+const config = require('../../app/config/core');
+const logger = require('../../app/config/logger');
+const pool = require('../../app/db/index');
 
 describe('Test Entity Routes', () => {
   before(() => {
@@ -77,7 +77,9 @@ describe('Test Entity Routes', () => {
       'name': 'Pedro Curado',
       'email': 'pedro@mail.com',
       'exp': expiryTime,
-      'refdbrole': 'readonlyreference',
+      'refdbrole': 'refreadonly',
+      'iss': config.iss,
+      'aud': ['operational-data-api', 'refdata-api'],
     };
     const secret = 'super-secret-19';
     const token = jwtSimple.encode(payload, secret);
@@ -114,7 +116,9 @@ describe('Test Entity Routes', () => {
       'name': 'Pedro Curado',
       'email': 'pedro@mail.com',
       'exp': expiryTime,
-      'refdbrole': 'readonlyreference',
+      'refdbrole': 'refreadonly',
+      'iss': config.iss,
+      'aud': ['operational-data-api', 'refdata-api'],
     };
     const secret = 'super-secret-19';
     const token = jwtSimple.encode(payload, secret);
@@ -243,7 +247,9 @@ describe('Test Entity Routes', () => {
       'name': 'Pedro Curado',
       'email': 'pedro@mail.com',
       'exp': expiryTime,
-      'refdbrole': 'readonlyreference',
+      'refdbrole': 'refreadonly',
+      'iss': config.iss,
+      'aud': ['operational-data-api', 'refdata-api'],
     };
     const secret = 'super-secret-19';
     const token = jwtSimple.encode(payload, secret);

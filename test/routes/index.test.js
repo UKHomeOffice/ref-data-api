@@ -3,8 +3,8 @@ const request = require('supertest');
 const { expect } = require('chai');
 
 // local imports
-const app = require('../../routes');
-const logger = require('../../config/logger');
+const app = require('../../app/routes');
+const logger = require('../../app/config/logger');
 
 describe('Test Index Router', () => {
   before(() => {
@@ -21,7 +21,7 @@ describe('Test Index Router', () => {
       'name': 'Pedro Curado',
       'email': 'pedro@mail.com',
       'exp': expiryTime,
-      'refdbrole': 'readonlyreference',
+      'refdbrole': 'refreadonly',
     };
     const secret = 'super-secret-19';
     const token = jwtSimple.encode(payload, secret);
