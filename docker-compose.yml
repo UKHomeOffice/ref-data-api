@@ -69,7 +69,7 @@ services:
       LOG_LEVEL: debug
       PORT: 5001
       DB_CONNECTION_STRING: postgres://authenticatorreference:auth1234@postgres_refdata:5432/reference
-      CLIENT_ID: ${CLIENT_ID}
+      KEYCLOAK_CLIENT_ID: ${KEYCLOAK_CLIENT_ID}
       KEYCLOAK_URL: ${KEYCLOAK_URL}
     depends_on:
       - postgres_refdata
