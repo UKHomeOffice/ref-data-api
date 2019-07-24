@@ -11,6 +11,45 @@ describe('Test Database Utils', () => {
   });
 
   describe('queryFilterDecode', () => {
+    it('Should resolve single "gt" filtering using integer values', () => {
+      const queryParams = 'id=gt.3';
+      const expectedQueryFilter = 'id > 3';
+
+      const queryFilter = queryFilterDecode(queryParams);
+
+      expect(queryFilter).to.be.a('string');
+      expect(queryFilter).to.equal(expectedQueryFilter);
+    });
+    it('Should resolve single "gte" filtering using integer values', () => {
+      const queryParams = 'id=gte.3';
+      const expectedQueryFilter = 'id >= 3';
+
+      const queryFilter = queryFilterDecode(queryParams);
+
+      expect(queryFilter).to.be.a('string');
+      expect(queryFilter).to.equal(expectedQueryFilter);
+    });
+
+    it('Should resolve single "lt" filtering using integer values', () => {
+      const queryParams = 'id=lt.3';
+      const expectedQueryFilter = 'id < 3';
+
+      const queryFilter = queryFilterDecode(queryParams);
+
+      expect(queryFilter).to.be.a('string');
+      expect(queryFilter).to.equal(expectedQueryFilter);
+    });
+
+    it('Should resolve single "lte" filtering using integer values', () => {
+      const queryParams = 'id=lte.3';
+      const expectedQueryFilter = 'id <= 3';
+
+      const queryFilter = queryFilterDecode(queryParams);
+
+      expect(queryFilter).to.be.a('string');
+      expect(queryFilter).to.equal(expectedQueryFilter);
+    });
+
     it('Should resolve single "eq" filtering using integer values', () => {
       const queryParams = 'id=eq.3';
       const expectedQueryFilter = 'id = 3';
