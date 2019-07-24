@@ -34,7 +34,7 @@ app.use((req, res, next) => {
     if (token.iss !== config.iss) {
       logger.error(`${req.method} - ${req.url} - Request by ${token.name}, Token not valid for our SSO endpoint - token presented: ${token.iss}`);
       res.status(401).json({ 'error': 'Unauthorized' });
-    } else if (token.aud.indexOf(config.client_id) === -1) {
+    } else if (token.aud.indexOf(config.keycloak_client_id) === -1) {
       // check if the client id is not present in the token aud array
       logger.error(`${req.method} - ${req.url} - Request by ${token.name}, Token did not present the correct audience claims for this endpoint - token aud presented: ${token.aud}`);
       res.status(401).json({ 'error': 'Unauthorized' });

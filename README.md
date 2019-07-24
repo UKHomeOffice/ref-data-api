@@ -136,7 +136,7 @@ To have a local copy of the reference data you can run the following which will 
 ```bash
 docker network create db
 docker network create web
-KEYCLOAK_URL=http://keycloak.lodev.xyz/auth/realms/dev CLIENT_ID=refdata-api PUBLIC_REFDATA_FLYWAY=/Users/XXX/GIT/cop/RefData PRIVATE_REFDATA_FLYWAY=/Users/XXX/GIT/cop/private_refdata docker-compose up -d
+KEYCLOAK_URL=http://keycloak.lodev.xyz/auth/realms/dev KEYCLOAK_CLIENT_ID=refdata-api PUBLIC_REFDATA_FLYWAY=/Users/XXX/GIT/cop/RefData PRIVATE_REFDATA_FLYWAY=/Users/XXX/GIT/cop/private_refdata docker-compose up -d
 docker logs public_refdata_flyway -f
 ```
 

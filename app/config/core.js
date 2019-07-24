@@ -9,7 +9,7 @@ const config = {
   'logLevel': process.env.LOG_LEVEL || 'info',
   'dbConnectionString': process.env.DB_CONNECTION_STRING || 'postgres://user:pass@localhost:5432/dbname',
   'iss': process.env.KEYCLOAK_URL || 'http://keycloak.lodev.xyz/auth/realms/dev',
-  'client_id': process.env.CLIENT_ID || 'refdata-api',
+  'keycloak_client_id': process.env.KEYCLOAK_CLIENT_ID || 'refdata-api',
   'port': process.env.PORT || '5000',
 };
 
