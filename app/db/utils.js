@@ -29,10 +29,10 @@ function queryFilterDecode(queryParams) {
     } else if (filter === 'lte' && !isNull) {
       filter = '<=';
     } else if (filter === 'eq' && !isNull) {
-      // 'validfrom IS NULL'
+      // 'continent != \'Asia\''
       filter = '=';
     } else if (filter === 'eq' && isNull) {
-      // 'continent != \'Asia\''
+      // 'validfrom IS NULL'
       filter = 'IS';
     } else if (filter === 'neq' && !isNull) {
       // 'continent != \'Asia\''
