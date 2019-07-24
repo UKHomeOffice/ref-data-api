@@ -20,8 +20,16 @@ function queryFilterDecode(queryParams) {
       value = value.toUpperCase();
     }
 
-    if (filter === 'eq' && !isNull) {
-      // 'continent = \'Asia\''
+    if (filter === 'gt' && !isNull) {
+      filter = '>';
+    } else if (filter === 'gte' && !isNull) {
+      filter = '>=';
+    } else if (filter === 'lt' && !isNull) {
+      filter = '<';
+    } else if (filter === 'lte' && !isNull) {
+      filter = '<=';
+    } else if (filter === 'eq' && !isNull) {
+      // 'continent != \'Asia\''
       filter = '=';
     } else if (filter === 'eq' && isNull) {
       // 'validfrom IS NULL'
@@ -34,9 +42,7 @@ function queryFilterDecode(queryParams) {
       filter = 'IS NOT';
     } else {
       filter = 'IN';
-      value = value.replace('%28', '')
-        .replace('%29', '')
-        .replace(/%20/g, ' ');
+      value = value.replace('%28', '').replace('%29', '').replace(/%20/g, ' ');
 
       const values = value.split(',');
       value = values.map(val => val.trim());
