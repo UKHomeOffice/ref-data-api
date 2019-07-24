@@ -11,6 +11,7 @@ WORKDIR /src
 COPY app /src/app
 COPY test /src/test
 COPY package* /src/
+COPY .eslint* /src/
 
 RUN npm install
 
