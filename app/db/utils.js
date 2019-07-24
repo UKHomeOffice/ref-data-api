@@ -20,7 +20,19 @@ function queryFilterDecode(queryParams) {
       value = value.toUpperCase();
     }
 
-    if (filter === 'eq' && !isNull) {
+    if (filter === 'gt' && !isNull) {
+      // 'sum IS GREATER THAN \'3\''
+      filter = '>';
+    } else if (filter === 'gte' && !isNull) {
+      // 'sum IS GREATER THAN or EQUAL to \'3\''
+      filter = '>=';
+    } else if (filter === 'lt' && !isNull) {
+      // 'sum IS LESS THAN \'3\''
+      filter = '<';
+    } else if (filter === 'lte' && !isNull) {
+      // 'sum IS LESS THAN or EQUAL to \'3\''
+      filter = '<=';
+    } else if (filter === 'eq' && !isNull) {
       // 'continent = \'Asia\''
       filter = '=';
     } else if (filter === 'eq' && isNull) {
@@ -34,9 +46,7 @@ function queryFilterDecode(queryParams) {
       filter = 'IS NOT';
     } else {
       filter = 'IN';
-      value = value.replace('%28', '')
-        .replace('%29', '')
-        .replace(/%20/g, ' ');
+      value = value.replace('%28', '').replace('%29', '').replace(/%20/g, ' ');
 
       const values = value.split(',');
       value = values.map(val => val.trim());
