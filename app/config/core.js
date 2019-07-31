@@ -7,7 +7,7 @@ const camundaUrls = {
 const config = {
   camundaUrls,
   'logLevel': process.env.LOG_LEVEL || 'info',
-  'dbConnectionString': process.env.DB_CONNECTION_STRING || 'postgres://user:pass@localhost:5432/dbname',
+  'dbConnectionString': process.env.DB_CONNECTION_STRING || 'postgres://authenticatorreference:auth1234@localhost:5433/reference',
   'iss': process.env.KEYCLOAK_URL || 'http://keycloak.lodev.xyz/auth/realms/dev',
   'keycloak_client_id': process.env.KEYCLOAK_CLIENT_ID || 'refdata-api',
   'port': process.env.PORT || '5000',

@@ -142,11 +142,6 @@ docker logs public_refdata_flyway -f
 
 Upon completion the database will be up and accessible via port tcp/5433. The docker compose file contains the different users and secrets which allow connecting to the different roles. An example to connect as the main root owner (not advised for service accounts which should use the authenticator user and switch role):
 
-```bash
-psql postgres://ownerreference:mysecretpassword@localhost:5433/reference
-set search_path reference
-```
-
 ### Note
 
 To clean up the running instance and take it down run:
