@@ -9,7 +9,7 @@ const { check } = require('express-validator/check');
 const entities = require('./entities');
 const health = require('./health');
 const items = require('./items');
-const logger = require('../config/logger');
+const logger = require('../config/logger')(__filename);
 const config = require('../config/core');
 
 const app = express();

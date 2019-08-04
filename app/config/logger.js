@@ -1,21 +1,32 @@
+const path = require('path');
 const { createLogger, format, transports } = require('winston');
 
 // local imports
 const config = require('./core');
 
 const {
-  combine,
-  timestamp,
-  prettyPrint,
+  colorize, combine, label, prettyPrint, timestamp,
 } = format;
 
-const logger = createLogger({
-  'level': config.logLevel,
-  'format': combine(
-    timestamp(),
-    prettyPrint(),
-  ),
-  'transports': [new transports.Console()],
-});
+module.exports = function (modulePath) {
+  // modulePath -> /home/<user>/<dir>/<dir>/filename.js
+  // pathParts -> ['', 'home', '<user>', '<dir>', 'filename.js']
+  const pathParts = modulePath.split(path.sep);
+  // pathParts -> '<dir>/filename.js'
+  modulePath = path.join(pathParts[pathParts.length - 2], pathParts.pop());
 
-module.exports = logger;
+  return createLogger({
+    'level': config.logLevel,
+    'silent': process.env.NODE_ENV === 'testing',
+    'format': combine(
+      label({ 'label': modulePath }),
+      timestamp({ 'format': 'DD-MM-YYYY HH:mm:ss' }),
+      prettyPrint(),
+    ),
+    'transports': [
+      new transports.Console({
+        'format': combine(colorize({ 'all': true })),
+      }),
+    ],
+  });
+};

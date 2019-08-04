@@ -3,7 +3,8 @@ const { validationResult } = require('express-validator/check');
 
 // local imports
 const config = require('../config/core');
-const logger = require('../config/logger');
+const logger = require('../config/logger')(__filename);
+
 const pool = require('../db/index');
 const { getEntityDescription, getEntitySchema } = require('../db/entities');
 const { getItemData } = require('../db/items');
