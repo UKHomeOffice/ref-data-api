@@ -2,16 +2,10 @@ const { expect } = require('chai');
 const sinon = require('sinon');
 
 // local imports
-const logger = require('../../app/config/logger');
 const pool = require('../../app/db/index');
 const { getItemData } = require('../../app/db/items');
 
 describe('Test Item Queries', () => {
-  before(() => {
-    // disable logging
-    logger.silent = true;
-  });
-
   afterEach(() => {
     pool.query.restore();
   });

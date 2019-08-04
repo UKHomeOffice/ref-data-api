@@ -1,15 +1,9 @@
 const { expect } = require('chai');
 
 // local imports
-const logger = require('../../app/config/logger');
 const queryFilterDecode = require('../../app/db/utils');
 
 describe('Test Database Utils', () => {
-  before(() => {
-    // disable logging
-    logger.silent = true;
-  });
-
   describe('queryFilterDecode', () => {
     it('Should resolve single "gt" filtering using integer values', () => {
       const queryParams = 'id=gt.3';
@@ -119,10 +113,5 @@ describe('Test Database Utils', () => {
       expect(queryFilter).to.be.a('string');
       expect(queryFilter).to.equal(expectedQueryFilter);
     });
-  });
-
-  after(() => {
-    // enable logging
-    logger.silent = false;
   });
 });

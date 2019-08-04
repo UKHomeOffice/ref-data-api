@@ -7,15 +7,9 @@ const { expect } = require('chai');
 // local imports
 const app = require('../../app/routes');
 const config = require('../../app/config/core');
-const logger = require('../../app/config/logger');
 const pool = require('../../app/db/index');
 
 describe('Test Entity Routes', () => {
-  before(() => {
-    // disable logging
-    logger.silent = true;
-  });
-
   describe('GET /v1/entities', () => {
     const entities = {
       'rows': [{
@@ -340,11 +334,6 @@ describe('Test Entity Routes', () => {
           expect(response.body).to.deep.equal({ 'status': 200, 'requestId': 'b7ef3ef1-7d61-11e9-9d6b-0242ef52c696' });
         });
     });
-  });
-
-  after(() => {
-    // enable logging
-    logger.silent = false;
   });
 
   afterEach(() => {

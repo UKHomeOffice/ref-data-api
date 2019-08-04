@@ -7,15 +7,8 @@ const { expect } = require('chai');
 // local imports
 const app = require('../../app/routes');
 const config = require('../../app/config/core');
-const logger = require('../../app/config/logger');
-const { patchItemField } = require('../../app/routes/items');
 
 describe('Test Item Routes', () => {
-  before(() => {
-    // disable logging
-    logger.silent = true;
-  });
-
   describe('PATCH /v1/entities/:name/items/:id', () => {
     // create a token with an expiry date 1 hour in the future
     let expiryTime = new Date();
@@ -130,10 +123,5 @@ describe('Test Item Routes', () => {
           expect(response.body).to.deep.equal({ 'status': 200, 'requestId': 'ddd671b5-7e2c-11e9-8e6e-02428e247f3f' });
         });
     });
-  });
-
-  after(() => {
-    // enable logging
-    logger.silent = false;
   });
 });

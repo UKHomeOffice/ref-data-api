@@ -2,7 +2,6 @@ const { expect } = require('chai');
 const sinon = require('sinon');
 
 // local imports
-const logger = require('../../app/config/logger');
 const pool = require('../../app/db/index');
 const {
   getAllEntities,
@@ -12,11 +11,6 @@ const {
 } = require('../../app/db/entities');
 
 describe('Test Entity Queries', () => {
-  before(() => {
-    // disable logging
-    logger.silent = true;
-  });
-
   afterEach(() => {
     pool.query.restore();
   });
@@ -379,10 +373,5 @@ describe('Test Entity Queries', () => {
       return getEntityData('readreferenceonly', 'addresss')
         .catch(error => expect(error.message).to.eql(expectedMsg));
     });
-  });
-
-  after(() => {
-    // enable logging
-    logger.silent = false;
   });
 });
