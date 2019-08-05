@@ -22,6 +22,7 @@ module.exports = function (modulePath) {
       label({ 'label': modulePath }),
       timestamp({ 'format': 'DD-MM-YYYY HH:mm:ss' }),
       prettyPrint(),
+      format.json(),
     ),
     'transports': [
       new transports.Console({
