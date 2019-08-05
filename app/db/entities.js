@@ -1,5 +1,5 @@
 // local imports
-const logger = require('../config/logger');
+const logger = require('../config/logger')(__filename);
 const pool = require('./index');
 
 const getEntityDescription = tableName => new Promise((resolve, reject) => {

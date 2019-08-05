@@ -4,14 +4,8 @@ const { expect } = require('chai');
 
 // local imports
 const app = require('../../app/routes');
-const logger = require('../../app/config/logger');
 
 describe('Test Index Router', () => {
-  before(() => {
-    // disable logging
-    logger.silent = true;
-  });
-
   describe('Request Attempt /v1/entities/:name/items/:id', () => {
     // create a token with an expiry date 2 hours in the past
     let expiryTime = new Date();
@@ -42,10 +36,5 @@ describe('Test Index Router', () => {
         expect(response.body).to.be.an('object');
         expect(response.body).to.deep.equal({ 'error': 'Unauthorized' });
       }));
-  });
-
-  after(() => {
-    // enable logging
-    logger.silent = false;
   });
 });

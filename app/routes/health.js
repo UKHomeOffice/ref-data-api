@@ -1,4 +1,4 @@
-const logger = require('../config/logger');
+const logger = require('../config/logger')(__filename);
 
 const health = (req, res) => {
   logger.verbose('API is Alive & Kicking!');

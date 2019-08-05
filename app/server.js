@@ -1,4 +1,4 @@
-const logger = require('./config/logger');
+const logger = require('./config/logger')(__filename);
 const server = require('./routes');
 const config = require('./config/core');
 

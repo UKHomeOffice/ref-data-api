@@ -1,7 +1,7 @@
 const { Pool } = require('pg');
 
 // local imports
-const logger = require('../config/logger');
+const logger = require('../config/logger')(__filename);
 const config = require('../config/core');
 
 const pool = new Pool({
