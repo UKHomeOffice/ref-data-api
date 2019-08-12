@@ -1,7 +1,7 @@
 const { expect } = require('chai');
 
 // local imports
-const queryFilterDecode = require('../../app/db/utils');
+const { queryFilterDecode } = require('../../app/db/utils');
 
 describe('Test Database Utils', () => {
   describe('queryFilterDecode', () => {
