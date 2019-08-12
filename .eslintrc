@@ -12,6 +12,7 @@
     "prefer-const": "off",
     "consistent-return": "off",
     "prefer-destructuring": "off",
+    "no-loop-func": "off",
   },
   "extends": "airbnb/base",
   "env": {
