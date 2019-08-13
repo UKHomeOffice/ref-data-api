@@ -71,90 +71,79 @@ function isPositiveInteger(stringValue) {
 }
 
 function queryFilterDecodeV2({ name, queryParams }) {
-  let limit = '';
   let query = `SELECT * FROM ${name}`;
 
-  for (const key in queryParams) {
-    if (Object.prototype.hasOwnProperty.call(queryParams, key)) {
-      let field = '';
-      let filter = '';
-      let value = '';
-
-      // check if select and limit are arrays
-      if ((key === 'select' || key === 'limit') && Array.isArray(queryParams[key])) {
-        query = '';
-        return query;
-      }
-
-      // check if limit is not integer
-      // check if limit is a negative integer
-      if (key === 'limit' && !isPositiveInteger(queryParams[key])) {
-        query = '';
-        return query;
-      }
-
-      if (key === 'limit') {
-        field = key.toUpperCase();
-        value = queryParams[key];
-        limit = `%20${field} ${value}`;
-      } else if (key === 'filter') {
-        queryParams[key].map((params) => {
-          // 'id=eq.3' -> ['id', 'eq' '3']
-          params = params.replace('=', '|').replace('.', '|').split('|');
-          field = params[0];
-          filter = params[1];
-          value = params[2];
-          let isNull = false;
-
-          if (filter !== 'in' && isNaN(value) && value !== 'null') {
-            value = `'${value}'`;
-          } else if (isNaN(value) && value === 'null') {
-            isNull = true;
-            value = value.toUpperCase();
-          }
-
-          if (filter === 'gt' && !isNull) {
-            // 'sum IS GREATER THAN \'3\''
-            filter = '>';
-          } else if (filter === 'gte' && !isNull) {
-            // 'sum IS GREATER THAN or EQUAL to \'3\''
-            filter = '>=';
-          } else if (filter === 'lt' && !isNull) {
-            // 'sum IS LESS THAN \'3\''
-            filter = '<';
-          } else if (filter === 'lte' && !isNull) {
-            // 'sum IS LESS THAN or EQUAL to \'3\''
-            filter = '<=';
-          } else if (filter === 'eq' && !isNull) {
-            // 'continent = \'Asia\''
-            filter = '=';
-          } else if (filter === 'eq' && isNull) {
-            // 'validfrom IS NULL'
-            filter = 'IS';
-          } else if (filter === 'neq' && !isNull) {
-            // 'continent != \'Asia\''
-            filter = '!=';
-          } else if (filter === 'neq' && isNull) {
-            // 'validfrom IS NOT NULL'
-            filter = 'IS NOT';
-          } else {
-            filter = 'IN';
-            value = value.replace('(', '').replace(')', '').replace(/%20/g, ' ');
-
-            const values = value.split(',');
-            value = values.map(val => val.trim());
-            value = `'${value.join("', '")}'`;
-            value = `(${value})`;
-          }
-
-          if (query) {
-            query += query.includes('WHERE') ? `%20AND ${field} ${filter} ${value}` : `%20WHERE ${field} ${filter} ${value}`;
-          }
-        });
-      }
-    }
+  // check if select and limit are arrays
+  if ((queryParams.select || queryParams.limit)
+      && (Array.isArray(queryParams.select) || Array.isArray(queryParams.limit))) {
+    query = '';
+    return query;
   }
-  query = query ? `${query}${limit};` : query;
+
+  // check if limit is not integer
+  // check if limit is a negative integer
+  if (queryParams.limit && !isPositiveInteger(queryParams.limit)) {
+    query = '';
+    return query;
+  }
+
+  if (queryParams.filter) {
+    queryParams.filter.map((params) => {
+      // 'id=eq.3' -> ['id', 'eq' '3']
+      params = params.replace('=', '|').replace('.', '|').split('|');
+      let [field, filter, value] = params;
+      let isNull = false;
+
+      if (filter !== 'in' && isNaN(value) && value !== 'null') {
+        value = `'${value}'`;
+      } else if (isNaN(value) && value === 'null') {
+        isNull = true;
+        value = value.toUpperCase();
+      }
+
+      if (filter === 'gt' && !isNull) {
+        // 'sum IS GREATER THAN \'3\''
+        filter = '>';
+      } else if (filter === 'gte' && !isNull) {
+        // 'sum IS GREATER THAN or EQUAL to \'3\''
+        filter = '>=';
+      } else if (filter === 'lt' && !isNull) {
+        // 'sum IS LESS THAN \'3\''
+        filter = '<';
+      } else if (filter === 'lte' && !isNull) {
+        // 'sum IS LESS THAN or EQUAL to \'3\''
+        filter = '<=';
+      } else if (filter === 'eq' && !isNull) {
+        // 'continent = \'Asia\''
+        filter = '=';
+      } else if (filter === 'eq' && isNull) {
+        // 'validfrom IS NULL'
+        filter = 'IS';
+      } else if (filter === 'neq' && !isNull) {
+        // 'continent != \'Asia\''
+        filter = '!=';
+      } else if (filter === 'neq' && isNull) {
+        // 'validfrom IS NOT NULL'
+        filter = 'IS NOT';
+      } else {
+        filter = 'IN';
+        value = value.replace('(', '').replace(')', '').replace(/%20/g, ' ');
+
+        const values = value.split(',');
+        value = values.map(val => val.trim());
+        value = `'${value.join("', '")}'`;
+        value = `(${value})`;
+      }
+
+      query += query.includes('WHERE') ? `%20AND ${field} ${filter} ${value}` : `%20WHERE ${field} ${filter} ${value}`;
+    });
+  }
+
+  if (queryParams.limit) {
+    query = `${query} LIMIT ${queryParams.limit}`;
+  }
+
+  query = `${query};`;
   query = query.replace(/%20/g, ' ');
   return query;
 }
