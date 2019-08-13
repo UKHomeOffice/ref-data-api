@@ -3,7 +3,7 @@ const { expect } = require('chai');
 // local imports
 const {
   queryFilterDecode,
-  queryFilterDecodeV2
+  queryFilterDecodeV2,
 } = require('../../app/db/utils');
 
 describe('Test Database Utils', () => {
@@ -123,8 +123,8 @@ describe('Test Database Utils', () => {
       const name = 'team';
       const queryParams = {
         'filter': [
-          'id=gt.3'
-        ]
+          'id=gt.3',
+        ],
       };
       const expectedQueryFilter = `SELECT * FROM ${name} WHERE id > 3;`;
       const queryFilter = queryFilterDecodeV2({ name, queryParams });
@@ -137,8 +137,8 @@ describe('Test Database Utils', () => {
       const name = 'team';
       const queryParams = {
         'filter': [
-          'id=gte.3'
-        ]
+          'id=gte.3',
+        ],
       };
       const expectedQueryFilter = `SELECT * FROM ${name} WHERE id >= 3;`;
       const queryFilter = queryFilterDecodeV2({ name, queryParams });
@@ -149,10 +149,10 @@ describe('Test Database Utils', () => {
 
     it('Should return a querystring with all columns selected filtered by less then value', () => {
       const name = 'team';
-      const queryParams =  {
+      const queryParams = {
         'filter': [
-          'id=lt.3'
-        ]
+          'id=lt.3',
+        ],
       };
       const expectedQueryFilter = `SELECT * FROM ${name} WHERE id < 3;`;
       const queryFilter = queryFilterDecodeV2({ name, queryParams });
@@ -163,10 +163,10 @@ describe('Test Database Utils', () => {
 
     it('Should return a querystring with all columns selected filtered by less or equal then value', () => {
       const name = 'team';
-      const queryParams =  {
+      const queryParams = {
         'filter': [
-          'id=lte.3'
-        ]
+          'id=lte.3',
+        ],
       };
       const expectedQueryFilter = `SELECT * FROM ${name} WHERE id <= 3;`;
       const queryFilter = queryFilterDecodeV2({ name, queryParams });
@@ -177,10 +177,10 @@ describe('Test Database Utils', () => {
 
     it('Should return a querystring with all columns selected filtered by equal to value (integer)', () => {
       const name = 'team';
-      const queryParams =  {
+      const queryParams = {
         'filter': [
-          'id=eq.3'
-        ]
+          'id=eq.3',
+        ],
       };
       const expectedQueryFilter = `SELECT * FROM ${name} WHERE id = 3;`;
       const queryFilter = queryFilterDecodeV2({ name, queryParams });
@@ -191,10 +191,10 @@ describe('Test Database Utils', () => {
 
     it('Should return a querystring with all columns selected filtered by equal to value (string)', () => {
       const name = 'country';
-      const queryParams =  {
+      const queryParams = {
         'filter': [
-          'name=eq.Portugal'
-        ]
+          'name=eq.Portugal',
+        ],
       };
       const expectedQueryFilter = `SELECT * FROM ${name} WHERE name = 'Portugal';`;
       const queryFilter = queryFilterDecodeV2({ name, queryParams });
@@ -205,10 +205,10 @@ describe('Test Database Utils', () => {
 
     it('Should return a querystring with all columns selected filtered by value is null', () => {
       const name = 'nationality';
-      const queryParams =  {
+      const queryParams = {
         'filter': [
-          'validfrom=eq.null'
-        ]
+          'validfrom=eq.null',
+        ],
       };
       const expectedQueryFilter = `SELECT * FROM ${name} WHERE validfrom IS NULL;`;
       const queryFilter = queryFilterDecodeV2({ name, queryParams });
@@ -219,10 +219,10 @@ describe('Test Database Utils', () => {
 
     it('Should return a querystring with all columns selected filtered by not equal to value', () => {
       const name = 'country';
-      const queryParams =  {
+      const queryParams = {
         'filter': [
-          'name=neq.Spain'
-        ]
+          'name=neq.Spain',
+        ],
       };
       const expectedQueryFilter = `SELECT * FROM ${name} WHERE name != 'Spain';`;
       const queryFilter = queryFilterDecodeV2({ name, queryParams });
@@ -233,10 +233,10 @@ describe('Test Database Utils', () => {
 
     it('Should return a querystring with all columns selected filtered by not null value', () => {
       const name = 'country';
-      const queryParams =  {
+      const queryParams = {
         'filter': [
-          'name=neq.null'
-        ]
+          'name=neq.null',
+        ],
       };
       const expectedQueryFilter = `SELECT * FROM ${name} WHERE name IS NOT NULL;`;
       const queryFilter = queryFilterDecodeV2({ name, queryParams });
@@ -247,10 +247,10 @@ describe('Test Database Utils', () => {
 
     it('Should return a querystring with all columns selected filtered by any value provided', () => {
       const name = 'country';
-      const queryParams =  {
+      const queryParams = {
         'filter': [
-          'region=in.(EU)'
-        ]
+          'region=in.(EU)',
+        ],
       };
       const expectedQueryFilter = `SELECT * FROM ${name} WHERE region IN ('EU');`;
       const queryFilter = queryFilterDecodeV2({ name, queryParams });
@@ -261,7 +261,7 @@ describe('Test Database Utils', () => {
 
     it('Should return a querystring with all columns selected filtered by value equal to, and any value in tuple', () => {
       const name = 'country';
-      const queryParams =  {
+      const queryParams = {
         'filter': [
           'name=eq.Portugal',
           'region=in.(EU, AS)',
