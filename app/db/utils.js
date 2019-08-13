@@ -60,8 +60,19 @@ function queryFilterDecode(queryParams) {
   return queryFilter.replace('&', ' AND ');
 }
 
-function queryFilterDecodeV2(queryParams) {
-  let queryFilter = '';
+// isPositiveInteger is a function that takes a number
+// as a string and checks if that number is a positive integer
+//
+// params stringValue: a string
+// returns:            a Boolean
+function isPositiveInteger(stringValue) {
+  const number = Math.floor(Number(stringValue));
+  return number !== Infinity && String(number) === stringValue && number >= 0;
+}
+
+function queryFilterDecodeV2({ name, queryParams }) {
+  let limit = '';
+  let query = `SELECT * FROM ${name}`;
 
   for (const key in queryParams) {
     if (Object.prototype.hasOwnProperty.call(queryParams, key)) {
@@ -69,7 +80,24 @@ function queryFilterDecodeV2(queryParams) {
       let filter = '';
       let value = '';
 
-      if (key === 'filter') {
+      // check if select and limit are arrays
+      if ((key === 'select' || key === 'limit') && Array.isArray(queryParams[key])) {
+        query = '';
+        return query;
+      }
+
+      // check if limit is not integer
+      // check if limit is a negative integer
+      if (key === 'limit' && !isPositiveInteger(queryParams[key])) {
+        query = '';
+        return query;
+      }
+
+      if (key === 'limit') {
+        field = key.toUpperCase();
+        value = queryParams[key];
+        limit = `%20${field} ${value}`;
+      } else if (key === 'filter') {
         queryParams[key].map((params) => {
           // 'id=eq.3' -> ['id', 'eq' '3']
           params = params.replace('=', '|').replace('.', '|').split('|');
@@ -111,7 +139,7 @@ function queryFilterDecodeV2(queryParams) {
             filter = 'IS NOT';
           } else {
             filter = 'IN';
-            value = value.replace('%28', '').replace('%29', '').replace(/%20/g, ' ');
+            value = value.replace('(', '').replace(')', '').replace(/%20/g, ' ');
 
             const values = value.split(',');
             value = values.map(val => val.trim());
@@ -119,13 +147,16 @@ function queryFilterDecodeV2(queryParams) {
             value = `(${value})`;
           }
 
-          queryFilter += `${field} ${filter} ${value}`;
-          queryFilter = queryFilter.replace(/%20/g, ' ');
+          if (query) {
+            query += query.includes('WHERE') ? `%20AND ${field} ${filter} ${value}` : `%20WHERE ${field} ${filter} ${value}`;
+          }
         });
       }
     }
   }
-  return queryFilter.replace('&', ' AND ');
+  query = query ? `${query}${limit};` : query;
+  query = query.replace(/%20/g, ' ');
+  return query;
 }
 
 module.exports = {

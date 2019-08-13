@@ -9,6 +9,7 @@ const { queryFilterDecode, queryFilterDecodeV2 } = require('../db/utils');
 const {
   getAllEntities,
   getEntityData,
+  getEntityDataV2,
   getEntityDescription,
   getEntitySchema,
 } = require('../db/entities');
@@ -109,8 +110,7 @@ const getEntityV2 = (req, res) => {
 
   // get schema mode, if not set the API will return both the schema and data
   const mode = queryParams.mode;
-  const { 'name': entityName } = req.params;
-  let queryFilters = null;
+  const { name } = req.params;
 
   // delete `mode` from `queryParams` since it does not need to be decoded
   delete queryParams.mode;
@@ -119,22 +119,18 @@ const getEntityV2 = (req, res) => {
     queryParams.filter = [queryParams.filter];
   }
 
-  if (Object.entries(queryParams).length > 0) {
-    queryFilters = queryFilterDecodeV2(queryParams);
+  const queryString = queryFilterDecodeV2({ name, queryParams });
+
+  if (!queryString) {
+    return res.status(400).json({ 'error': 'Invalid query parameters' });
   }
 
   if (mode === 'dataOnly') {
-    const dataObject = {
-      'status': 'success',
-      'code': 200,
-      'entityName': entityName,
-    };
-    const entityData = getEntityData(res.locals.user.refdbrole, entityName, queryFilters);
+    const entityData = getEntityDataV2(res.locals.user.refdbrole, name, queryString);
 
     Promise.all([entityData])
       .then((resultsArray) => {
-        dataObject.data = resultsArray[0];
-        res.status(200).json(dataObject);
+        res.status(200).json({ 'data': resultsArray[0] });
       })
       .catch((error) => {
         logger.error(error.stack);
@@ -144,14 +140,14 @@ const getEntityV2 = (req, res) => {
     const dataObject = {
       'status': 'success',
       'code': 200,
-      'entityName': entityName,
+      'entityName': name,
       'entitySchema': {
         'required': {},
         'properties': {},
       },
     };
-    const entityDescription = getEntityDescription(entityName);
-    const entitySchema = getEntitySchema(res.locals.user.refdbrole, entityName);
+    const entityDescription = getEntityDescription(name);
+    const entitySchema = getEntitySchema(res.locals.user.refdbrole, name);
 
     Promise.all([entityDescription, entitySchema])
       .then((resultsArray) => {
@@ -168,15 +164,15 @@ const getEntityV2 = (req, res) => {
     const dataObject = {
       'status': 'success',
       'code': 200,
-      'entityName': entityName,
+      'entityName': name,
       'entitySchema': {
         'required': {},
         'properties': {},
       },
     };
-    const entityDescription = getEntityDescription(entityName);
-    const entitySchema = getEntitySchema(res.locals.user.refdbrole, entityName);
-    const entityData = getEntityData(res.locals.user.refdbrole, entityName, queryFilters);
+    const entityDescription = getEntityDescription(name);
+    const entitySchema = getEntitySchema(res.locals.user.refdbrole, name);
+    const entityData = getEntityDataV2(res.locals.user.refdbrole, name, queryString);
 
     Promise.all([entityDescription, entitySchema, entityData])
       .then((resultsArray) => {
