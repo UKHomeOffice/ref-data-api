@@ -1,5 +1,5 @@
 const engine = {
-  'protocol': process.env.ENGINE_PROTOCOL || 'http',
+  'protocol': process.env.ENGINE_PROTOCOL || 'http://',
   'url': process.env.ENGINE_URL || 'localhost:8080',
 };
 
