@@ -30,7 +30,7 @@ const config = {
   'logLevel': process.env.API_REF_LOG_LEVEL || 'info',
   'dbConnectionString': `${db.protocol}${db.username}:${db.password}@${db.hostname}:${db.port}/${db.dbname}`,
   'dbSchema': process.env.DB_REF_REFERENCE_SCHEMA || 'reference',
-  'iss': `${keycloak.protocol}${keycloak.url}/auth/realms/${keycloak.realm}`,
+  'iss': `${keycloak.protocol}${keycloak.url}/realms/${keycloak.realm}`,
   'keycloak_client_id': process.env.API_REF_KEYCLOAK_CLIENT_ID || 'refdata-api',
   'port': process.env.API_REF_PORT || '5000',
 };
