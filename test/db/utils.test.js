@@ -324,5 +324,21 @@ describe('Test Database Utils', () => {
 
       expect(query).to.equal('');
     });
+
+    it('Should return an empty querystring if there is more than one select in the query params', () => {
+      const name = 'users';
+      const queryParams = {
+        'limit': '3',
+        'select': 'name,age',
+        'filter': [
+          'name=eq.John',
+          'age=eq.34',
+        ],
+      };
+      const expectedQueryFilter = `SELECT name,age FROM ${name} WHERE name = 'John' AND age = 34 LIMIT 3;`;
+      const query = queryFilterDecodeV2({ name, queryParams });
+
+      expect(query).to.equal(expectedQueryFilter);
+    });
   });
 });

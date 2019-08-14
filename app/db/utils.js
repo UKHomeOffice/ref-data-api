@@ -71,20 +71,30 @@ function isPositiveInteger(stringValue) {
 }
 
 function queryFilterDecodeV2({ name, queryParams }) {
-  let query = `SELECT * FROM ${name}`;
+  let conditions = '';
+  let limit = '';
+  let select = '';
 
   // check if select and limit are arrays
   if ((queryParams.select || queryParams.limit)
       && (Array.isArray(queryParams.select) || Array.isArray(queryParams.limit))) {
-    query = '';
-    return query;
+    return '';
   }
 
   // check if limit is not integer
   // check if limit is a negative integer
   if (queryParams.limit && !isPositiveInteger(queryParams.limit)) {
-    query = '';
-    return query;
+    return '';
+  }
+
+  if (queryParams.select) {
+    select = `SELECT ${queryParams.select} FROM ${name}`;
+  } else {
+    select = `SELECT * FROM ${name}`;
+  }
+
+  if (queryParams.limit) {
+    limit = `%20LIMIT ${queryParams.limit}`;
   }
 
   if (queryParams.filter) {
@@ -135,15 +145,12 @@ function queryFilterDecodeV2({ name, queryParams }) {
         value = `(${value})`;
       }
 
-      query += query.includes('WHERE') ? `%20AND ${field} ${filter} ${value}` : `%20WHERE ${field} ${filter} ${value}`;
+      conditions += conditions.includes('WHERE') ? `%20AND ${field} ${filter} ${value}` : `%20WHERE ${field} ${filter} ${value}`;
     });
   }
 
-  if (queryParams.limit) {
-    query = `${query} LIMIT ${queryParams.limit}`;
-  }
 
-  query = `${query};`;
+  let query = `${select}${conditions}${limit};`;
   query = query.replace(/%20/g, ' ');
   return query;
 }
