@@ -2,24 +2,24 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: ref-data-api-ingress
+  name: {{.API_REF_NAME}}-ingress
   labels:
     stable.k8s.psg.io/kcm.class: default
   annotations:
     kubernetes.io/ingress.class: "nginx-external"
-    ingress.kubernetes.io/secure-backends: "true"
+    ingress.kubernetes.io/force-ssl-redirect: "true"
     ingress.kubernetes.io/backend-protocol: "HTTPS"
     stable.k8s.psg.io/kcm.provider: http
 spec:
   rules:
-  - host: {{.HOSTNAME}}
+  - host: {{.API_REF_URL}}
     http:
       paths:
       - backend:
-          serviceName: ref-data-api-service
+          serviceName: {{.API_REF_NAME}}-service
           servicePort: 10443
         path: /
   tls:
   - hosts:
-    - {{.HOSTNAME}}
-    secretName: ref-data-api-tls
+    - {{.API_REF_URL}}
+    secretName: {{.API_REF_NAME}}-tls

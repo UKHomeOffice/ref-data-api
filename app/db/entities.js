@@ -1,5 +1,6 @@
 // local imports
 const logger = require('../config/logger')(__filename);
+const config = require('../config/core');
 const pool = require('./index');
 
 const getEntityDescription = tableName => new Promise((resolve, reject) => {
@@ -46,7 +47,7 @@ const getEntitySchema = (role, entityName) => pool.query(`SET ROLE ${role};`)
     return new Error(errorMsg);
   });
 
-const getAllEntities = () => pool.query('SELECT * FROM pg_catalog.pg_tables WHERE schemaname = \'reference\';')
+const getAllEntities = () => pool.query(`SELECT * FROM pg_catalog.pg_tables WHERE schemaname = '${config.dbSchema}';`)
   .then((data) => {
     const entitiesData = [];
     data.rows.map(obj => entitiesData.push(obj.tablename));
