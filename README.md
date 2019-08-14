@@ -136,7 +136,7 @@ To have a local copy of the reference data you can run the following which will 
 ```bash
 docker network create db
 docker network create web
-KEYCLOAK_URL=http://keycloak.lodev.xyz/auth/realms/dev KEYCLOAK_CLIENT_ID=refdata-api PUBLIC_REFDATA_FLYWAY=/Users/XXX/GIT/cop/RefData PRIVATE_REFDATA_FLYWAY=/Users/XXX/GIT/cop/private_refdata docker-compose up -d
+KEYCLOAK_URL=http://keycloak.lodev.xyz/auth/realms/dev KEYCLOAK_CLIENT_ID=refdata-api PUBLIC_REFDATA_FLYWAY=/Users/XXX/GIT/cop/RefData PRIVATE_REFDATA_FLYWAY=/Users/XXX/GIT/cop/private_refdata docker-compose up
 docker logs public_refdata_flyway -f
 ```
 
@@ -148,4 +148,45 @@ To clean up the running instance and take it down run:
 
 ```bash
 docker-compose rm -vs
+```
+
+## Filtering examples
+Return all users where names match 'John' and 'Debbie'
+```bash
+filter=name=in.(John, Debbie)
+```
+
+Return all countries where names match 'Denmark', and 'Portugal'
+```bash
+filter=name=in.(Denmark, Portugal)
+```
+
+Return all users where name matches 'John'
+```bash
+filter=name=eq.John
+```
+
+Return all users where name is not equal to 'John'
+```bash
+filter=name=neq.John
+```
+
+Return user where name is 'John' and email is 'john@mail.com'
+```bash
+filter=name=eq.John&filter=email=eq.john@mail.com
+```
+
+Return only the entity schema
+```bash
+mode=schemaOnly
+```
+
+Return only the entity data
+```bash
+mode=dataOnly
+```
+
+Return only the entity data where user name matches 'John'
+```bash
+mode=dataOnly&filter=name=eq.John
 ```

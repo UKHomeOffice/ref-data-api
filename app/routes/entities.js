@@ -5,7 +5,7 @@ const { validationResult } = require('express-validator/check');
 const config = require('../config/core');
 const logger = require('../config/logger')(__filename);
 const pool = require('../db/index');
-const queryFilterDecode = require('../db/utils');
+const { queryFilterDecode, queryFilterDecodeV2 } = require('../db/utils');
 const {
   getAllEntities,
   getEntityData,
@@ -87,6 +87,95 @@ const getEntity = (req, res) => {
         res.status(400).json({ 'error': error.message });
       });
   } else {
+    const entityData = getEntityData(res.locals.user.refdbrole, entityName, queryFilters);
+
+    Promise.all([entityDescription, entitySchema, entityData])
+      .then((resultsArray) => {
+        dataObject.entitySchema = resultsArray[0].description;
+        dataObject.entitySchema.required = resultsArray[1].required;
+        dataObject.entitySchema.properties = resultsArray[1].properties;
+        dataObject.data = resultsArray[2];
+        res.status(200).json(dataObject);
+      })
+      .catch((error) => {
+        logger.error(error.stack);
+        res.status(400).json({ 'error': error.message });
+      });
+  }
+};
+
+const getEntityV2 = (req, res) => {
+  const queryParams = req.query;
+
+  // get schema mode, if not set the API will return both the schema and data
+  const mode = queryParams.mode;
+  const { 'name': entityName } = req.params;
+  let queryFilters = null;
+
+  // delete `mode` from `queryParams` since it does not need to be decoded
+  delete queryParams.mode;
+
+  if (queryParams.filter && !Array.isArray(queryParams.filter)) {
+    queryParams.filter = [queryParams.filter];
+  }
+
+  if (Object.entries(queryParams).length > 0) {
+    queryFilters = queryFilterDecodeV2(queryParams);
+  }
+
+  if (mode === 'dataOnly') {
+    const dataObject = {
+      'status': 'success',
+      'code': 200,
+      'entityName': entityName,
+    };
+    const entityData = getEntityData(res.locals.user.refdbrole, entityName, queryFilters);
+
+    Promise.all([entityData])
+      .then((resultsArray) => {
+        dataObject.data = resultsArray[0];
+        res.status(200).json(dataObject);
+      })
+      .catch((error) => {
+        logger.error(error.stack);
+        res.status(400).json({ 'error': error.message });
+      });
+  } else if (mode === 'schemaOnly') {
+    const dataObject = {
+      'status': 'success',
+      'code': 200,
+      'entityName': entityName,
+      'entitySchema': {
+        'required': {},
+        'properties': {},
+      },
+    };
+    const entityDescription = getEntityDescription(entityName);
+    const entitySchema = getEntitySchema(res.locals.user.refdbrole, entityName);
+
+    Promise.all([entityDescription, entitySchema])
+      .then((resultsArray) => {
+        dataObject.entitySchema = resultsArray[0].description;
+        dataObject.entitySchema.required = resultsArray[1].required;
+        dataObject.entitySchema.properties = resultsArray[1].properties;
+        res.status(200).json(dataObject);
+      })
+      .catch((error) => {
+        logger.error(error.stack);
+        res.status(400).json({ 'error': error.message });
+      });
+  } else {
+    const dataObject = {
+      'status': 'success',
+      'code': 200,
+      'entityName': entityName,
+      'entitySchema': {
+        'required': {},
+        'properties': {},
+      },
+    };
+    const entityDescription = getEntityDescription(entityName);
+    const entitySchema = getEntitySchema(res.locals.user.refdbrole, entityName);
     const entityData = getEntityData(res.locals.user.refdbrole, entityName, queryFilters);
 
     Promise.all([entityDescription, entitySchema, entityData])
@@ -216,6 +305,7 @@ const postEntityItem = (req, res) => {
 module.exports = {
   getEntities,
   getEntity,
+  getEntityV2,
   patchEntitySchema,
   postEntityItem,
 };
