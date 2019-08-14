@@ -3,14 +3,13 @@ const cors = require('cors');
 const express = require('express');
 const jwtDecode = require('jwt-decode');
 const moment = require('moment');
-const { check } = require('express-validator/check');
 
 // local imports
-const entities = require('./entities');
-const health = require('./health');
-const items = require('./items');
-const logger = require('../config/logger')(__filename);
 const config = require('../config/core');
+const health = require('./health');
+const logger = require('../config/logger')(__filename);
+const v1 = require('./v1');
+const v2 = require('./v2');
 
 const app = express();
 const corsConfiguration = {
@@ -22,6 +21,8 @@ app.use(cors(corsConfiguration));
 // 'extended': 'true' allows the values of the objects passed, to be of any type
 app.use(bodyParser.urlencoded({ 'extended': 'true' }));
 app.use(bodyParser.json());
+app.options('*', cors(corsConfiguration));
+
 // check each request for authorization token
 app.use((req, res, next) => {
   if (req.headers.authorization) {
@@ -58,34 +59,8 @@ app.use((req, res, next) => {
   }
 });
 
-app.options('*', cors(corsConfiguration));
-
+app.use('/v1', v1);
+app.use('/v2', v2);
 app.get('/_health', health);
-app.get('/v1/entities', entities.getEntities);
-app.get('/v1/entities/:name', entities.getEntity);
-app.patch(
-  '/v1/entities/:name',
-  [
-    check('entity').not().isEmpty().trim(),
-    check('field').not().isEmpty().trim(),
-    check('newValue').not().isEmpty().trim(),
-    check('validFrom').exists().trim(),
-    check('validTo').exists().trim(),
-  ],
-  entities.patchEntitySchema,
-);
-app.post('/v1/entities/:name', entities.postEntityItem);
-app.get('/v1/entities/:name/items/:id', items.getItem);
-app.patch(
-  '/v1/entities/:name/items/:id',
-  [
-    check('id').not().isEmpty().trim(),
-    check('field').not().isEmpty().trim(),
-    check('newValue').not().isEmpty().trim(),
-    check('validFrom').optional({ 'nullable': true }).trim(),
-    check('validTo').optional({ 'nullable': true }).trim(),
-  ],
-  items.patchItemField,
-);
 
 module.exports = app;

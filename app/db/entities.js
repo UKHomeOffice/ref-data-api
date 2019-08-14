@@ -80,9 +80,26 @@ const getEntityData = (role, entityName, filters) => new Promise((resolve, rejec
     });
 });
 
+const getEntityDataV2 = (role, entityName, queryString) => new Promise((resolve, reject) => {
+  pool.query(`SET ROLE ${role};`)
+    .then(() => {
+      logger.info(`Running query ${queryString}`);
+      return pool.query(`${queryString}`);
+    })
+    .then(data => resolve(data.rows))
+    .catch((error) => {
+      const errorMsg = `Unable to retrieve data from table ${entityName}`;
+      logger.error(errorMsg);
+      logger.error(error.stack);
+      error.message = errorMsg;
+      reject(new Error(errorMsg));
+    });
+});
+
 module.exports = {
   getAllEntities,
   getEntityData,
+  getEntityDataV2,
   getEntityDescription,
   getEntitySchema,
 };
