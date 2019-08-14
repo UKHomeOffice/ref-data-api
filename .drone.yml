@@ -62,7 +62,7 @@ pipeline:
     commands:
       - export HOSTNAME=$${DEV_HOSTNAME}
       - export NGINX_IMAGE=$${DEV_NGINX_IMAGE}
-      - export NGINX_IMAGE=$${DEV_NGINX_TAG}
+      - export NGINX_TAG=$${DEV_NGINX_TAG}
       - export KUBE_NAMESPACE=$${DEV_KUBE_NAMESPACE}
       - export KUBE_SERVER=$${DEV_KUBE_SERVER}
       - export KUBE_TOKEN=$${DEV_KUBE_TOKEN}
@@ -114,7 +114,7 @@ pipeline:
     commands:
       - export HOSTNAME=$${STAGING_HOSTNAME}
       - export NGINX_IMAGE=$${STAGING_NGINX_IMAGE}
-      - export NGINX_IMAGE=$${STAGING_NGINX_TAG}
+      - export NGINX_TAG=$${STAGING_NGINX_TAG}
       - export KUBE_NAMESPACE=$${STAGING_KUBE_NAMESPACE}
       - export KUBE_SERVER=$${STAGING_KUBE_SERVER}
       - export KUBE_TOKEN=$${STAGING_KUBE_TOKEN}
@@ -166,7 +166,7 @@ pipeline:
     commands:
       - export HOSTNAME=$${PRODUCTION_HOSTNAME}
       - export NGINX_IMAGE=$${PRODUCTION_NGINX_IMAGE}
-      - export NGINX_IMAGE=$${PRODUCTION_NGINX_TAG}
+      - export NGINX_TAG=$${PRODUCTION_NGINX_TAG}
       - export KUBE_NAMESPACE=$${PRODUCTION_KUBE_NAMESPACE}
       - export KUBE_SERVER=$${PRODUCTION_KUBE_SERVER}
       - export KUBE_TOKEN=$${PRODUCTION_KUBE_TOKEN}
