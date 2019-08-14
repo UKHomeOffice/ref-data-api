@@ -47,6 +47,7 @@ pipeline:
       - DEV_KEYCLOAK_REALM
       - DEV_KEYCLOAK_PROTOCOL
       - DEV_API_REF_NAME
+      - DEV_API_REF_IMAGE
       - DEV_API_REF_KEYCLOAK_CLIENT_ID
       - DEV_API_REF_LOG_LEVEL
       - DEV_DB_REF_REFERENCE_AUTHENTICATOR_PASSWORD
@@ -77,6 +78,7 @@ pipeline:
       - export DB_REF_REFERENCE_SCHEMA=$${DEV_DB_REF_REFERENCE_SCHEMA}
       - export DB_REF_REFERENCE_AUTHENTICATOR_USERNAME=$${DEV_DB_REF_REFERENCE_AUTHENTICATOR_USERNAME}
       - export DB_REF_REFERENCE_AUTHENTICATOR_PASSWORD=$${DEV_DB_REF_REFERENCE_AUTHENTICATOR_PASSWORD}
+      - export API_REF_IMAGE=$${DEV_API_REF_IMAGE}
       - export API_REF_TAG=$${DRONE_COMMIT_SHA}
       - kd --insecure-skip-tls-verify -f kube/secret.yml -f kube/deployment.yml -f kube/service.yml -f kube/ingress.yml -f kube/network-policy.yml
     when:
@@ -105,6 +107,7 @@ pipeline:
       - STAGING_DB_REF_REFERENCE_SCHEMA
       - STAGING_DB_REF_REFERENCE_AUTHENTICATOR_USERNAME
       - STAGING_DB_REF_REFERENCE_AUTHENTICATOR_PASSWORD
+      - STAGING_API_REF_IMAGE
     commands:
       - export HOSTNAME=$${STAGING_HOSTNAME}
       - export KUBE_NAMESPACE=$${STAGING_KUBE_NAMESPACE}
@@ -124,6 +127,7 @@ pipeline:
       - export DB_REF_REFERENCE_SCHEMA=$${STAGING_DB_REF_REFERENCE_SCHEMA}
       - export DB_REF_REFERENCE_AUTHENTICATOR_USERNAME=$${STAGING_DB_REF_REFERENCE_AUTHENTICATOR_USERNAME}
       - export DB_REF_REFERENCE_AUTHENTICATOR_PASSWORD=$${STAGING_DB_REF_REFERENCE_AUTHENTICATOR_PASSWORD}
+      - export API_REF_IMAGE=$${STAGING_API_REF_IMAGE}
       - export API_REF_TAG=$${DRONE_COMMIT_SHA}
       - kd --insecure-skip-tls-verify -f kube/secret.yml -f kube/deployment.yml -f kube/service.yml -f kube/ingress.yml -f kube/network-policy.yml
     when:
@@ -152,6 +156,7 @@ pipeline:
       - PRODUCTION_DB_REF_REFERENCE_SCHEMA
       - PRODUCTION_DB_REF_REFERENCE_AUTHENTICATOR_USERNAME
       - PRODUCTION_DB_REF_REFERENCE_AUTHENTICATOR_PASSWORD
+      - PRODUCTION_API_REF_IMAGE
     commands:
       - export HOSTNAME=$${PRODUCTION_HOSTNAME}
       - export KUBE_NAMESPACE=$${PRODUCTION_KUBE_NAMESPACE}
@@ -171,6 +176,7 @@ pipeline:
       - export DB_REF_REFERENCE_SCHEMA=$${PRODUCTION_DB_REF_REFERENCE_SCHEMA}
       - export DB_REF_REFERENCE_AUTHENTICATOR_USERNAME=$${PRODUCTION_DB_REF_REFERENCE_AUTHENTICATOR_USERNAME}
       - export DB_REF_REFERENCE_AUTHENTICATOR_PASSWORD=$${PRODUCTION_DB_REF_REFERENCE_AUTHENTICATOR_PASSWORD}
+      - export API_REF_IMAGE=$${PRODUCTION_API_REF_IMAGE}
       - export API_REF_TAG=$${DRONE_COMMIT_SHA}
       - kd --insecure-skip-tls-verify -f kube/secret.yml -f kube/deployment.yml -f kube/service.yml -f kube/ingress.yml -f kube/network-policy.yml
     when:
