@@ -1,7 +1,8 @@
 const request = require('request');
+const config = require('./config/core');
 
 const options = {
-  'url': 'http://127.0.0.1:5000/_health',
+  'url': `http://127.0.0.1:${config.port}/_health`,
   'timeout': 2000,
 };
 

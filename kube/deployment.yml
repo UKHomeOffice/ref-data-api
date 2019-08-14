@@ -2,7 +2,7 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: ref-data-api
+  name: {{.API_REF_NAME}}
 spec:
   replicas: 3
   strategy:
@@ -14,11 +14,11 @@ spec:
   template:
     metadata:
       labels:
-        name: ref-data-api
+        name: {{.API_REF_NAME}}
     spec:
       containers:
       - name: api
-        image: quay.io/ukhomeofficedigital/reference-data-api-service:{{.DRONE_COMMIT_SHA}}
+        image: "{{.API_REF_IMAGE}}:{{.API_REF_TAG}}"
         imagePullPolicy: Always
         securityContext:
           runAsNonRoot: true
@@ -44,33 +44,50 @@ spec:
               - /src/app/healthcheck.js
           initialDelaySeconds: 5
           periodSeconds: 5
-
         env:
-        - name: DB_CONNECTION_STRING
-          value: {{.DB_CONNECTION_STRING}}
-        - name: READ_ONLY_ROLE
-          value: {{.READ_ONLY_ROLE}}
+        - name: DB_REF_PROTOCOL
+          value: "{{.DB_REF_PROTOCOL}}"
+        - name: DB_REF_PORT
+          value: "{{.DB_REF_PORT}}"
+        - name: DB_REF_HOSTNAME
+          value: "{{.DB_REF_HOSTNAME}}"
+        - name: DB_REF_OPTIONS
+          value: "{{.DB_REF_OPTIONS}}"
+        - name: DB_REF_REFERENCE_DBNAME
+          value: "{{.DB_REF_REFERENCE_DBNAME}}"
+        - name: DB_REF_REFERENCE_SCHEMA
+          value: "{{.DB_REF_REFERENCE_SCHEMA}}"
+        - name: DB_REF_REFERENCE_AUTHENTICATOR_USERNAME
+          value: "{{.DB_REF_REFERENCE_AUTHENTICATOR_USERNAME}}"
+        - name: DB_REF_REFERENCE_AUTHENTICATOR_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: "{{.API_REF_NAME}}-secret"
+              key: dbPassword
         - name: KEYCLOAK_URL
-          value: {{.KEYCLOAK_URL}}
-        - name: KEYCLOAK_CLIENT_ID
-          value: {{.KEYCLOAK_CLIENT_ID}}
-        - name: LOG_LEVEL
-          value: {{.LOG_LEVEL}}
-        - name: PORT
-          value: '5000'
+          value: "{{.KEYCLOAK_URL}}"
+        - name: KEYCLOAK_PROTOCOL
+          value: "{{.KEYCLOAK_PROTOCOL}}"
+        - name: KEYCLOAK_REALM
+          value: "{{.KEYCLOAK_REALM}}"
+        - name: API_REF_KEYCLOAK_CLIENT_ID
+          value: "{{.API_REF_KEYCLOAK_CLIENT_ID}}"
+        - name: API_REF_LOG_LEVEL
+          value: "{{.API_REF_LOG_LEVEL}}"
+        - name: API_REF_PORT
+          value: "{{.API_REF_PORT}}"
         ports:
           - name: api
-            containerPort: 5000
-
+            containerPort: {{.API_REF_PORT}}
       - name: proxy
-        image: quay.io/ukhomeofficedigital/nginx-proxy
+        image: "{{.NGINX_IMAGE}}:{{.NGINX_TAG}}"
         securityContext:
           runAsNonRoot: true
         env:
           - name: PROXY_SERVICE_HOST
             value: 'http://127.0.0.1'
           - name: PROXY_SERVICE_PORT
-            value: '5000'
+            value: "{{.API_REF_PORT}}"
           - name: LOG_FORMAT_NAME
             value: 'json'
           - name: NAXSI_USE_DEFAULT_RULES

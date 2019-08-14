@@ -3,12 +3,12 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    name: ref-data-api-service
-  name: ref-data-api-service
+    name: {{.API_REF_NAME}}-service
+  name: {{.API_REF_NAME}}-service
 spec:
   ports:
   - name: https
     port: 443
     targetPort: 10443
   selector:
-    name: ref-data-api
+    name: {{.API_REF_NAME}}

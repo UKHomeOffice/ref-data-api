@@ -10,7 +10,7 @@ const pool = new Pool({
 
 pool.on('connect', (client) => {
   logger.info('New database connection established');
-  client.query('SET search_path TO "reference";');
+  client.query(`SET search_path TO "${config.dbSchema}";`);
 });
 
 pool.on('error', (err, client) => {
