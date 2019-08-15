@@ -31,7 +31,7 @@ pipeline:
       target: DOCKER_PASSWORD
     registry: quay.io
     repo: quay.io/ukhomeofficedigital/reference-data-api-service
-    tags: ${DRONE_COMMIT_SHA} 
+    tags: ${DRONE_COMMIT_SHA}
     when:
       branch: master
       event: push
@@ -205,13 +205,13 @@ pipeline:
     channel: cop-deployments
     username: Drone Build Watcher
     template: >
-        {{#success build.status}}
-          *{{repo.name}} - Build {{build.number}} succeeded*
-          {{build.link}}
-        {{else}}
-          *{{repo.name}} - Build {{build.number}} failed*
-          {{build.link}}
-        {{/success}}
+      {{#build.deployTo}}
+        *{{repo.name}} - Build {{build.number}} - {{uppercasefirst build.deployTo}} - {{uppercase build.status}}*
+        {{build.link}}
+      {{else}}
+        *{{repo.name}} - Build {{build.number}} - Development - {{uppercase build.status}}*
+        {{build.link}}
+      {{/build.deployTo}}
     when:
       branch: master
       event: [ push, deployment ]
