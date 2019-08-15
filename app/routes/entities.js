@@ -126,11 +126,17 @@ const getEntityV2 = (req, res) => {
   }
 
   if (mode === 'dataOnly') {
+    const dataObject = {
+      'status': 'success',
+      'code': 200,
+      'entityName': name,
+    };
     const entityData = getEntityDataV2(res.locals.user.refdbrole, name, queryString);
 
     Promise.all([entityData])
       .then((resultsArray) => {
-        res.status(200).json({ 'data': resultsArray[0] });
+        dataObject.data = resultsArray[0];
+        res.status(200).json(dataObject);
       })
       .catch((error) => {
         logger.error(error.stack);
