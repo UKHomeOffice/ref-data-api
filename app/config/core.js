@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const engine = {
   'protocol': process.env.ENGINE_PROTOCOL || 'http://',
   'url': process.env.ENGINE_URL || 'localhost:8080',
@@ -9,9 +11,9 @@ const camundaUrls = {
 };
 
 const keycloak = {
-  'protocol': process.env.KEYCLOAK_PROTOCOL || 'http://',
-  'url': process.env.KEYCLOAK_URL || 'localhost',
-  'realm': process.env.KEYCLOAK_REALM || 'dev,',
+  'protocol': process.env.KEYCLOAK_PROTOCOL || 'https://',
+  'url': process.env.KEYCLOAK_URL || 'keycloak.lodev.xyz/auth',
+  'realm': process.env.KEYCLOAK_REALM || 'cop-dev',
 };
 
 const db = {
@@ -21,7 +23,7 @@ const db = {
   'options': process.env.DB_REF_OPTIONS || '',
   'dbname': process.env.DB_REF_REFERENCE_DBNAME || 'reference',
   'schema': process.env.DB_REF_REFERENCE_SCHEMA || 'reference',
-  'username': process.env.DB_REF_REFERENCE_AUTHENTICATOR_USERNAME || 'authenticator',
+  'username': process.env.DB_REF_REFERENCE_AUTHENTICATOR_USERNAME || 'authenticatorreference',
   'password': process.env.DB_REF_REFERENCE_AUTHENTICATOR_PASSWORD || 'auth1234',
 };
 

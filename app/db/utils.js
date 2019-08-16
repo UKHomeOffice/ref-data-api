@@ -73,6 +73,7 @@ function isPositiveInteger(stringValue) {
 function queryFilterDecodeV2({ name, queryParams }) {
   let conditions = '';
   let limit = '';
+  let order = '';
   let select = '';
 
   // check if select and limit are arrays
@@ -95,6 +96,18 @@ function queryFilterDecodeV2({ name, queryParams }) {
 
   if (queryParams.limit) {
     limit = `%20LIMIT ${queryParams.limit}`;
+  }
+
+  if (queryParams.sort) {
+    // 'name.asc,age.desc' -> ['name.asc', 'age.desc']
+    let sortParams = queryParams.sort.split(',');
+    sortParams.map((params) => {
+      // 'name|asc' -> ['name', 'asc']
+      params = params.replace('.', '|').split('|');
+      let [field, filter] = params;
+      filter = filter.toUpperCase();
+      order += order.includes('ORDER BY') ? `,%20${field} ${filter}` : `%20ORDER BY ${field} ${filter}`;
+    });
   }
 
   if (queryParams.filter) {
@@ -150,7 +163,7 @@ function queryFilterDecodeV2({ name, queryParams }) {
   }
 
 
-  let query = `${select}${conditions}${limit};`;
+  let query = `${select}${conditions}${order}${limit};`;
   query = query.replace(/%20/g, ' ');
   return query;
 }
