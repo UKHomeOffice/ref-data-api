@@ -340,5 +340,34 @@ describe('Test Database Utils', () => {
 
       expect(query).to.equal(expectedQueryFilter);
     });
+
+    it('Should return a querystring with a column selected ordered by column ascending', () => {
+      const name = 'country';
+      const queryParams = {
+        'limit': '3',
+        'select': 'name',
+        'sort': 'name.asc',
+      };
+      const expectedQueryFilter = `SELECT name FROM ${name} ORDER BY name ASC LIMIT 3;`;
+      const query = queryFilterDecodeV2({ name, queryParams });
+
+      expect(query).to.equal(expectedQueryFilter);
+    });
+
+    it('Should return a querystring with all columns selected, filtered by name and age, sorted by name asc, age desc, and a limit of 3 rows', () => {
+      const name = 'country';
+      const queryParams = {
+        'limit': '3',
+        'filter': [
+          'name=eq.John',
+          'age=eq.null',
+        ],
+        'sort': 'name.asc,age.desc',
+      };
+      const expectedQueryFilter = `SELECT * FROM ${name} WHERE name = 'John' AND age IS NULL ORDER BY name ASC, age DESC LIMIT 3;`;
+      const query = queryFilterDecodeV2({ name, queryParams });
+
+      expect(query).to.equal(expectedQueryFilter);
+    });
   });
 });
