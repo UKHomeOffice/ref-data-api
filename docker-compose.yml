@@ -61,7 +61,7 @@ services:
 
   ref_data_api:
     build: .
-    image: quay.io/ukhomeofficedigital/reference-data-api-service:dev
+    image: quay.io/ukhomeofficedigital/ref-data-api:dev
     command: npm run start-dev
     volumes:
       - ./app:/src/app
