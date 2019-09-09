@@ -4,21 +4,21 @@ pipeline:
   build:
     image: quay.io/ukhomeofficedigital/drone-docker
     commands:
-      - docker build -t reference-data-api-service:$${DRONE_COMMIT_SHA} .
+      - docker build -t ref-data-api:$${DRONE_COMMIT_SHA} .
     when:
       event: push
 
   unit_tests:
     image: quay.io/ukhomeofficedigital/drone-docker
     commands:
-      - docker run -t reference-data-api-service:$${DRONE_COMMIT_SHA} sh -c "npm run test"
+      - docker run -t ref-data-api:$${DRONE_COMMIT_SHA} sh -c "npm run test"
     when:
       event: push
 
   lint_checks:
     image: quay.io/ukhomeofficedigital/drone-docker
     commands:
-      - docker run -t reference-data-api-service:$${DRONE_COMMIT_SHA} sh -c "npm run lint -- app/"
+      - docker run -t ref-data-api:$${DRONE_COMMIT_SHA} sh -c "npm run lint -- app/"
     when:
       event: push
 
@@ -30,7 +30,7 @@ pipeline:
     - source: DEV_QUAY_PASSWORD
       target: DOCKER_PASSWORD
     registry: quay.io
-    repo: quay.io/ukhomeofficedigital/reference-data-api-service
+    repo: quay.io/ukhomeofficedigital/ref-data-api
     tags: ${DRONE_COMMIT_SHA}
     when:
       branch: master

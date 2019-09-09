@@ -12,7 +12,7 @@ This API forms part of a Reference Data Service that is being developed by the U
 To use this API first clone this repo
 
 ```sh
-git@github.com:UKHomeOffice/reference-data-api-service.git
+git@github.com:UKHomeOffice/ref-data-api.git
 ```
 
 ### Development without Docker
@@ -72,30 +72,30 @@ $ npm run lint -- ./routes/ --fix
 Once you've cloned the project, build the prototype Docker container
 
 ```sh
-docker build -t reference-data-api-service .
+docker build -t ref-data-api .
 ```
 
 To run the resulting Docker container
 
 ```sh
-docker run -p 5000:5000 reference-data-api-service
+docker run -p 5000:5000 ref-data-api
 ```
 
 Running tests (from outside the Docker container)
 
 ```sh
-docker run -t reference-data-api-service:<tag> sh -c "npm run test"
+docker run -t ref-data-api:<tag> sh -c "npm run test"
 ```
 
 Running linter (from outside the Docker container)
 
 ```sh
-docker run -t reference-data-api-service:<tag> sh -c "npm run lint -- ."
+docker run -t ref-data-api:<tag> sh -c "npm run lint -- ."
 ```
 
 If you prefer to run tests or linter from within the container
 
-1. run the Docker container with `docker run -p 5000:5000 reference-data-api-service`
+1. run the Docker container with `docker run -p 5000:5000 ref-data-api`
 
 2. go into the container by opening a new terminal tab and execute `docker exect -it <docker_container_id> sh`
 
