@@ -63,12 +63,14 @@ const getAllEntities = () => pool.query(`SELECT * FROM pg_catalog.pg_tables WHER
 const getEntityData = (role, entityName, filters) => new Promise((resolve, reject) => {
   pool.query(`SET ROLE ${role};`)
     .then(() => {
+      const limit = config.limitRows ? ' LIMIT 100' : '';
+
       if (filters === null) {
-        logger.info(`Running query SELECT * FROM ${entityName};`);
-        return pool.query(`SELECT * FROM ${entityName} LIMIT 100;`);
+        logger.info(`Running query SELECT * FROM ${entityName}${limit};`);
+        return pool.query(`SELECT * FROM ${entityName}${limit};`);
       }
-      logger.info(`Running query SELECT * FROM ${entityName} WHERE ${filters};`);
-      return pool.query(`SELECT * FROM ${entityName} WHERE ${filters} LIMIT 100;`);
+      logger.info(`Running query SELECT * FROM ${entityName} WHERE ${filters}${limit};`);
+      return pool.query(`SELECT * FROM ${entityName} WHERE ${filters}${limit};`);
     })
     .then(data => resolve(data.rows))
     .catch((error) => {

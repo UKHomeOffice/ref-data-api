@@ -20,7 +20,7 @@ describe('Test Item Routes', () => {
       'exp': expiryTime,
       'refdbrole': 'readonlyreference',
       'iss': config.iss,
-      'aud': ['operational-data-api', 'refdata-api'],
+      'aud': ['operational-data-api', 'api-ref'],
     };
     const secret = 'super-secret-19';
     const token = jwtSimple.encode(payload, secret);

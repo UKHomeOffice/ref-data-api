@@ -12,7 +12,7 @@ const camundaUrls = {
 
 const keycloak = {
   'protocol': process.env.KEYCLOAK_PROTOCOL || 'https://',
-  'url': process.env.KEYCLOAK_URL || 'keycloak.lodev.xyz/auth',
+  'url': process.env.KEYCLOAK_URL || 'sso-dev.notprod.homeoffice.gov.uk/auth',
   'realm': process.env.KEYCLOAK_REALM || 'cop-local',
 };
 
@@ -24,7 +24,7 @@ const db = {
   'dbname': process.env.DB_REF_REFERENCE_DBNAME || 'reference',
   'schema': process.env.DB_REF_REFERENCE_SCHEMA || 'reference',
   'username': process.env.DB_REF_REFERENCE_AUTHENTICATOR_USERNAME || 'authenticatorreference',
-  'password': process.env.DB_REF_REFERENCE_AUTHENTICATOR_PASSWORD || '02Zuv5e6iRtfys0gUCUu',
+  'password': process.env.DB_REF_REFERENCE_AUTHENTICATOR_PASSWORD || 'auth1234',
 };
 
 const config = {
