@@ -65,10 +65,10 @@ const getEntityData = (role, entityName, filters) => new Promise((resolve, rejec
     .then(() => {
       if (filters === null) {
         logger.info(`Running query SELECT * FROM ${entityName};`);
-        return pool.query(`SELECT * FROM ${entityName};`);
+        return pool.query(`SELECT * FROM ${entityName} LIMIT 100;`);
       }
       logger.info(`Running query SELECT * FROM ${entityName} WHERE ${filters};`);
-      return pool.query(`SELECT * FROM ${entityName} WHERE ${filters};`);
+      return pool.query(`SELECT * FROM ${entityName} WHERE ${filters} LIMIT 100;`);
     })
     .then(data => resolve(data.rows))
     .catch((error) => {
