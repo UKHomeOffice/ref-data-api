@@ -1,3 +1,5 @@
+const config = require('../config/core');
+
 // queryFilterDecode is a function that takes a string
 // with query parameters and decodes it to be used in a postgres database
 function queryFilterDecode(queryParams) {
@@ -72,7 +74,7 @@ function isPositiveInteger(stringValue) {
 
 function queryFilterDecodeV2({ name, queryParams }) {
   let conditions = '';
-  let limit = '';
+  let limit = config.limitRows ? 100 : '';
   let order = '';
   let select = '';
 
@@ -161,7 +163,6 @@ function queryFilterDecodeV2({ name, queryParams }) {
       conditions += conditions.includes('WHERE') ? `%20AND ${field} ${filter} ${value}` : `%20WHERE ${field} ${filter} ${value}`;
     });
   }
-
 
   let query = `${select}${conditions}${order}${limit};`;
   query = query.replace(/%20/g, ' ');
