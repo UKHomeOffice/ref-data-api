@@ -97,3 +97,10 @@ spec:
         ports:
           - name: https
             containerPort: 10443
+        volumeMounts:
+          - name: certs
+            mountPath: /certs
+      volumes:
+      - name: certs
+        secret:
+          secretName: "{{.API_REF_NAME}}-pod-tls"

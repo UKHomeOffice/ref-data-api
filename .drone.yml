@@ -84,55 +84,55 @@ pipeline:
   deploy_to_dev:
     image: quay.io/ukhomeofficedigital/kd
     secrets:
-      - DEV_NGINX_IMAGE
-      - DEV_NGINX_TAG
-      - DEV_KUBE_SERVER
-      - DEV_KEYCLOAK_URL
-      - DEV_KEYCLOAK_REALM
-      - DEV_KEYCLOAK_PROTOCOL
-      - DEV_API_REF_NAME
-      - DEV_API_REF_IMAGE
-      - DEV_API_REF_KEYCLOAK_CLIENT_ID
-      - DEV_API_REF_KUBE_NAMESPACE
-      - DEV_API_REF_KUBE_TOKEN
-      - DEV_API_REF_LOG_LEVEL
-      - DEV_API_REF_URL
-      - DEV_API_REF_PORT
-      - DEV_API_REF_LIMIT_ROWS
-      - DEV_DB_REF_PROTOCOL
-      - DEV_DB_REF_PORT
-      - DEV_DB_REF_HOSTNAME
-      - DEV_DB_REF_OPTIONS
-      - DEV_DB_REF_REFERENCE_DBNAME
-      - DEV_DB_REF_REFERENCE_SCHEMA
-      - DEV_DB_REF_REFERENCE_AUTHENTICATOR_USERNAME
-      - DEV_DB_REF_REFERENCE_AUTHENTICATOR_PASSWORD
+      - source: DEV_API_REF_IMAGE
+        target: API_REF_IMAGE
+      - source: DEV_API_REF_KEYCLOAK_CLIENT_ID
+        target: API_REF_KEYCLOAK_CLIENT_ID
+      - source: DEV_API_REF_KUBE_NAMESPACE
+        target: KUBE_NAMESPACE
+      - source: DEV_API_REF_KUBE_TOKEN
+        target: KUBE_TOKEN
+      - source: DEV_API_REF_LIMIT_ROWS
+        target: LIMIT_ROWS
+      - source: DEV_API_REF_LOG_LEVEL
+        target: API_REF_LOG_LEVEL
+      - source: DEV_API_REF_NAME
+        target: API_REF_NAME
+      - source: DEV_API_REF_PORT
+        target: API_REF_PORT
+      - source: DEV_API_REF_URL
+        target: API_REF_URL
+      - source: DEV_DB_REF_HOSTNAME
+        target: DB_REF_HOSTNAME
+      - source: DEV_DB_REF_OPTIONS
+        target: DB_REF_OPTIONS
+      - source: DEV_DB_REF_PORT
+        target: DB_REF_PORT
+      - source: DEV_DB_REF_PROTOCOL
+        target: DB_REF_PROTOCOL
+      - source: DEV_DB_REF_REFERENCE_AUTHENTICATOR_PASSWORD
+        target: DB_REF_REFERENCE_AUTHENTICATOR_PASSWORD
+      - source: DEV_DB_REF_REFERENCE_AUTHENTICATOR_USERNAME
+        target: DB_REF_REFERENCE_AUTHENTICATOR_USERNAME
+      - source: DEV_DB_REF_REFERENCE_DBNAME
+        target: DB_REF_REFERENCE_DBNAME
+      - source: DEV_DB_REF_REFERENCE_SCHEMA
+        target: DB_REF_REFERENCE_SCHEMA
+      - source: DEV_KEYCLOAK_PROTOCOL
+        target: KEYCLOAK_PROTOCOL
+      - source: DEV_KEYCLOAK_REALM
+        target: KEYCLOAK_REALM
+      - source: DEV_KEYCLOAK_URL
+        target: KEYCLOAK_URL
+      - source: DEV_KUBE_SERVER
+        target: KUBE_SERVER
+      - source: NGINX_IMAGE
+        target: NGINX_IMAGE
+      - source: NGINX_TAG
+        target: NGINX_TAG
     commands:
-      - export NGINX_IMAGE=$${DEV_NGINX_IMAGE}
-      - export NGINX_TAG=$${DEV_NGINX_TAG}
-      - export KUBE_NAMESPACE=$${DEV_API_REF_KUBE_NAMESPACE}
-      - export KUBE_SERVER=$${DEV_KUBE_SERVER}
-      - export KUBE_TOKEN=$${DEV_API_REF_KUBE_TOKEN}
-      - export KEYCLOAK_URL=$${DEV_KEYCLOAK_URL}
-      - export KEYCLOAK_REALM=$${DEV_KEYCLOAK_REALM}
-      - export KEYCLOAK_PROTOCOL=$${DEV_KEYCLOAK_PROTOCOL}
-      - export API_REF_NAME=$${DEV_API_REF_NAME}
-      - export API_REF_KEYCLOAK_CLIENT_ID=$${DEV_API_REF_KEYCLOAK_CLIENT_ID}
-      - export API_REF_LOG_LEVEL=$${DEV_API_REF_LOG_LEVEL}
-      - export API_REF_PORT=$${DEV_API_REF_PORT}
-      - export LIMIT_ROWS=$${DEV_API_REF_LIMIT_ROWS}
-      - export API_REF_URL=$${DEV_API_REF_URL}
-      - export DB_REF_PROTOCOL=$${DEV_DB_REF_PROTOCOL}
-      - export DB_REF_PORT=$${DEV_DB_REF_PORT}
-      - export DB_REF_HOSTNAME=$${DEV_DB_REF_HOSTNAME}
-      - export DB_REF_OPTIONS=$${DEV_DB_REF_OPTIONS}
-      - export DB_REF_REFERENCE_DBNAME=$${DEV_DB_REF_REFERENCE_DBNAME}
-      - export DB_REF_REFERENCE_SCHEMA=$${DEV_DB_REF_REFERENCE_SCHEMA}
-      - export DB_REF_REFERENCE_AUTHENTICATOR_USERNAME=$${DEV_DB_REF_REFERENCE_AUTHENTICATOR_USERNAME}
-      - export DB_REF_REFERENCE_AUTHENTICATOR_PASSWORD=$${DEV_DB_REF_REFERENCE_AUTHENTICATOR_PASSWORD}
-      - export API_REF_IMAGE=$${DEV_API_REF_IMAGE}
       - export API_REF_TAG=$${DRONE_COMMIT_SHA}
-      - kd --insecure-skip-tls-verify -f kube/secret.yml -f kube/deployment.yml -f kube/service.yml -f kube/ingress.yml -f kube/network-policy.yml
+      - kd --insecure-skip-tls-verify -f kube/cert.yml -f kube/secret.yml -f kube/deployment.yml -f kube/service.yml -f kube/ingress.yml -f kube/network-policy.yml
     when:
       branch: master
       event: push
@@ -140,55 +140,55 @@ pipeline:
   deploy_to_staging:
     image: quay.io/ukhomeofficedigital/kd
     secrets:
-      - STAGING_NGINX_IMAGE
-      - STAGING_NGINX_TAG
-      - STAGING_KUBE_SERVER
-      - STAGING_API_REF_KUBE_NAMESPACE
-      - STAGING_API_REF_KUBE_TOKEN
-      - STAGING_KEYCLOAK_URL
-      - STAGING_KEYCLOAK_REALM
-      - STAGING_KEYCLOAK_PROTOCOL
-      - STAGING_API_REF_NAME
-      - STAGING_API_REF_KEYCLOAK_CLIENT_ID
-      - STAGING_API_REF_LOG_LEVEL
-      - STAGING_API_REF_PORT
-      - STAGING_API_REF_URL
-      - STAGING_API_REF_LIMIT_ROWS
-      - STAGING_DB_REF_PROTOCOL
-      - STAGING_DB_REF_PORT
-      - STAGING_DB_REF_HOSTNAME
-      - STAGING_DB_REF_OPTIONS
-      - STAGING_DB_REF_REFERENCE_DBNAME
-      - STAGING_DB_REF_REFERENCE_SCHEMA
-      - STAGING_DB_REF_REFERENCE_AUTHENTICATOR_USERNAME
-      - STAGING_DB_REF_REFERENCE_AUTHENTICATOR_PASSWORD
-      - STAGING_API_REF_IMAGE
+      - source: STAGING_API_REF_IMAGE
+        target: API_REF_IMAGE
+      - source: STAGING_API_REF_KEYCLOAK_CLIENT_ID
+        target: API_REF_KEYCLOAK_CLIENT_ID
+      - source: STAGING_API_REF_KUBE_NAMESPACE
+        target: KUBE_NAMESPACE
+      - source: STAGING_API_REF_KUBE_TOKEN
+        target: KUBE_TOKEN
+      - source: STAGING_API_REF_LIMIT_ROWS
+        target: LIMIT_ROWS
+      - source: STAGING_API_REF_LOG_LEVEL
+        target: API_REF_LOG_LEVEL
+      - source: STAGING_API_REF_NAME
+        target: API_REF_NAME
+      - source: STAGING_API_REF_PORT
+        target: API_REF_PORT
+      - source: STAGING_API_REF_URL
+        target: API_REF_URL
+      - source: STAGING_DB_REF_HOSTNAME
+        target: DB_REF_HOSTNAME
+      - source: STAGING_DB_REF_OPTIONS
+        target: DB_REF_OPTIONS
+      - source: STAGING_DB_REF_PORT
+        target: DB_REF_PORT
+      - source: STAGING_DB_REF_PROTOCOL
+        target: DB_REF_PROTOCOL
+      - source: STAGING_DB_REF_REFERENCE_AUTHENTICATOR_PASSWORD
+        target: DB_REF_REFERENCE_AUTHENTICATOR_PASSWORD
+      - source: STAGING_DB_REF_REFERENCE_AUTHENTICATOR_USERNAME
+        target: DB_REF_REFERENCE_AUTHENTICATOR_USERNAME
+      - source: STAGING_DB_REF_REFERENCE_DBNAME
+        target: DB_REF_REFERENCE_DBNAME
+      - source: STAGING_DB_REF_REFERENCE_SCHEMA
+        target: DB_REF_REFERENCE_SCHEMA
+      - source: STAGING_KEYCLOAK_PROTOCOL
+        target: KEYCLOAK_PROTOCOL
+      - source: STAGING_KEYCLOAK_REALM
+        target: KEYCLOAK_REALM
+      - source: STAGING_KEYCLOAK_URL
+        target: KEYCLOAK_URL
+      - source: STAGING_KUBE_SERVER
+        target: KUBE_SERVER
+      - source: NGINX_IMAGE
+        target: NGINX_IMAGE
+      - source: NGINX_TAG
+        target: NGINX_TAG
     commands:
-      - export NGINX_IMAGE=$${STAGING_NGINX_IMAGE}
-      - export NGINX_TAG=$${STAGING_NGINX_TAG}
-      - export KUBE_NAMESPACE=$${STAGING_API_REF_KUBE_NAMESPACE}
-      - export KUBE_SERVER=$${STAGING_KUBE_SERVER}
-      - export KUBE_TOKEN=$${STAGING_API_REF_KUBE_TOKEN}
-      - export KEYCLOAK_URL=$${STAGING_KEYCLOAK_URL}
-      - export KEYCLOAK_REALM=$${STAGING_KEYCLOAK_REALM}
-      - export KEYCLOAK_PROTOCOL=$${STAGING_KEYCLOAK_PROTOCOL}
-      - export API_REF_NAME=$${STAGING_API_REF_NAME}
-      - export API_REF_KEYCLOAK_CLIENT_ID=$${STAGING_API_REF_KEYCLOAK_CLIENT_ID}
-      - export API_REF_LOG_LEVEL=$${STAGING_API_REF_LOG_LEVEL}
-      - export API_REF_PORT=$${STAGING_API_REF_PORT}
-      - export API_REF_URL=$${STAGING_API_REF_URL}
-      - export LIMIT_ROWS=$${STAGING_API_REF_LIMIT_ROWS}
-      - export DB_REF_PROTOCOL=$${STAGING_DB_REF_PROTOCOL}
-      - export DB_REF_PORT=$${STAGING_DB_REF_PORT}
-      - export DB_REF_HOSTNAME=$${STAGING_DB_REF_HOSTNAME}
-      - export DB_REF_OPTIONS=$${STAGING_DB_REF_OPTIONS}
-      - export DB_REF_REFERENCE_DBNAME=$${STAGING_DB_REF_REFERENCE_DBNAME}
-      - export DB_REF_REFERENCE_SCHEMA=$${STAGING_DB_REF_REFERENCE_SCHEMA}
-      - export DB_REF_REFERENCE_AUTHENTICATOR_USERNAME=$${STAGING_DB_REF_REFERENCE_AUTHENTICATOR_USERNAME}
-      - export DB_REF_REFERENCE_AUTHENTICATOR_PASSWORD=$${STAGING_DB_REF_REFERENCE_AUTHENTICATOR_PASSWORD}
-      - export API_REF_IMAGE=$${STAGING_API_REF_IMAGE}
       - export API_REF_TAG=$${DRONE_COMMIT_SHA}
-      - kd --insecure-skip-tls-verify -f kube/secret.yml -f kube/deployment.yml -f kube/service.yml -f kube/ingress.yml -f kube/network-policy.yml
+      - kd --insecure-skip-tls-verify -f kube/cert.yml -f kube/secret.yml -f kube/deployment.yml -f kube/service.yml -f kube/ingress.yml -f kube/network-policy.yml
     when:
       event: deployment
       environment: staging
@@ -196,55 +196,55 @@ pipeline:
   deploy_to_prod:
     image: quay.io/ukhomeofficedigital/kd
     secrets:
-      - PRODUCTION_NGINX_IMAGE
-      - PRODUCTION_NGINX_TAG
-      - PRODUCTION_KUBE_SERVER
-      - PRODUCTION_KEYCLOAK_URL
-      - PRODUCTION_KEYCLOAK_REALM
-      - PRODUCTION_KEYCLOAK_PROTOCOL
-      - PRODUCTION_API_REF_NAME
-      - PRODUCTION_API_REF_IMAGE
-      - PRODUCTION_API_REF_KEYCLOAK_CLIENT_ID
-      - PRODUCTION_API_REF_KUBE_NAMESPACE
-      - PRODUCTION_API_REF_KUBE_TOKEN
-      - PRODUCTION_API_REF_LOG_LEVEL
-      - PRODUCTION_API_REF_URL
-      - PRODUCTION_API_REF_PORT
-      - PRODUCTION_API_REF_LIMIT_ROWS
-      - PRODUCTION_DB_REF_PROTOCOL
-      - PRODUCTION_DB_REF_PORT
-      - PRODUCTION_DB_REF_HOSTNAME
-      - PRODUCTION_DB_REF_OPTIONS
-      - PRODUCTION_DB_REF_REFERENCE_DBNAME
-      - PRODUCTION_DB_REF_REFERENCE_SCHEMA
-      - PRODUCTION_DB_REF_REFERENCE_AUTHENTICATOR_USERNAME
-      - PRODUCTION_DB_REF_REFERENCE_AUTHENTICATOR_PASSWORD
+      - source: PRODUCTION_API_REF_IMAGE
+        target: API_REF_IMAGE
+      - source: PRODUCTION_API_REF_KEYCLOAK_CLIENT_ID
+        target: API_REF_KEYCLOAK_CLIENT_ID
+      - source: PRODUCTION_API_REF_KUBE_NAMESPACE
+        target: KUBE_NAMESPACE
+      - source: PRODUCTION_API_REF_KUBE_TOKEN
+        target: KUBE_TOKEN
+      - source: PRODUCTION_API_REF_LIMIT_ROWS
+        target: LIMIT_ROWS
+      - source: PRODUCTION_API_REF_LOG_LEVEL
+        target: API_REF_LOG_LEVEL
+      - source: PRODUCTION_API_REF_NAME
+        target: API_REF_NAME
+      - source: PRODUCTION_API_REF_PORT
+        target: API_REF_PORT
+      - source: PRODUCTION_API_REF_URL
+        target: API_REF_URL
+      - source: PRODUCTION_DB_REF_HOSTNAME
+        target: DB_REF_HOSTNAME
+      - source: PRODUCTION_DB_REF_OPTIONS
+        target: DB_REF_OPTIONS
+      - source: PRODUCTION_DB_REF_PORT
+        target: DB_REF_PORT
+      - source: PRODUCTION_DB_REF_PROTOCOL
+        target: DB_REF_PROTOCOL
+      - source: PRODUCTION_DB_REF_REFERENCE_AUTHENTICATOR_PASSWORD
+        target: DB_REF_REFERENCE_AUTHENTICATOR_PASSWORD
+      - source: PRODUCTION_DB_REF_REFERENCE_AUTHENTICATOR_USERNAME
+        target: DB_REF_REFERENCE_AUTHENTICATOR_USERNAME
+      - source: PRODUCTION_DB_REF_REFERENCE_DBNAME
+        target: DB_REF_REFERENCE_DBNAME
+      - source: PRODUCTION_DB_REF_REFERENCE_SCHEMA
+        target: DB_REF_REFERENCE_SCHEMA
+      - source: PRODUCTION_KEYCLOAK_PROTOCOL
+        target: KEYCLOAK_PROTOCOL
+      - source: PRODUCTION_KEYCLOAK_REALM
+        target: KEYCLOAK_REALM
+      - source: PRODUCTION_KEYCLOAK_URL
+        target: KEYCLOAK_URL
+      - source: PRODUCTION_KUBE_SERVER
+        target: KUBE_SERVER
+      - source: NGINX_IMAGE
+        target: NGINX_IMAGE
+      - source: NGINX_TAG
+        target: NGINX_TAG
     commands:
-      - export NGINX_IMAGE=$${PRODUCTION_NGINX_IMAGE}
-      - export NGINX_TAG=$${PRODUCTION_NGINX_TAG}
-      - export KUBE_NAMESPACE=$${PRODUCTION_API_REF_KUBE_NAMESPACE}
-      - export KUBE_SERVER=$${PRODUCTION_KUBE_SERVER}
-      - export KUBE_TOKEN=$${PRODUCTION_API_REF_KUBE_TOKEN}
-      - export KEYCLOAK_URL=$${PRODUCTION_KEYCLOAK_URL}
-      - export KEYCLOAK_REALM=$${PRODUCTION_KEYCLOAK_REALM}
-      - export KEYCLOAK_PROTOCOL=$${PRODUCTION_KEYCLOAK_PROTOCOL}
-      - export API_REF_NAME=$${PRODUCTION_API_REF_NAME}
-      - export API_REF_KEYCLOAK_CLIENT_ID=$${PRODUCTION_API_REF_KEYCLOAK_CLIENT_ID}
-      - export API_REF_LOG_LEVEL=$${PRODUCTION_API_REF_LOG_LEVEL}
-      - export API_REF_PORT=$${PRODUCTION_API_REF_PORT}
-      - export LIMIT_ROWS=$${PRODUCTION_API_REF_LIMIT_ROWS}
-      - export API_REF_URL=$${PRODUCTION_API_REF_URL}
-      - export DB_REF_PROTOCOL=$${PRODUCTION_DB_REF_PROTOCOL}
-      - export DB_REF_PORT=$${PRODUCTION_DB_REF_PORT}
-      - export DB_REF_HOSTNAME=$${PRODUCTION_DB_REF_HOSTNAME}
-      - export DB_REF_OPTIONS=$${PRODUCTION_DB_REF_OPTIONS}
-      - export DB_REF_REFERENCE_DBNAME=$${PRODUCTION_DB_REF_REFERENCE_DBNAME}
-      - export DB_REF_REFERENCE_SCHEMA=$${PRODUCTION_DB_REF_REFERENCE_SCHEMA}
-      - export DB_REF_REFERENCE_AUTHENTICATOR_USERNAME=$${PRODUCTION_DB_REF_REFERENCE_AUTHENTICATOR_USERNAME}
-      - export DB_REF_REFERENCE_AUTHENTICATOR_PASSWORD=$${PRODUCTION_DB_REF_REFERENCE_AUTHENTICATOR_PASSWORD}
-      - export API_REF_IMAGE=$${PRODUCTION_API_REF_IMAGE}
       - export API_REF_TAG=$${DRONE_COMMIT_SHA}
-      - kd --insecure-skip-tls-verify -f kube/secret.yml -f kube/deployment.yml -f kube/service.yml -f kube/ingress.yml -f kube/network-policy.yml
+      - kd --insecure-skip-tls-verify -f kube/cert.yml -f kube/secret.yml -f kube/deployment.yml -f kube/service.yml -f kube/ingress.yml -f kube/network-policy.yml
     when:
       event: deployment
       environment: production
