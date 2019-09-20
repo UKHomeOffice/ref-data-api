@@ -26,7 +26,6 @@ app.get('/entities/:name/items/:id', items.getItem);
 app.patch(
   '/entities/:name/items/:id',
   [
-    check('id').not().isEmpty().trim(),
     check('field').not().isEmpty().trim(),
     check('newValue').not().isEmpty().trim(),
     check('validFrom').optional({ 'nullable': true }).trim(),
