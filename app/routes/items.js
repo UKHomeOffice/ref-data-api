@@ -42,9 +42,9 @@ const patchItemField = (req, res) => {
   }
 
   const { body } = req;
+  const { name, id } = req.params;
   body.id = id;
 
-  const { name, id } = req.params;
   const date = new Date();
   const utcTimeStampString = date.toUTCString();
   const updateItemField = {

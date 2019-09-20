@@ -18,7 +18,7 @@ describe('Test Item Routes', () => {
       'name': 'Pedro Curado',
       'email': 'pedro@mail.com',
       'exp': expiryTime,
-      'refdbrole': 'readonlyreference',
+      'refdbrole': 'refreadonly',
       'iss': config.iss,
       'aud': ['operational-data-api', 'api-ref'],
     };
@@ -60,11 +60,10 @@ describe('Test Item Routes', () => {
       const utcTimeStampString = date.toUTCString();
 
       const body = {
-        'id': 3,
-        'field': 'iso31661alpha2',
-        'newValue': 'AB',
-        'validFrom': '10/08/2020',
-        'validTo': null,
+        field: 'iso31661alpha2',
+        newValue: 'AB',
+        validFrom: '10/08/2020',
+        validTo: null,
       };
 
       const updateItemField = {
@@ -86,7 +85,7 @@ describe('Test Item Routes', () => {
             'type': 'String',
           },
           'changeRequested': {
-            'value': JSON.stringify(body),
+            'value': "{\"field\":\"iso31661alpha2\",\"newValue\":\"AB\",\"validFrom\":\"10/08/2020\",\"validTo\":null,\"id\":\"3\"}",
             'type': 'json',
           },
         },
