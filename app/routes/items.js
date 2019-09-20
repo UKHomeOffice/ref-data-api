@@ -30,7 +30,7 @@ const getItem = (req, res) => {
       dataObject.data = resultsArray[2];
       res.status(200).json(dataObject);
     })
-    .catch(error => res.json({ 'message': error.message }));
+    .catch(error => res.status(400).json({ 'error': error.message }));
 };
 
 const patchItemField = (req, res) => {
@@ -43,6 +43,8 @@ const patchItemField = (req, res) => {
 
   const { body } = req;
   const { name, id } = req.params;
+  body.id = id;
+
   const date = new Date();
   const utcTimeStampString = date.toUTCString();
   const updateItemField = {

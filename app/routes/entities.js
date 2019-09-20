@@ -244,7 +244,7 @@ const patchEntitySchema = (req, res) => {
     })
     .catch((error) => {
       logger.error(error.stack);
-      res.status(400).json({ 'error': error.message });
+      res.status(400).json({});
     });
 };
 
@@ -255,7 +255,7 @@ const postEntityItem = (req, res) => {
   if (Object.entries(body).length === 0 && body.constructor === Object) {
     logger.error('Invalid JSON');
     logger.error(body);
-    return res.status(400).json({ 'message': 'Invalid JSON object' });
+    return res.status(400).json({ 'error': 'Invalid JSON object' });
   }
 
   const date = new Date();

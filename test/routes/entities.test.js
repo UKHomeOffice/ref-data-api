@@ -260,7 +260,7 @@ describe('Test Entity Routes', () => {
         .set('Accept', 'application/json')
         .then((response) => {
           expect(response.status).to.equal(400);
-          expect(response.body).to.deep.equal({ 'message': 'Invalid JSON object' });
+          expect(response.body).to.deep.equal({ 'error': 'Invalid JSON object' });
         });
     });
 
