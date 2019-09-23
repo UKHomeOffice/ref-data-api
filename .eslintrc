@@ -9,6 +9,7 @@
     "consistent-return": "off",
     "func-names": ["error", "never"],
     "quote-props": ["error", "always"],
+    "max-len": ["error", { "code": 185 }],
     "no-underscore-dangle": "off",
     "no-param-reassign": "off",
     "no-restricted-globals": "off",
