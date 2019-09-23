@@ -82,11 +82,12 @@ const getEntityData = (role, entityName, filters) => new Promise((resolve, rejec
     });
 });
 
-const getEntityDataV2 = (role, entityName, queryString) => new Promise((resolve, reject) => {
+const getEntityDataV2 = (role, entityName, queryString, values) => new Promise((resolve, reject) => {
   pool.query(`SET ROLE ${role};`)
     .then(() => {
-      logger.info(`Running query ${queryString}`);
-      return pool.query(`${queryString}`);
+      logger.info('Running query - 3');
+      logger.debug(`Running query: ${queryString}, values: ${values}`);
+      return pool.query(queryString, values);
     })
     .then(data => resolve(data.rows))
     .catch((error) => {

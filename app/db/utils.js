@@ -74,20 +74,24 @@ function isPositiveInteger(stringValue) {
 
 function queryFilterDecodeV2({ name, queryParams }) {
   let conditions = '';
+  let index = 1;
   let limit = config.limitRows ? 100 : '';
   let order = '';
+  let placeholders = '';
+  let queryString = '';
   let select = '';
+  let values = [];
 
   // check if select and limit are arrays
   if ((queryParams.select || queryParams.limit)
       && (Array.isArray(queryParams.select) || Array.isArray(queryParams.limit))) {
-    return '';
+    return { queryString, values };
   }
 
   // check if limit is not integer
   // check if limit is a negative integer
   if (queryParams.limit && !isPositiveInteger(queryParams.limit)) {
-    return '';
+    return { queryString, values };
   }
 
   if (queryParams.select) {
@@ -97,7 +101,9 @@ function queryFilterDecodeV2({ name, queryParams }) {
   }
 
   if (queryParams.limit) {
-    limit = `%20LIMIT ${queryParams.limit}`;
+    limit = ` LIMIT $${index}`;
+    values.push(queryParams.limit);
+    index += 1;
   }
 
   if (queryParams.sort) {
@@ -108,7 +114,7 @@ function queryFilterDecodeV2({ name, queryParams }) {
       params = params.replace('.', '|').split('|');
       let [field, filter] = params;
       filter = filter.toUpperCase();
-      order += order.includes('ORDER BY') ? `,%20${field} ${filter}` : `%20ORDER BY ${field} ${filter}`;
+      order += order.includes('ORDER BY') ? `, ${field} ${filter}` : ` ORDER BY ${field} ${filter}`;
     });
   }
 
@@ -119,9 +125,7 @@ function queryFilterDecodeV2({ name, queryParams }) {
       let [field, filter, value] = params;
       let isNull = false;
 
-      if (filter !== 'in' && isNaN(value) && value !== 'null') {
-        value = `'${value}'`;
-      } else if (isNaN(value) && value === 'null') {
+      if (isNaN(value) && value === 'null') {
         isNull = true;
         value = value.toUpperCase();
       }
@@ -129,44 +133,78 @@ function queryFilterDecodeV2({ name, queryParams }) {
       if (filter === 'gt' && !isNull) {
         // 'sum IS GREATER THAN \'3\''
         filter = '>';
+        values.push(value);
+        placeholders = `$${index}`;
+        index += 1;
       } else if (filter === 'gte' && !isNull) {
         // 'sum IS GREATER THAN or EQUAL to \'3\''
         filter = '>=';
+        values.push(value);
+        placeholders = `$${index}`;
+        index += 1;
       } else if (filter === 'lt' && !isNull) {
         // 'sum IS LESS THAN \'3\''
         filter = '<';
+        values.push(value);
+        placeholders = `$${index}`;
+        index += 1;
       } else if (filter === 'lte' && !isNull) {
         // 'sum IS LESS THAN or EQUAL to \'3\''
         filter = '<=';
+        values.push(value);
+        placeholders = `$${index}`;
+        index += 1;
       } else if (filter === 'eq' && !isNull) {
         // 'continent = \'Asia\''
         filter = '=';
+        values.push(value);
+        placeholders = `$${index}`;
+        index += 1;
       } else if (filter === 'eq' && isNull) {
         // 'validfrom IS NULL'
         filter = 'IS';
+        // 'IS NULL' is treated as dynamic columns and
+        // therefore prepared statements are not allowed
+        // hence adding the value in place of the index.
+        placeholders = value;
+        index += 1;
       } else if (filter === 'neq' && !isNull) {
         // 'continent != \'Asia\''
         filter = '!=';
+        values.push(value);
+        placeholders = `$${index}`;
+        index += 1;
       } else if (filter === 'neq' && isNull) {
         // 'validfrom IS NOT NULL'
         filter = 'IS NOT';
+        // 'IS NOT NULL' is treated as dynamic columns and
+        // therefore prepared statements are not allowed
+        // hence adding the value in place of the index.
+        placeholders = value;
+        index += 1;
       } else {
         filter = 'IN';
-        value = value.replace('(', '').replace(')', '').replace(/%20/g, ' ');
+        value = value.replace('(', '');
+        value = value.replace(')', '');
+        value = value.replace(/%20/g, ' ');
+        value = value.split(',');
+        values = values.concat(value.map(val => val.trim()));
+        placeholders = value.map((val) => {
+          val = `$${index}`;
+          index += 1;
+          return val;
+        });
 
-        const values = value.split(',');
-        value = values.map(val => val.trim());
-        value = `'${value.join("', '")}'`;
-        value = `(${value})`;
+        placeholders = `${placeholders.join(', ')}`;
+        placeholders = `(${placeholders})`;
       }
 
-      conditions += conditions.includes('WHERE') ? `%20AND ${field} ${filter} ${value}` : `%20WHERE ${field} ${filter} ${value}`;
+      conditions += conditions.includes('WHERE') ? ` AND ${field} ${filter} ${placeholders}` : ` WHERE ${field} ${filter} ${placeholders}`;
     });
   }
 
-  let query = `${select}${conditions}${order}${limit};`;
-  query = query.replace(/%20/g, ' ');
-  return query;
+  queryString = `${select}${conditions}${order}${limit}`;
+  return { queryString, values };
 }
 
 module.exports = {

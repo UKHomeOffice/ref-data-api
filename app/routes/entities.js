@@ -119,7 +119,7 @@ const getEntityV2 = (req, res) => {
     queryParams.filter = [queryParams.filter];
   }
 
-  const queryString = queryFilterDecodeV2({ name, queryParams });
+  const { queryString, values } = queryFilterDecodeV2({ name, queryParams });
 
   if (!queryString) {
     return res.status(400).json({ 'error': 'Invalid query parameters' });
@@ -131,7 +131,7 @@ const getEntityV2 = (req, res) => {
       'code': 200,
       'entityName': name,
     };
-    const entityData = getEntityDataV2(res.locals.user.refdbrole, name, queryString);
+    const entityData = getEntityDataV2(res.locals.user.refdbrole, name, queryString, values);
 
     Promise.all([entityData])
       .then((resultsArray) => {
@@ -178,7 +178,7 @@ const getEntityV2 = (req, res) => {
     };
     const entityDescription = getEntityDescription(name);
     const entitySchema = getEntitySchema(res.locals.user.refdbrole, name);
-    const entityData = getEntityDataV2(res.locals.user.refdbrole, name, queryString);
+    const entityData = getEntityDataV2(res.locals.user.refdbrole, name, queryString, values);
 
     Promise.all([entityDescription, entitySchema, entityData])
       .then((resultsArray) => {

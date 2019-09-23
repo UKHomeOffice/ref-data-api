@@ -126,11 +126,14 @@ describe('Test Database Utils', () => {
           'id=gt.3',
         ],
       };
-      const expectedQueryFilter = `SELECT * FROM ${name} WHERE id > 3;`;
+      const expectedQueryObject = {
+        'queryString': `SELECT * FROM ${name} WHERE id > $1`,
+        'values': ['3'],
+      };
       const queryFilter = queryFilterDecodeV2({ name, queryParams });
 
-      expect(queryFilter).to.be.a('string');
-      expect(queryFilter).to.equal(expectedQueryFilter);
+      expect(queryFilter).to.be.an('object');
+      expect(queryFilter).to.deep.equal(expectedQueryObject);
     });
 
     it('Should return a querystring with all columns selected filtered by greater or equal then value', () => {
@@ -140,11 +143,14 @@ describe('Test Database Utils', () => {
           'id=gte.3',
         ],
       };
-      const expectedQueryFilter = `SELECT * FROM ${name} WHERE id >= 3;`;
+      const expectedQueryObject = {
+        'queryString': `SELECT * FROM ${name} WHERE id >= $1`,
+        'values': ['3'],
+      };
       const queryFilter = queryFilterDecodeV2({ name, queryParams });
 
-      expect(queryFilter).to.be.a('string');
-      expect(queryFilter).to.equal(expectedQueryFilter);
+      expect(queryFilter).to.be.an('object');
+      expect(queryFilter).to.deep.equal(expectedQueryObject);
     });
 
     it('Should return a querystring with all columns selected filtered by less then value', () => {
@@ -154,11 +160,15 @@ describe('Test Database Utils', () => {
           'id=lt.3',
         ],
       };
-      const expectedQueryFilter = `SELECT * FROM ${name} WHERE id < 3;`;
+      const expectedQueryObject = {
+        'queryString': `SELECT * FROM ${name} WHERE id < $1`,
+        'values': ['3'],
+      };
+
       const queryFilter = queryFilterDecodeV2({ name, queryParams });
 
-      expect(queryFilter).to.be.a('string');
-      expect(queryFilter).to.equal(expectedQueryFilter);
+      expect(queryFilter).to.be.an('object');
+      expect(queryFilter).to.deep.equal(expectedQueryObject);
     });
 
     it('Should return a querystring with all columns selected filtered by less or equal then value', () => {
@@ -168,11 +178,14 @@ describe('Test Database Utils', () => {
           'id=lte.3',
         ],
       };
-      const expectedQueryFilter = `SELECT * FROM ${name} WHERE id <= 3;`;
+      const expectedQueryObject = {
+        'queryString': `SELECT * FROM ${name} WHERE id <= $1`,
+        'values': ['3'],
+      };
       const queryFilter = queryFilterDecodeV2({ name, queryParams });
 
-      expect(queryFilter).to.be.a('string');
-      expect(queryFilter).to.equal(expectedQueryFilter);
+      expect(queryFilter).to.be.an('object');
+      expect(queryFilter).to.deep.equal(expectedQueryObject);
     });
 
     it('Should return a querystring with all columns selected filtered by equal to value (integer)', () => {
@@ -182,11 +195,14 @@ describe('Test Database Utils', () => {
           'id=eq.3',
         ],
       };
-      const expectedQueryFilter = `SELECT * FROM ${name} WHERE id = 3;`;
+      const expectedQueryObject = {
+        'queryString': `SELECT * FROM ${name} WHERE id = $1`,
+        'values': ['3'],
+      };
       const queryFilter = queryFilterDecodeV2({ name, queryParams });
 
-      expect(queryFilter).to.be.a('string');
-      expect(queryFilter).to.equal(expectedQueryFilter);
+      expect(queryFilter).to.be.an('object');
+      expect(queryFilter).to.deep.equal(expectedQueryObject);
     });
 
     it('Should return a querystring with all columns selected filtered by equal to value (string)', () => {
@@ -196,11 +212,14 @@ describe('Test Database Utils', () => {
           'name=eq.Portugal',
         ],
       };
-      const expectedQueryFilter = `SELECT * FROM ${name} WHERE name = 'Portugal';`;
+      const expectedQueryObject = {
+        'queryString': `SELECT * FROM ${name} WHERE name = $1`,
+        'values': ['Portugal'],
+      };
       const queryFilter = queryFilterDecodeV2({ name, queryParams });
 
-      expect(queryFilter).to.be.a('string');
-      expect(queryFilter).to.equal(expectedQueryFilter);
+      expect(queryFilter).to.be.an('object');
+      expect(queryFilter).to.deep.equal(expectedQueryObject);
     });
 
     it('Should return a querystring with all columns selected filtered by value is null', () => {
@@ -210,11 +229,14 @@ describe('Test Database Utils', () => {
           'validfrom=eq.null',
         ],
       };
-      const expectedQueryFilter = `SELECT * FROM ${name} WHERE validfrom IS NULL;`;
+      const expectedQueryObject = {
+        'queryString': `SELECT * FROM ${name} WHERE validfrom IS NULL`,
+        'values': [],
+      };
       const queryFilter = queryFilterDecodeV2({ name, queryParams });
 
-      expect(queryFilter).to.be.a('string');
-      expect(queryFilter).to.equal(expectedQueryFilter);
+      expect(queryFilter).to.be.an('object');
+      expect(queryFilter).to.deep.equal(expectedQueryObject);
     });
 
     it('Should return a querystring with all columns selected filtered by not equal to value', () => {
@@ -224,11 +246,14 @@ describe('Test Database Utils', () => {
           'name=neq.Spain',
         ],
       };
-      const expectedQueryFilter = `SELECT * FROM ${name} WHERE name != 'Spain';`;
+      const expectedQueryObject = {
+        'queryString': `SELECT * FROM ${name} WHERE name != $1`,
+        'values': ['Spain'],
+      };
       const queryFilter = queryFilterDecodeV2({ name, queryParams });
 
-      expect(queryFilter).to.be.a('string');
-      expect(queryFilter).to.equal(expectedQueryFilter);
+      expect(queryFilter).to.be.an('object');
+      expect(queryFilter).to.deep.equal(expectedQueryObject);
     });
 
     it('Should return a querystring with all columns selected filtered by not null value', () => {
@@ -239,10 +264,14 @@ describe('Test Database Utils', () => {
         ],
       };
       const expectedQueryFilter = `SELECT * FROM ${name} WHERE name IS NOT NULL;`;
+      const expectedQueryObject = {
+        'queryString': `SELECT * FROM ${name} WHERE name IS NOT NULL`,
+        'values': [],
+      };
       const queryFilter = queryFilterDecodeV2({ name, queryParams });
 
-      expect(queryFilter).to.be.a('string');
-      expect(queryFilter).to.equal(expectedQueryFilter);
+      expect(queryFilter).to.be.an('object');
+      expect(queryFilter).to.deep.equal(expectedQueryObject);
     });
 
     it('Should return a querystring with all columns selected filtered by any value provided', () => {
@@ -253,10 +282,14 @@ describe('Test Database Utils', () => {
         ],
       };
       const expectedQueryFilter = `SELECT * FROM ${name} WHERE region IN ('EU');`;
+      const expectedQueryObject = {
+        'queryString': `SELECT * FROM ${name} WHERE region IN ($1)`,
+        'values': ['EU'],
+      };
       const queryFilter = queryFilterDecodeV2({ name, queryParams });
 
-      expect(queryFilter).to.be.a('string');
-      expect(queryFilter).to.equal(expectedQueryFilter);
+      expect(queryFilter).to.be.an('object');
+      expect(queryFilter).to.deep.equal(expectedQueryObject);
     });
 
     it('Should return a querystring with all columns selected filtered by value equal to, and any value in tuple', () => {
@@ -267,11 +300,14 @@ describe('Test Database Utils', () => {
           'region=in.(EU, AS)',
         ],
       };
-      const expectedQueryFilter = `SELECT * FROM ${name} WHERE name = 'Portugal' AND region IN ('EU', 'AS');`;
+      const expectedQueryObject = {
+        'queryString': `SELECT * FROM ${name} WHERE name = $1 AND region IN ($2, $3)`,
+        'values': ['Portugal', 'EU', 'AS'],
+      };
       const queryFilter = queryFilterDecodeV2({ name, queryParams });
 
-      expect(queryFilter).to.be.a('string');
-      expect(queryFilter).to.equal(expectedQueryFilter);
+      expect(queryFilter).to.be.an('object');
+      expect(queryFilter).to.deep.equal(expectedQueryObject);
     });
 
     it('Should return a querystring with all columns selected filtered by value equal to, and a limit of 5 rows', () => {
@@ -283,35 +319,45 @@ describe('Test Database Utils', () => {
         ],
         'limit': '5',
       };
-      const expectedQuery = `SELECT * FROM ${name} WHERE name = 'Tilbury 1' AND city = 'London' LIMIT 5;`;
-      const query = queryFilterDecodeV2({ name, queryParams });
+      const expectedQueryObject = {
+        'queryString': `SELECT * FROM ${name} WHERE name = $2 AND city = $3 LIMIT $1`,
+        'values': ['5', 'Tilbury 1', 'London'],
+      };
+      const queryFilter = queryFilterDecodeV2({ name, queryParams });
 
-      expect(query).to.equal(expectedQuery);
+      expect(queryFilter).to.be.an('object');
+      expect(queryFilter).to.deep.equal(expectedQueryObject);
     });
 
     it('Should return a querystring with all columns and a limit of 1 row', () => {
       const name = 'roles';
       const queryParams = { 'limit': '1' };
-      const expectedQuery = `SELECT * FROM ${name} LIMIT 1;`;
-      const query = queryFilterDecodeV2({ name, queryParams });
+      const expectedQueryObject = {
+        'queryString': `SELECT * FROM ${name} LIMIT $1`,
+        'values': ['1'],
+      };
+      const queryFilter = queryFilterDecodeV2({ name, queryParams });
 
-      expect(query).to.equal(expectedQuery);
+      expect(queryFilter).to.be.an('object');
+      expect(queryFilter).to.deep.equal(expectedQueryObject);
     });
 
     it('Should return an empty querystring if limit is a negative integer', () => {
       const name = 'roles';
       const queryParams = { 'limit': '-1' };
-      const query = queryFilterDecodeV2({ name, queryParams });
+      const queryFilter = queryFilterDecodeV2({ name, queryParams });
 
-      expect(query).to.equal('');
+      expect(queryFilter).to.be.an('object');
+      expect(queryFilter.queryString).to.equal('');
     });
 
     it('Should return an empty querystring if limit is a string', () => {
       const name = 'roles';
       const queryParams = { 'limit': '-13' };
-      const query = queryFilterDecodeV2({ name, queryParams });
+      const queryFilter = queryFilterDecodeV2({ name, queryParams });
 
-      expect(query).to.equal('');
+      expect(queryFilter).to.be.an('object');
+      expect(queryFilter.queryString).to.equal('');
     });
 
     it('Should return an empty querystring if there is more than one select in the query params', () => {
@@ -320,9 +366,10 @@ describe('Test Database Utils', () => {
         'limit': ['3', '77'],
         'select': ['name,age', 'location'],
       };
-      const query = queryFilterDecodeV2({ name, queryParams });
+      const queryFilter = queryFilterDecodeV2({ name, queryParams });
 
-      expect(query).to.equal('');
+      expect(queryFilter).to.be.an('object');
+      expect(queryFilter.queryString).to.equal('');
     });
 
     it('Should return an empty querystring if there is more than one select in the query params', () => {
@@ -335,10 +382,14 @@ describe('Test Database Utils', () => {
           'age=eq.34',
         ],
       };
-      const expectedQueryFilter = `SELECT name,age FROM ${name} WHERE name = 'John' AND age = 34 LIMIT 3;`;
-      const query = queryFilterDecodeV2({ name, queryParams });
+      const expectedQueryObject = {
+        'queryString': `SELECT name,age FROM ${name} WHERE name = $2 AND age = $3 LIMIT $1`,
+        'values': ['3', 'John', '34'],
+      };
+      const queryFilter = queryFilterDecodeV2({ name, queryParams });
 
-      expect(query).to.equal(expectedQueryFilter);
+      expect(queryFilter).to.be.an('object');
+      expect(queryFilter).to.deep.equal(expectedQueryObject);
     });
 
     it('Should return a querystring with a column selected ordered by column ascending', () => {
@@ -348,10 +399,14 @@ describe('Test Database Utils', () => {
         'select': 'name',
         'sort': 'name.asc',
       };
-      const expectedQueryFilter = `SELECT name FROM ${name} ORDER BY name ASC LIMIT 3;`;
-      const query = queryFilterDecodeV2({ name, queryParams });
+      const expectedQueryObject = {
+        'queryString': `SELECT name FROM ${name} ORDER BY name ASC LIMIT $1`,
+        'values': ['3'],
+      };
+      const queryFilter = queryFilterDecodeV2({ name, queryParams });
 
-      expect(query).to.equal(expectedQueryFilter);
+      expect(queryFilter).to.be.an('object');
+      expect(queryFilter).to.deep.equal(expectedQueryObject);
     });
 
     it('Should return a querystring with all columns selected, filtered by name and age, sorted by name asc, age desc, and a limit of 3 rows', () => {
@@ -365,9 +420,14 @@ describe('Test Database Utils', () => {
         'sort': 'name.asc,age.desc',
       };
       const expectedQueryFilter = `SELECT * FROM ${name} WHERE name = 'John' AND age IS NULL ORDER BY name ASC, age DESC LIMIT 3;`;
-      const query = queryFilterDecodeV2({ name, queryParams });
+      const expectedQueryObject = {
+        'queryString': `SELECT * FROM ${name} WHERE name = $2 AND age IS NULL ORDER BY name ASC, age DESC LIMIT $1`,
+        'values': ['3', 'John'],
+      };
+      const queryFilter = queryFilterDecodeV2({ name, queryParams });
 
-      expect(query).to.equal(expectedQueryFilter);
+      expect(queryFilter).to.be.an('object');
+      expect(queryFilter).to.deep.equal(expectedQueryObject);
     });
   });
 });
