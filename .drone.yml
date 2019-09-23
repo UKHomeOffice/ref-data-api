@@ -104,19 +104,19 @@ pipeline:
         target: API_REF_URL
       - source: DEV_DB_REF_HOSTNAME
         target: DB_REF_HOSTNAME
-      - source: DEV_DB_REF_OPTIONS
+      - source: DB_REF_OPTIONS
         target: DB_REF_OPTIONS
-      - source: DEV_DB_REF_PORT
+      - source: DB_REF_PORT
         target: DB_REF_PORT
-      - source: DEV_DB_REF_PROTOCOL
+      - source: DB_REF_PROTOCOL
         target: DB_REF_PROTOCOL
       - source: DEV_DB_REF_REFERENCE_AUTHENTICATOR_PASSWORD
         target: DB_REF_REFERENCE_AUTHENTICATOR_PASSWORD
-      - source: DEV_DB_REF_REFERENCE_AUTHENTICATOR_USERNAME
+      - source: DB_REF_REFERENCE_AUTHENTICATOR_USERNAME
         target: DB_REF_REFERENCE_AUTHENTICATOR_USERNAME
-      - source: DEV_DB_REF_REFERENCE_DBNAME
+      - source: DB_REF_REFERENCE_DBNAME
         target: DB_REF_REFERENCE_DBNAME
-      - source: DEV_DB_REF_REFERENCE_SCHEMA
+      - source: DB_REF_REFERENCE_SCHEMA
         target: DB_REF_REFERENCE_SCHEMA
       - source: DEV_KEYCLOAK_PROTOCOL
         target: KEYCLOAK_PROTOCOL
@@ -160,19 +160,19 @@ pipeline:
         target: API_REF_URL
       - source: STAGING_DB_REF_HOSTNAME
         target: DB_REF_HOSTNAME
-      - source: STAGING_DB_REF_OPTIONS
+      - source: DB_REF_OPTIONS
         target: DB_REF_OPTIONS
-      - source: STAGING_DB_REF_PORT
+      - source: DB_REF_PORT
         target: DB_REF_PORT
-      - source: STAGING_DB_REF_PROTOCOL
+      - source: DB_REF_PROTOCOL
         target: DB_REF_PROTOCOL
       - source: STAGING_DB_REF_REFERENCE_AUTHENTICATOR_PASSWORD
         target: DB_REF_REFERENCE_AUTHENTICATOR_PASSWORD
-      - source: STAGING_DB_REF_REFERENCE_AUTHENTICATOR_USERNAME
+      - source: DB_REF_REFERENCE_AUTHENTICATOR_USERNAME
         target: DB_REF_REFERENCE_AUTHENTICATOR_USERNAME
-      - source: STAGING_DB_REF_REFERENCE_DBNAME
+      - source: DB_REF_REFERENCE_DBNAME
         target: DB_REF_REFERENCE_DBNAME
-      - source: STAGING_DB_REF_REFERENCE_SCHEMA
+      - source: DB_REF_REFERENCE_SCHEMA
         target: DB_REF_REFERENCE_SCHEMA
       - source: STAGING_KEYCLOAK_PROTOCOL
         target: KEYCLOAK_PROTOCOL
@@ -216,19 +216,19 @@ pipeline:
         target: API_REF_URL
       - source: PRODUCTION_DB_REF_HOSTNAME
         target: DB_REF_HOSTNAME
-      - source: PRODUCTION_DB_REF_OPTIONS
+      - source: DB_REF_OPTIONS
         target: DB_REF_OPTIONS
-      - source: PRODUCTION_DB_REF_PORT
+      - source: DB_REF_PORT
         target: DB_REF_PORT
-      - source: PRODUCTION_DB_REF_PROTOCOL
+      - source: DB_REF_PROTOCOL
         target: DB_REF_PROTOCOL
       - source: PRODUCTION_DB_REF_REFERENCE_AUTHENTICATOR_PASSWORD
         target: DB_REF_REFERENCE_AUTHENTICATOR_PASSWORD
-      - source: PRODUCTION_DB_REF_REFERENCE_AUTHENTICATOR_USERNAME
+      - source: DB_REF_REFERENCE_AUTHENTICATOR_USERNAME
         target: DB_REF_REFERENCE_AUTHENTICATOR_USERNAME
-      - source: PRODUCTION_DB_REF_REFERENCE_DBNAME
+      - source: DB_REF_REFERENCE_DBNAME
         target: DB_REF_REFERENCE_DBNAME
-      - source: PRODUCTION_DB_REF_REFERENCE_SCHEMA
+      - source: DB_REF_REFERENCE_SCHEMA
         target: DB_REF_REFERENCE_SCHEMA
       - source: PRODUCTION_KEYCLOAK_PROTOCOL
         target: KEYCLOAK_PROTOCOL
