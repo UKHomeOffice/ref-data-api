@@ -111,15 +111,6 @@ And to run linter execute
 npm run lint -- .
 ```
 
-## Endpoints
-The API interface uses OpenAPI 3.0 and is documented in Swagger
-
-https://app.swaggerhub.com/apis/Viable-Data/Reference-Data-Service-API/0.0.1
-
-and on GitHub
-
-https://github.com/UKHomeOffice/reference-data-governance-api-spec
-
 ## Local environment setup with Docker
 
 To have a local copy of the reference data you can run the following which will start a postgres docker container which you can connect to and seed the data.
@@ -150,43 +141,11 @@ To clean up the running instance and take it down run:
 docker-compose rm -vs
 ```
 
-## Filtering examples
-Return all users where names match 'John' and 'Debbie'
-```bash
-filter=name=in.(John, Debbie)
-```
+## Endpoints
+The API interface uses OpenAPI 3.0 and is documented in Swagger
 
-Return all countries where names match 'Denmark', and 'Portugal'
-```bash
-filter=name=in.(Denmark, Portugal)
-```
+https://api-spec.dev.refdata.homeoffice.gov.uk
 
-Return all users where name matches 'John'
-```bash
-filter=name=eq.John
-```
+and on GitHub
 
-Return all users where name is not equal to 'John'
-```bash
-filter=name=neq.John
-```
-
-Return user where name is 'John' and email is 'john@mail.com'
-```bash
-filter=name=eq.John&filter=email=eq.john@mail.com
-```
-
-Return only the entity schema
-```bash
-mode=schemaOnly
-```
-
-Return only the entity data
-```bash
-mode=dataOnly
-```
-
-Return only the entity data where user name matches 'John'
-```bash
-mode=dataOnly&filter=name=eq.John
-```
+https://github.com/UKHomeOffice/reference-data-governance-api-spec
