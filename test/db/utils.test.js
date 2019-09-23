@@ -10,111 +10,134 @@ describe('Test Database Utils', () => {
   describe('queryFilterDecode', () => {
     it('Should resolve single "gt" filtering using integer values', () => {
       const queryParams = 'id=gt.3';
-      const expectedQueryFilter = 'id > 3';
-
+      const expectedQueryObject = {
+        'queryString': 'id > $1',
+        'values': ['3'],
+      };
       const queryFilter = queryFilterDecode(queryParams);
 
-      expect(queryFilter).to.be.a('string');
-      expect(queryFilter).to.equal(expectedQueryFilter);
+      expect(queryFilter).to.be.an('object');
+      expect(queryFilter).to.deep.equal(expectedQueryObject);
     });
+
     it('Should resolve single "gte" filtering using integer values', () => {
       const queryParams = 'id=gte.3';
-      const expectedQueryFilter = 'id >= 3';
-
+      const expectedQueryObject = {
+        'queryString': 'id >= $1',
+        'values': ['3'],
+      };
       const queryFilter = queryFilterDecode(queryParams);
 
-      expect(queryFilter).to.be.a('string');
-      expect(queryFilter).to.equal(expectedQueryFilter);
+      expect(queryFilter).to.be.an('object');
+      expect(queryFilter).to.deep.equal(expectedQueryObject);
     });
 
     it('Should resolve single "lt" filtering using integer values', () => {
       const queryParams = 'id=lt.3';
-      const expectedQueryFilter = 'id < 3';
-
+      const expectedQueryObject = {
+        'queryString': 'id < $1',
+        'values': ['3'],
+      };
       const queryFilter = queryFilterDecode(queryParams);
 
-      expect(queryFilter).to.be.a('string');
-      expect(queryFilter).to.equal(expectedQueryFilter);
+      expect(queryFilter).to.be.an('object');
+      expect(queryFilter).to.deep.equal(expectedQueryObject);
     });
 
     it('Should resolve single "lte" filtering using integer values', () => {
       const queryParams = 'id=lte.3';
-      const expectedQueryFilter = 'id <= 3';
-
+      const expectedQueryObject = {
+        'queryString': 'id <= $1',
+        'values': ['3'],
+      };
       const queryFilter = queryFilterDecode(queryParams);
 
-      expect(queryFilter).to.be.a('string');
-      expect(queryFilter).to.equal(expectedQueryFilter);
+      expect(queryFilter).to.be.an('object');
+      expect(queryFilter).to.deep.equal(expectedQueryObject);
     });
 
     it('Should resolve single "eq" filtering using integer values', () => {
       const queryParams = 'id=eq.3';
-      const expectedQueryFilter = 'id = 3';
-
+      const expectedQueryObject = {
+        'queryString': 'id = $1',
+        'values': ['3'],
+      };
       const queryFilter = queryFilterDecode(queryParams);
 
-      expect(queryFilter).to.be.a('string');
-      expect(queryFilter).to.equal(expectedQueryFilter);
+      expect(queryFilter).to.be.an('object');
+      expect(queryFilter).to.deep.equal(expectedQueryObject);
     });
 
     it('Should resolve single "eq" filtering using string values', () => {
       const queryParams = 'country=eq.Portugal';
-      const expectedQueryFilter = 'country = \'Portugal\'';
-
+      const expectedQueryObject = {
+        'queryString': 'country = $1',
+        'values': ['Portugal'],
+      };
       const queryFilter = queryFilterDecode(queryParams);
 
-      expect(queryFilter).to.be.a('string');
-      expect(queryFilter).to.equal(expectedQueryFilter);
+      expect(queryFilter).to.be.an('object');
+      expect(queryFilter).to.deep.equal(expectedQueryObject);
     });
 
     it('Should resolve single "eq" filtering using null values', () => {
       const queryParams = 'validfrom=eq.null';
-      const expectedQueryFilter = 'validfrom IS NULL';
-
+      const expectedQueryObject = {
+        'queryString': 'validfrom IS NULL',
+        'values': [],
+      };
       const queryFilter = queryFilterDecode(queryParams);
 
-      expect(queryFilter).to.be.a('string');
-      expect(queryFilter).to.equal(expectedQueryFilter);
+      expect(queryFilter).to.be.an('object');
+      expect(queryFilter).to.deep.equal(expectedQueryObject);
     });
 
     it('Should resolve single "neq" filtering using string values', () => {
       const queryParams = 'country=neq.Spain';
-      const expectedQueryFilter = 'country != \'Spain\'';
-
+      const expectedQueryObject = {
+        'queryString': 'country != $1',
+        'values': ['Spain'],
+      };
       const queryFilter = queryFilterDecode(queryParams);
 
-      expect(queryFilter).to.be.a('string');
-      expect(queryFilter).to.equal(expectedQueryFilter);
+      expect(queryFilter).to.be.an('object');
+      expect(queryFilter).to.deep.equal(expectedQueryObject);
     });
 
     it('Should resolve single "neq" filtering using null values', () => {
       const queryParams = 'validfrom=neq.null';
-      const expectedQueryFilter = 'validfrom IS NOT NULL';
-
+      const expectedQueryObject = {
+        'queryString': 'validfrom IS NOT NULL',
+        'values': [],
+      };
       const queryFilter = queryFilterDecode(queryParams);
 
-      expect(queryFilter).to.be.a('string');
-      expect(queryFilter).to.equal(expectedQueryFilter);
+      expect(queryFilter).to.be.an('object');
+      expect(queryFilter).to.deep.equal(expectedQueryObject);
     });
 
     it('Should resolve single "in" filtering', () => {
       const queryParams = 'region=in.%28EU%29';
-      const expectedQueryFilter = 'region IN (\'EU\')';
-
+      const expectedQueryObject = {
+        'queryString': 'region IN ($1)',
+        'values': ['EU'],
+      };
       const queryFilter = queryFilterDecode(queryParams);
 
-      expect(queryFilter).to.be.a('string');
-      expect(queryFilter).to.equal(expectedQueryFilter);
+      expect(queryFilter).to.be.an('object');
+      expect(queryFilter).to.deep.equal(expectedQueryObject);
     });
 
     it('Should resolve a multi "in" filtering', () => {
       const queryParams = 'country=eq.Portugal&region=in.%28EU,%20AS%29';
-      const expectedQueryFilter = 'country = \'Portugal\' AND region IN (\'EU\', \'AS\')';
-
+      const expectedQueryObject = {
+        'queryString': 'country = $1 AND region IN ($2, $3)',
+        'values': ['Portugal', 'EU', 'AS'],
+      };
       const queryFilter = queryFilterDecode(queryParams);
 
-      expect(queryFilter).to.be.a('string');
-      expect(queryFilter).to.equal(expectedQueryFilter);
+      expect(queryFilter).to.be.an('object');
+      expect(queryFilter).to.deep.equal(expectedQueryObject);
     });
   });
 

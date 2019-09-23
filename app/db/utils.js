@@ -3,7 +3,11 @@ const config = require('../config/core');
 // queryFilterDecode is a function that takes a string
 // with query parameters and decodes it to be used in a postgres database
 function queryFilterDecode(queryParams) {
-  let queryFilter = '';
+  let queryString = '';
+  let index = 1;
+  let placeholders = '';
+  let values = [];
+
   // 'id=eq.3&continent=neq.Asia' -> 'id=eq.3,&continent=neq.Asia'
   queryParams = queryParams.replace(/&/g, ';&');
   queryParams = queryParams.split(';');
@@ -15,9 +19,7 @@ function queryFilterDecode(queryParams) {
     let [field, filter, value] = params;
     let isNull = false;
 
-    if (filter !== 'in' && isNaN(value) && value !== 'null') {
-      value = `'${value}'`;
-    } else if (isNaN(value) && value === 'null') {
+    if (isNaN(value) && value === 'null') {
       isNull = true;
       value = value.toUpperCase();
     }
@@ -25,41 +27,78 @@ function queryFilterDecode(queryParams) {
     if (filter === 'gt' && !isNull) {
       // 'sum IS GREATER THAN \'3\''
       filter = '>';
+      values.push(value);
+      placeholders = `$${index}`;
+      index += 1;
     } else if (filter === 'gte' && !isNull) {
       // 'sum IS GREATER THAN or EQUAL to \'3\''
       filter = '>=';
+      values.push(value);
+      placeholders = `$${index}`;
+      index += 1;
     } else if (filter === 'lt' && !isNull) {
       // 'sum IS LESS THAN \'3\''
       filter = '<';
+      values.push(value);
+      placeholders = `$${index}`;
+      index += 1;
     } else if (filter === 'lte' && !isNull) {
       // 'sum IS LESS THAN or EQUAL to \'3\''
       filter = '<=';
+      values.push(value);
+      placeholders = `$${index}`;
+      index += 1;
     } else if (filter === 'eq' && !isNull) {
       // 'continent = \'Asia\''
       filter = '=';
+      values.push(value);
+      placeholders = `$${index}`;
+      index += 1;
     } else if (filter === 'eq' && isNull) {
       // 'validfrom IS NULL'
       filter = 'IS';
+      // 'IS NULL' is treated as dynamic columns and
+      // therefore prepared statements are not allowed
+      // hence adding the value in place of the index.
+      placeholders = value;
+      index += 1;
     } else if (filter === 'neq' && !isNull) {
       // 'continent != \'Asia\''
       filter = '!=';
+      values.push(value);
+      placeholders = `$${index}`;
+      index += 1;
     } else if (filter === 'neq' && isNull) {
       // 'validfrom IS NOT NULL'
       filter = 'IS NOT';
+      // 'IS NOT NULL' is treated as dynamic columns and
+      // therefore prepared statements are not allowed
+      // hence adding the value in place of the index.
+      placeholders = value;
+      index += 1;
     } else {
       filter = 'IN';
-      value = value.replace('%28', '').replace('%29', '').replace(/%20/g, ' ');
+      value = value.replace('%28', '');
+      value = value.replace('%29', '');
+      value = value.replace(/%20/g, ' ');
+      value = value.split(',');
+      values = values.concat(value.map(val => val.trim()));
+      placeholders = value.map((val) => {
+        val = `$${index}`;
+        index += 1;
+        return val;
+      });
 
-      const values = value.split(',');
-      value = values.map(val => val.trim());
-      value = `'${value.join("', '")}'`;
-      value = `(${value})`;
+      placeholders = `${placeholders.join(', ')}`;
+      placeholders = `(${placeholders})`;
     }
 
-    queryFilter += `${field} ${filter} ${value}`;
-    queryFilter = queryFilter.replace(/%20/g, ' ');
+    queryString += `${field} ${filter} ${placeholders}`;
+    queryString = queryString.replace(/%20/g, ' ');
   });
-  return queryFilter.replace('&', ' AND ');
+
+  queryString = queryString.replace('&', ' AND ');
+  return { queryString, values };
 }
 
 // isPositiveInteger is a function that takes a number

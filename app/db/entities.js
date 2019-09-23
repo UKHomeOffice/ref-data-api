@@ -66,11 +66,16 @@ const getEntityData = (role, entityName, filters) => new Promise((resolve, rejec
       const limit = config.limitRows ? ' LIMIT 100' : '';
 
       if (filters === null) {
-        logger.info(`Running query SELECT * FROM ${entityName}${limit};`);
-        return pool.query(`SELECT * FROM ${entityName}${limit};`);
+        const text = `SELECT * from ${entityName}${limit}`;
+        logger.info('Running query - 1');
+        logger.debug(`Running query: ${text}, values: []`);
+        return pool.query(text, []);
       }
-      logger.info(`Running query SELECT * FROM ${entityName} WHERE ${filters}${limit};`);
-      return pool.query(`SELECT * FROM ${entityName} WHERE ${filters}${limit};`);
+
+      const text = `SELECT * FROM ${entityName} WHERE ${filters.queryString}${limit}`;
+      logger.info('Running query - 2');
+      logger.debug(`Running query: ${text}, values: ${filters.values}`);
+      return pool.query(text, filters.values);
     })
     .then(data => resolve(data.rows))
     .catch((error) => {
