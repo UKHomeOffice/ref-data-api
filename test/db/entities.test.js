@@ -348,7 +348,7 @@ describe('Test Entity Queries', () => {
       };
       sinon.stub(pool, 'query').resolves(obj);
 
-      return getEntityData('readreferenceonly', 'country')
+      return getEntityData('readreferenceonly', 'country', null)
         .then((result) => {
           expect(result).to.be.an('array');
           expect(result).to.deep.equal(obj.rows);
