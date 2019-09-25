@@ -88,6 +88,10 @@ spec:
             value: 'http://127.0.0.1'
           - name: PROXY_SERVICE_PORT
             value: "{{.API_REF_PORT}}"
+          - name: SERVER_CERT
+            value: "/certs/tls.crt"
+          - name: SERVER_KEY
+            value: "/certs/tls.key"
           - name: LOG_FORMAT_NAME
             value: 'json'
           - name: NAXSI_USE_DEFAULT_RULES
