@@ -26,6 +26,7 @@ pipeline:
     image: quay.io/ukhomeofficedigital/cop-secrets
     environment:
       - DRONE_SERVER=https://drone.acp.homeoffice.gov.uk
+      - DEPLOY_ENV=dev
     secrets:
       - source: DEV_DRONE_AWS_ACCESS_KEY_ID
         target: AWS_ACCESS_KEY_ID
@@ -34,13 +35,14 @@ pipeline:
       - source: DRONE_PUBLIC_TOKEN
         target: DRONE_TOKEN
     when:
-      branch: master
-      event: push
+      environment: secrets
+      event: deployment
 
   synch_staging_secrets:
     image: quay.io/ukhomeofficedigital/cop-secrets
     environment:
       - DRONE_SERVER=https://drone.acp.homeoffice.gov.uk
+      - DEPLOY_ENV=staging
     secrets:
       - source: STAGING_DRONE_AWS_ACCESS_KEY_ID
         target: AWS_ACCESS_KEY_ID
@@ -49,13 +51,14 @@ pipeline:
       - source: DRONE_PUBLIC_TOKEN
         target: DRONE_TOKEN
     when:
+      environment: secrets
       event: deployment
-      environment: staging
 
   synch_production_secrets:
     image: quay.io/ukhomeofficedigital/cop-secrets
     environment:
       - DRONE_SERVER=https://drone.acp.homeoffice.gov.uk
+      - DEPLOY_ENV=production
     secrets:
       - source: PRODUCTION_DRONE_AWS_ACCESS_KEY_ID
         target: AWS_ACCESS_KEY_ID
@@ -64,8 +67,8 @@ pipeline:
       - source: DRONE_PUBLIC_TOKEN
         target: DRONE_TOKEN
     when:
+      environment: secrets
       event: deployment
-      environment: production
 
   image_to_quay:
     image: quay.io/ukhomeofficedigital/drone-docker
@@ -88,13 +91,13 @@ pipeline:
         target: API_REF_IMAGE
       - source: DEV_API_REF_KEYCLOAK_CLIENT_ID
         target: API_REF_KEYCLOAK_CLIENT_ID
-      - source: DEV_API_REF_KUBE_NAMESPACE
+      - source: DEV_KUBE_NAMESPACE_REFDATA
         target: KUBE_NAMESPACE
       - source: DEV_API_REF_KUBE_TOKEN
         target: KUBE_TOKEN
       - source: DEV_API_REF_LIMIT_ROWS
         target: LIMIT_ROWS
-      - source: DEV_API_REF_LOG_LEVEL
+      - source: LOG_LEVEL_DEBUG
         target: API_REF_LOG_LEVEL
       - source: DEV_API_REF_NAME
         target: API_REF_NAME
@@ -108,7 +111,7 @@ pipeline:
         target: DB_REF_OPTIONS
       - source: DB_REF_PORT
         target: DB_REF_PORT
-      - source: DB_REF_PROTOCOL
+      - source: PROTOCOL_POSTGRES
         target: DB_REF_PROTOCOL
       - source: DEV_DB_REF_REFERENCE_AUTHENTICATOR_PASSWORD
         target: DB_REF_REFERENCE_AUTHENTICATOR_PASSWORD
@@ -118,7 +121,7 @@ pipeline:
         target: DB_REF_REFERENCE_DBNAME
       - source: DB_REF_REFERENCE_SCHEMA
         target: DB_REF_REFERENCE_SCHEMA
-      - source: DEV_KEYCLOAK_PROTOCOL
+      - source: PROTOCOL_HTTPS
         target: KEYCLOAK_PROTOCOL
       - source: DEV_KEYCLOAK_REALM
         target: KEYCLOAK_REALM
@@ -132,7 +135,7 @@ pipeline:
         target: NGINX_TAG
     commands:
       - export API_REF_TAG=$${DRONE_COMMIT_SHA}
-      - kd --insecure-skip-tls-verify -f kube/cert.yml -f kube/secret.yml -f kube/deployment.yml -f kube/service.yml -f kube/ingress.yml -f kube/network-policy.yml
+      - kd --insecure-skip-tls-verify -f kube/cert.yml -f kube/deployment.yml -f kube/service.yml -f kube/ingress.yml -f kube/network-policy.yml
     when:
       branch: master
       event: push
@@ -144,13 +147,13 @@ pipeline:
         target: API_REF_IMAGE
       - source: STAGING_API_REF_KEYCLOAK_CLIENT_ID
         target: API_REF_KEYCLOAK_CLIENT_ID
-      - source: STAGING_API_REF_KUBE_NAMESPACE
+      - source: STAGING_KUBE_NAMESPACE_REFDATA
         target: KUBE_NAMESPACE
       - source: STAGING_API_REF_KUBE_TOKEN
         target: KUBE_TOKEN
       - source: STAGING_API_REF_LIMIT_ROWS
         target: LIMIT_ROWS
-      - source: STAGING_API_REF_LOG_LEVEL
+      - source: LOG_LEVEL_INFO
         target: API_REF_LOG_LEVEL
       - source: STAGING_API_REF_NAME
         target: API_REF_NAME
@@ -164,7 +167,7 @@ pipeline:
         target: DB_REF_OPTIONS
       - source: DB_REF_PORT
         target: DB_REF_PORT
-      - source: DB_REF_PROTOCOL
+      - source: PROTOCOL_POSTGRES
         target: DB_REF_PROTOCOL
       - source: STAGING_DB_REF_REFERENCE_AUTHENTICATOR_PASSWORD
         target: DB_REF_REFERENCE_AUTHENTICATOR_PASSWORD
@@ -174,7 +177,7 @@ pipeline:
         target: DB_REF_REFERENCE_DBNAME
       - source: DB_REF_REFERENCE_SCHEMA
         target: DB_REF_REFERENCE_SCHEMA
-      - source: STAGING_KEYCLOAK_PROTOCOL
+      - source: PROTOCOL_HTTPS
         target: KEYCLOAK_PROTOCOL
       - source: STAGING_KEYCLOAK_REALM
         target: KEYCLOAK_REALM
@@ -188,7 +191,7 @@ pipeline:
         target: NGINX_TAG
     commands:
       - export API_REF_TAG=$${DRONE_COMMIT_SHA}
-      - kd --insecure-skip-tls-verify -f kube/cert.yml -f kube/secret.yml -f kube/deployment.yml -f kube/service.yml -f kube/ingress.yml -f kube/network-policy.yml
+      - kd --insecure-skip-tls-verify -f kube/cert.yml -f kube/deployment.yml -f kube/service.yml -f kube/ingress.yml -f kube/network-policy.yml
     when:
       event: deployment
       environment: staging
@@ -200,13 +203,13 @@ pipeline:
         target: API_REF_IMAGE
       - source: PRODUCTION_API_REF_KEYCLOAK_CLIENT_ID
         target: API_REF_KEYCLOAK_CLIENT_ID
-      - source: PRODUCTION_API_REF_KUBE_NAMESPACE
+      - source: PRODUCTION_KUBE_NAMESPACE_REFDATA
         target: KUBE_NAMESPACE
       - source: PRODUCTION_API_REF_KUBE_TOKEN
         target: KUBE_TOKEN
       - source: PRODUCTION_API_REF_LIMIT_ROWS
         target: LIMIT_ROWS
-      - source: PRODUCTION_API_REF_LOG_LEVEL
+      - source: LOG_LEVEL_INFO
         target: API_REF_LOG_LEVEL
       - source: PRODUCTION_API_REF_NAME
         target: API_REF_NAME
@@ -220,7 +223,7 @@ pipeline:
         target: DB_REF_OPTIONS
       - source: DB_REF_PORT
         target: DB_REF_PORT
-      - source: DB_REF_PROTOCOL
+      - source: PROTOCOL_POSTGRES
         target: DB_REF_PROTOCOL
       - source: PRODUCTION_DB_REF_REFERENCE_AUTHENTICATOR_PASSWORD
         target: DB_REF_REFERENCE_AUTHENTICATOR_PASSWORD
@@ -230,7 +233,7 @@ pipeline:
         target: DB_REF_REFERENCE_DBNAME
       - source: DB_REF_REFERENCE_SCHEMA
         target: DB_REF_REFERENCE_SCHEMA
-      - source: PRODUCTION_KEYCLOAK_PROTOCOL
+      - source: PROTOCOL_HTTPS
         target: KEYCLOAK_PROTOCOL
       - source: PRODUCTION_KEYCLOAK_REALM
         target: KEYCLOAK_REALM
@@ -244,7 +247,7 @@ pipeline:
         target: NGINX_TAG
     commands:
       - export API_REF_TAG=$${DRONE_COMMIT_SHA}
-      - kd --insecure-skip-tls-verify -f kube/cert.yml -f kube/secret.yml -f kube/deployment.yml -f kube/service.yml -f kube/ingress.yml -f kube/network-policy.yml
+      - kd --insecure-skip-tls-verify -f kube/cert.yml -f kube/deployment.yml -f kube/service.yml -f kube/ingress.yml -f kube/network-policy.yml
     when:
       event: deployment
       environment: production
@@ -257,11 +260,10 @@ pipeline:
     template: >
       {{#build.deployTo}}
         *{{repo.name}} - Build {{build.number}} - {{uppercasefirst build.deployTo}} - {{uppercase build.status}}*
-        {{build.link}}
       {{else}}
         *{{repo.name}} - Build {{build.number}} - Development - {{uppercase build.status}}*
-        {{build.link}}
       {{/build.deployTo}}
+      {{build.link}}
     when:
       branch: master
       event: [ push, deployment ]

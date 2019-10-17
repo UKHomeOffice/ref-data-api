@@ -60,10 +60,7 @@ spec:
         - name: DB_REF_REFERENCE_AUTHENTICATOR_USERNAME
           value: "{{.DB_REF_REFERENCE_AUTHENTICATOR_USERNAME}}"
         - name: DB_REF_REFERENCE_AUTHENTICATOR_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: "{{.API_REF_NAME}}-secret"
-              key: dbPassword
+          value: "{{.DB_REF_REFERENCE_AUTHENTICATOR_PASSWORD}}"
         - name: KEYCLOAK_URL
           value: "{{.KEYCLOAK_URL}}"
         - name: KEYCLOAK_PROTOCOL
