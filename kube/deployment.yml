@@ -1,5 +1,5 @@
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{.API_REF_NAME}}
@@ -11,6 +11,9 @@ spec:
       maxUnavailable: 33%
       maxSurge: 1
   revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      name: {{.API_REF_NAME}}
   template:
     metadata:
       labels:
