@@ -1,7 +1,7 @@
 const logger = require('../config/logger')(__filename);
 
 const health = (req, res) => {
-  logger.verbose('API is Alive & Kicking!');
+  logger.silly('API is Alive & Kicking!');
   return res.status(200).json({ 'status': 'UP' });
 };
 
