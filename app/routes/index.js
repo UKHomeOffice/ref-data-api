@@ -41,7 +41,7 @@ app.use((req, res, next) => {
       res.status(401).json({ 'error': 'Unauthorized' });
     } else if (currentDate.unix() < tokenExpiryDate.unix()) {
       // check if the token expiry time is in the future
-      logger.info(`${req.method} - ${req.url} - Request by ${token.name}, ${token.email} - Token valid until - ${tokenExpiryDate.format()}`);
+      logger.info(`${req.method} - ${req.url} - Request by ${token.name}, ${token.email} - role: ${token.refdbrole} - Token valid until - ${tokenExpiryDate.format()}`);
       res.locals.user = token;
       // process request
       next();
