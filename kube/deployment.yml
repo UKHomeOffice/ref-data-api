@@ -98,6 +98,8 @@ spec:
             value: 'FALSE'
           - name: ENABLE_UUID_PARAM
             value: 'FALSE'
+          - name: STATSD_METRICS
+            value: "FALSE"
         ports:
           - name: https
             containerPort: 10443
