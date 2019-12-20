@@ -74,8 +74,8 @@ const patchItemField = (req, res) => {
 
   axios.post(config.camundaUrls.submitRequest, updateItemField)
     .then((response) => {
-      logger.info('Item field value update requested');
-      logger.info(response.data);
+      logger.debug('Item field value update requested');
+      logger.debug(response.data);
       res.status(200).json(
         {
           'status': 200,
@@ -85,6 +85,7 @@ const patchItemField = (req, res) => {
     })
     .catch((error) => {
       logger.error(error.stack);
+      logger.error(error.message);
       res.status(400).json({});
     });
 };

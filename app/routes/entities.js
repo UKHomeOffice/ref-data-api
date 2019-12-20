@@ -233,8 +233,8 @@ const patchEntitySchema = (req, res) => {
 
   axios.post(config.camundaUrls.submitRequest, updateEntitySchema)
     .then((response) => {
-      logger.info('Schema field value update requested');
-      logger.info(response.data);
+      logger.debug('Schema field value update requested');
+      logger.debug(response.data);
       res.status(200).json(
         {
           'status': 200,
@@ -288,8 +288,8 @@ const postEntityItem = (req, res) => {
 
   axios.post(config.camundaUrls.submitRequest, newEntityItem)
     .then((response) => {
-      logger.info('New entity item requested');
-      logger.info(response.data);
+      logger.debug('New entity item requested');
+      logger.debug(response.data);
       res.status(200).json(
         {
           'status': 200,
@@ -299,7 +299,7 @@ const postEntityItem = (req, res) => {
     })
     .catch((error) => {
       logger.error(error.stack);
-      logger.info(error.message);
+      logger.error(error.message);
       res.status(400).json({});
     });
 };
