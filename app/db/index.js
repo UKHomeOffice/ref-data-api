@@ -11,7 +11,6 @@ const pool = new Pool({
 pool.on('connect', (client) => {
   logger.debug('New database connection established');
   client.query(`SET search_path TO "${config.dbSchema}";`);
-  client.query(`SET ROLE refreadonly;`);
 });
 
 pool.on('error', (err, client) => {
