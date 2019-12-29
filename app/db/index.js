@@ -4,18 +4,46 @@ const { Pool } = require('pg');
 const logger = require('../config/logger')(__filename);
 const config = require('../config/core');
 
-const pool = new Pool({
+const readPool = new Pool({
   'connectionString': config.dbConnectionString,
 });
 
-pool.on('connect', (client) => {
-  logger.debug('New database connection established');
-  client.query(`SET search_path TO "${config.dbSchema}";`);
+const writePool = new Pool({
+  'connectionString': config.dbConnectionString,
 });
 
-pool.on('error', (err, client) => {
+readPool.on('connect', (client) => {
+  client.query(`SET search_path TO "${config.dbSchema}";`);
+  logger.info('Setting READ Role');
+  client.query(`SET ROLE ${config.dbRead}`)
+});
+
+readPool.on('error', (err, client) => {
   logger.error('Unexpected error on idle client', err);
   process.exit(-1);
 });
 
-module.exports = pool;
+writePool.on('connect', (client) => {
+  client.query(`SET search_path TO "${config.dbSchema}";`);
+  logger.debug('Setting WRITE Role');
+  client.query(`SET ROLE ${config.dbWrite}`)
+});
+
+writePool.on('error', (err, client) => {
+  logger.error('Unexpected error on idle client', err);
+  process.exit(-1);
+});
+
+const getPool = (role = undefined) => {
+  if (role === undefined || role === config.dbRead) {
+    return readPool;
+  } else if (role === config.dbWrite) {
+    return writePool;
+  }
+};
+
+module.exports = {
+  getPool,
+  readPool,
+  writePool
+};

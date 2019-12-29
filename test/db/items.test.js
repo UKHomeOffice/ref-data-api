@@ -2,12 +2,12 @@ const { expect } = require('chai');
 const sinon = require('sinon');
 
 // local imports
-const pool = require('../../app/db/index');
+const { readPool } = require('../../app/db/index');
 const { getItemData } = require('../../app/db/items');
 
 describe('Test Item Queries', () => {
   afterEach(() => {
-    pool.query.restore();
+    readPool.query.restore();
   });
 
   describe('getItemData', () => {
@@ -27,9 +27,9 @@ describe('Test Item Queries', () => {
           },
         ],
       };
-      sinon.stub(pool, 'query').resolves(obj);
+      sinon.stub(readPool, 'query').resolves(obj);
 
-      return getItemData('readonly', 'country', 175)
+      return getItemData('refreadonly', 'country', 175)
         .then((result) => {
           expect(result).to.be.an('object');
           expect(result).to.include.all.keys(
@@ -47,9 +47,9 @@ describe('Test Item Queries', () => {
 
     it('Should reject with an error if the role, table or id, do not exist', () => {
       const expectedMsg = 'Unable to retrieve data from table country row id 175';
-      sinon.stub(pool, 'query').rejects();
+      sinon.stub(readPool, 'query').rejects();
 
-      return getItemData('readonly', 'country', 175)
+      return getItemData('refreadonly', 'country', 175)
         .catch(error => expect(error.message).to.eql(expectedMsg));
     });
   });

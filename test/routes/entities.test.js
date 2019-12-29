@@ -7,7 +7,7 @@ const { expect } = require('chai');
 // local imports
 const app = require('../../app/routes');
 const config = require('../../app/config/core');
-const pool = require('../../app/db/index');
+const { readPool } = require('../../app/db/index');
 
 describe('Test Entity Routes', () => {
   describe('GET /v1/entities', () => {
@@ -79,7 +79,7 @@ describe('Test Entity Routes', () => {
     const token = jwtSimple.encode(payload, secret);
 
     it('Should return all entities on success', () => {
-      const queryStub = sinon.stub(pool, 'query');
+      const queryStub = sinon.stub(readPool, 'query');
       queryStub.onCall(0).resolves(entities);
       queryStub.onCall(1).resolves(entityDescription);
       // set the role

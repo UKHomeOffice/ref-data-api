@@ -2,7 +2,7 @@ const { expect } = require('chai');
 const sinon = require('sinon');
 
 // local imports
-const pool = require('../../app/db/index');
+const { readPool } = require('../../app/db/index');
 const {
   getAllEntities,
   getEntityDescription,
@@ -12,7 +12,7 @@ const {
 
 describe('Test Entity Queries', () => {
   afterEach(() => {
-    pool.query.restore();
+    readPool.query.restore();
   });
 
   describe('getEntityDescription', () => {
@@ -24,7 +24,7 @@ describe('Test Entity Queries', () => {
           },
         ],
       };
-      sinon.stub(pool, 'query').resolves(obj);
+      sinon.stub(readPool, 'query').resolves(obj);
 
       return getEntityDescription('country')
         .then((result) => {
@@ -42,7 +42,7 @@ describe('Test Entity Queries', () => {
 
     it('Should reject with an error if the table does not exist', () => {
       const expectedMsg = 'Unable to retrieve description from table country';
-      sinon.stub(pool, 'query').rejects();
+      sinon.stub(readPool, 'query').rejects();
 
       return getEntityDescription('country')
         .catch(error => expect(error.message).to.eql(expectedMsg));
@@ -254,9 +254,9 @@ describe('Test Entity Queries', () => {
           },
         },
       };
-      sinon.stub(pool, 'query').resolves(obj);
+      sinon.stub(readPool, 'query').resolves(obj);
 
-      return getEntitySchema('readonly', 'nationality')
+      return getEntitySchema('refreadonly', 'nationality')
         .then((result) => {
           expect(result).to.be.an('object');
           expect(result).to.deep.equal(expectedData);
@@ -278,9 +278,9 @@ describe('Test Entity Queries', () => {
 
     it('Should reject with an error if the table or the role do not exist', () => {
       const expectedMsg = 'Unable to retrieve schema from table nationality';
-      sinon.stub(pool, 'query').rejects();
+      sinon.stub(readPool, 'query').rejects();
 
-      return getEntitySchema('readonly', 'nationality')
+      return getEntitySchema('refreadonly', 'nationality')
         .catch(error => expect(error.message).to.eql(expectedMsg));
     });
   });
@@ -299,7 +299,7 @@ describe('Test Entity Queries', () => {
           'rowsecurity': false,
         }],
       };
-      sinon.stub(pool, 'query').resolves(obj);
+      sinon.stub(readPool, 'query').resolves(obj);
 
       return getAllEntities()
         .then((result) => {
@@ -311,7 +311,7 @@ describe('Test Entity Queries', () => {
 
     it('Should reject with an error if the schemaname does not exist', () => {
       const expectedMsg = 'Unable to retrieve tables from database';
-      sinon.stub(pool, 'query').rejects();
+      sinon.stub(readPool, 'query').rejects();
 
       return getAllEntities()
         .catch(error => expect(error.message).to.eql(expectedMsg));
@@ -346,9 +346,9 @@ describe('Test Entity Queries', () => {
           },
         ],
       };
-      sinon.stub(pool, 'query').resolves(obj);
+      sinon.stub(readPool, 'query').resolves(obj);
 
-      return getEntityData('readreferenceonly', 'country', null)
+      return getEntityData('refreadonly', 'country', null)
         .then((result) => {
           expect(result).to.be.an('array');
           expect(result).to.deep.equal(obj.rows);
@@ -368,9 +368,9 @@ describe('Test Entity Queries', () => {
 
     it('Should reject with an error if the table does not exist', () => {
       const expectedMsg = 'Unable to retrieve data from table addresss';
-      sinon.stub(pool, 'query').rejects();
+      sinon.stub(readPool, 'query').rejects();
 
-      return getEntityData('readreferenceonly', 'addresss')
+      return getEntityData('refreadonly', 'addresss', '')
         .catch(error => expect(error.message).to.eql(expectedMsg));
     });
   });
