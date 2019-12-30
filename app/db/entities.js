@@ -85,8 +85,8 @@ const getEntityData = (role, entityName, filters) => new Promise((resolve, rejec
   logger.info('Running query - 1');
   logger.debug(`Running query: ${text}, values: ${filterValues}`);
   pool.query(text, filterValues)
-    .then(data => {
-      resolve(data.rows)
+    .then((data) => {
+      resolve(data.rows);
     })
     .catch((error) => {
       const errorMsg = `Unable to retrieve data from table ${entityName}`;
