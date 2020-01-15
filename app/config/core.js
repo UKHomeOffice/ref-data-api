@@ -31,6 +31,8 @@ const config = {
   camundaUrls,
   'dbConnectionString': `${db.protocol}${db.username}:${db.password}@${db.hostname}:${db.port}/${db.dbname}${db.options}`,
   'dbSchema': process.env.DB_REF_REFERENCE_SCHEMA || 'reference',
+  'dbRead': process.env.DB_REF_READ_ROLE || 'refreadonly',
+  'dbWrite': process.env.DB_REF_WRITE_ROLE || 'refservice',
   'iss': `${keycloak.protocol}${keycloak.url}/realms/${keycloak.realm}`,
   'keycloak_client_id': process.env.API_REF_KEYCLOAK_CLIENT_ID || 'api-ref',
   'limitRows': process.env.LIMIT_ROWS || false,
