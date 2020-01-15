@@ -14,7 +14,6 @@ const writePool = new Pool({
 
 readPool.on('connect', (client) => {
   client.query(`SET search_path TO "${config.dbSchema}";`);
-  logger.info('Setting READ Role');
   client.query(`SET ROLE ${config.dbRead}`);
 });
 
@@ -25,7 +24,6 @@ readPool.on('error', (err, client) => {
 
 writePool.on('connect', (client) => {
   client.query(`SET search_path TO "${config.dbSchema}";`);
-  logger.debug('Setting WRITE Role');
   client.query(`SET ROLE ${config.dbWrite}`);
 });
 
