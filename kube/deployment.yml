@@ -48,14 +48,18 @@ spec:
           initialDelaySeconds: 5
           periodSeconds: 5
         env:
-        - name: DB_REF_PROTOCOL
-          value: "{{.DB_REF_PROTOCOL}}"
-        - name: DB_REF_PORT
-          value: "{{.DB_REF_PORT}}"
         - name: DB_REF_HOSTNAME
           value: "{{.DB_REF_HOSTNAME}}"
         - name: DB_REF_OPTIONS
           value: "{{.DB_REF_OPTIONS}}"
+        - name: DB_REF_PORT
+          value: "{{.DB_REF_PORT}}"
+        - name: DB_REF_PROTOCOL
+          value: "{{.DB_REF_PROTOCOL}}"
+        - name: DB_REF_READ_ROLE
+          value: "{{.DB_REF_READ_ROLE}}"
+        - name: DB_REF_WRITE_ROLE
+          value: "{{.DB_REF_WRITE_ROLE}}"
         - name: DB_REF_REFERENCE_DBNAME
           value: "{{.DB_REF_REFERENCE_DBNAME}}"
         - name: DB_REF_REFERENCE_SCHEMA

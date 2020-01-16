@@ -97,6 +97,9 @@ pipeline:
 
   deploy_to_dev:
     image: quay.io/ukhomeofficedigital/kd
+    environment:
+      - DB_REF_READ_ROLE="refreadonly"
+      - DB_REF_WRITE_ROLE="refservice"
     secrets:
       - source: DEV_API_REF_IMAGE
         target: API_REF_IMAGE
@@ -153,6 +156,9 @@ pipeline:
 
   deploy_to_staging:
     image: quay.io/ukhomeofficedigital/kd
+    environment:
+      - DB_REF_READ_ROLE="refreadonly"
+      - DB_REF_WRITE_ROLE="refservice"
     secrets:
       - source: STAGING_API_REF_IMAGE
         target: API_REF_IMAGE
@@ -209,6 +215,9 @@ pipeline:
 
   deploy_to_prod:
     image: quay.io/ukhomeofficedigital/kd
+    environment:
+      - DB_REF_READ_ROLE="refreadonly"
+      - DB_REF_WRITE_ROLE="refservice"
     secrets:
       - source: PRODUCTION_API_REF_IMAGE
         target: API_REF_IMAGE
