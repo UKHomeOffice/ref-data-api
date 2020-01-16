@@ -97,9 +97,6 @@ pipeline:
 
   deploy_to_dev:
     image: quay.io/ukhomeofficedigital/kd
-    environment:
-      - DB_REF_READ_ROLE="refreadonly"
-      - DB_REF_WRITE_ROLE="refservice"
     secrets:
       - source: DEV_API_REF_IMAGE
         target: API_REF_IMAGE
@@ -149,6 +146,8 @@ pipeline:
         target: NGINX_TAG
     commands:
       - export API_REF_TAG=$${DRONE_COMMIT_SHA}
+      - export DB_REF_READ_ROLE="refreadonly"
+      - export DB_REF_WRITE_ROLE="refservice"
       - kd --insecure-skip-tls-verify -f kube/cert.yml -f kube/deployment.yml -f kube/service.yml -f kube/ingress.yml -f kube/network-policy.yml
     when:
       branch: master
@@ -156,9 +155,6 @@ pipeline:
 
   deploy_to_staging:
     image: quay.io/ukhomeofficedigital/kd
-    environment:
-      - DB_REF_READ_ROLE="refreadonly"
-      - DB_REF_WRITE_ROLE="refservice"
     secrets:
       - source: STAGING_API_REF_IMAGE
         target: API_REF_IMAGE
@@ -208,6 +204,8 @@ pipeline:
         target: NGINX_TAG
     commands:
       - export API_REF_TAG=$${DRONE_COMMIT_SHA}
+      - export DB_REF_READ_ROLE="refreadonly"
+      - export DB_REF_WRITE_ROLE="refservice"
       - kd --insecure-skip-tls-verify -f kube/cert.yml -f kube/deployment.yml -f kube/service.yml -f kube/ingress.yml -f kube/network-policy.yml
     when:
       event: deployment
@@ -215,9 +213,6 @@ pipeline:
 
   deploy_to_prod:
     image: quay.io/ukhomeofficedigital/kd
-    environment:
-      - DB_REF_READ_ROLE="refreadonly"
-      - DB_REF_WRITE_ROLE="refservice"
     secrets:
       - source: PRODUCTION_API_REF_IMAGE
         target: API_REF_IMAGE
@@ -267,6 +262,8 @@ pipeline:
         target: NGINX_TAG
     commands:
       - export API_REF_TAG=$${DRONE_COMMIT_SHA}
+      - export DB_REF_READ_ROLE="refreadonly"
+      - export DB_REF_WRITE_ROLE="refservice"
       - kd --insecure-skip-tls-verify -f kube/cert.yml -f kube/deployment.yml -f kube/service.yml -f kube/ingress.yml -f kube/network-policy.yml
     when:
       event: deployment
