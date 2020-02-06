@@ -83,7 +83,7 @@ spec:
         ports:
           - name: api
             containerPort: {{.API_REF_PORT}}
-      - name: proxy
+      - name: {{.API_REF_NAME}}-proxy
         image: "{{.NGINX_IMAGE}}:{{.NGINX_TAG}}"
         securityContext:
           runAsNonRoot: true
