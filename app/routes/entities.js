@@ -53,20 +53,24 @@ const getEntities = async (req, res) => {
 const getEntity = (req, res) => {
   // set default to `false`
   const { schemaOnly = 'false' } = req.query;
-  const { 'name': entityName } = req.params;
+  const { name } = req.params;
   const queryParams = req.url.split('?')[1];
   let queryFilters = null;
+
+  if (name.startsWith('pg_') || Boolean(name.match(/\W/))) {
+    return res.status(400).json({ 'error': 'Invalid entity' });
+  }
 
   if (schemaOnly === 'false' && queryParams) {
     queryFilters = queryFilterDecode(queryParams);
   }
 
-  const entityDescription = getEntityDescription(entityName);
-  const entitySchema = getEntitySchema(res.locals.user.refdbrole, entityName);
+  const entityDescription = getEntityDescription(name);
+  const entitySchema = getEntitySchema(res.locals.user.refdbrole, name);
   const dataObject = {
     'status': 'success',
     'code': 200,
-    'entityName': entityName,
+    'name': name,
     'entitySchema': {
       'required': {},
       'properties': {},
@@ -88,7 +92,7 @@ const getEntity = (req, res) => {
         res.status(400).json({ 'error': error.message });
       });
   } else {
-    const entityData = getEntityData(res.locals.user.refdbrole, entityName, queryFilters);
+    const entityData = getEntityData(res.locals.user.refdbrole, name, queryFilters);
 
     Promise.all([entityDescription, entitySchema, entityData])
       .then((resultsArray) => {
@@ -111,6 +115,10 @@ const getEntityV2 = (req, res) => {
   // get schema mode, if not set the API will return both the schema and data
   const mode = queryParams.mode;
   const { name } = req.params;
+
+  if (name.startsWith('pg_') || Boolean(name.match(/\W/))) {
+    return res.status(400).json({ 'error': 'Invalid entity' });
+  }
 
   // delete `mode` from `queryParams` since it does not need to be decoded
   delete queryParams.mode;

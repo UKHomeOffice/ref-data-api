@@ -1,4 +1,5 @@
 const config = require('../config/core');
+const logger = require('../config/logger')(__filename);
 
 // queryFilterDecode is a function that takes a string
 // with query parameters and decodes it to be used in a postgres database
@@ -112,8 +113,10 @@ function isPositiveInteger(stringValue) {
 }
 
 function queryFilterDecodeV2({ name, queryParams }) {
+  let columns = '';
   let conditions = '';
   let index = 1;
+  let invalidQueryParams = false;
   let limit = config.limitRows ? 100 : '';
   let order = '';
   let placeholders = '';
@@ -134,6 +137,18 @@ function queryFilterDecodeV2({ name, queryParams }) {
   }
 
   if (queryParams.select) {
+    // column params should be comma separated words
+    columns = queryParams.select.split(',');
+    columns.map((col) => {
+      if (col.match(/\W/)) {
+        invalidQueryParams = true;
+      }
+    });
+
+    if (invalidQueryParams) {
+      logger.debug(`Select params: ${queryParams.select}`);
+      return { queryString, values };
+    }
     select = `SELECT ${queryParams.select} FROM ${name}`;
   } else {
     select = `SELECT * FROM ${name}`;
@@ -149,12 +164,22 @@ function queryFilterDecodeV2({ name, queryParams }) {
     // 'name.asc,age.desc' -> ['name.asc', 'age.desc']
     let sortParams = queryParams.sort.split(',');
     sortParams.map((params) => {
-      // 'name|asc' -> ['name', 'asc']
-      params = params.replace('.', '|').split('|');
-      let [field, filter] = params;
-      filter = filter.toUpperCase();
-      order += order.includes('ORDER BY') ? `, ${field} ${filter}` : ` ORDER BY ${field} ${filter}`;
+      // 'name;.asc' -> 'name .asc' -> name |asc' -> ['name ', 'asc']
+      params = params.replace(/;/g, ' ').replace('.', '|').split('|');
+
+      if (params.length > 1) {
+        let [field, filter] = params;
+        filter = filter.toUpperCase();
+        order += order.includes('ORDER BY') ? `, ${field} ${filter}` : ` ORDER BY ${field} ${filter}`;
+        // each identifier should contain no spaces in order to be valid
+        invalidQueryParams = (params[0].indexOf(' ') >= 0);
+      }
     });
+
+    if (invalidQueryParams) {
+      logger.debug(`Sort params: ${queryParams.sort}`);
+      return { queryString, values };
+    }
   }
 
   if (queryParams.filter) {
