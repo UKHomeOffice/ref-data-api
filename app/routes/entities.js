@@ -5,7 +5,10 @@ const { validationResult } = require('express-validator/check');
 const config = require('../config/core');
 const logger = require('../config/logger')(__filename);
 const pool = require('../db/index');
-const { queryFilterDecode, queryFilterDecodeV2 } = require('../db/utils');
+const {
+  queryFilterDecode,
+  queryFilterDecodeV2,
+} = require('../db/queryFilterDecoder');
 const {
   getAllEntities,
   getEntityData,

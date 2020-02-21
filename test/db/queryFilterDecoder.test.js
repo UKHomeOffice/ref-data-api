@@ -1,10 +1,12 @@
 const { expect } = require('chai');
+const sinon = require('sinon');
 
 // local imports
+const helpers = require('../../app/db/helpers');
 const {
   queryFilterDecode,
   queryFilterDecodeV2,
-} = require('../../app/db/utils');
+} = require('../../app/db/queryFilterDecoder');
 
 describe('Test Database Utils', () => {
   describe('queryFilterDecode', () => {
@@ -142,6 +144,10 @@ describe('Test Database Utils', () => {
   });
 
   describe('queryFilterDecodeV2', () => {
+    afterEach(() => {
+      sinon.restore();
+    });
+
     it('Should return a querystring with all columns selected filtered by greater then value', () => {
       const name = 'team';
       const queryParams = {
@@ -447,6 +453,51 @@ describe('Test Database Utils', () => {
         'queryString': `SELECT * FROM ${name} WHERE name = $2 AND age IS NULL ORDER BY name ASC, age DESC LIMIT $1`,
         'values': ['3', 'John'],
       };
+      const queryFilter = queryFilterDecodeV2({ name, queryParams });
+
+      expect(queryFilter).to.be.an('object');
+      expect(queryFilter).to.deep.equal(expectedQueryObject);
+    });
+
+    it('Should return a querystring with all columns selected, filtered by continent and valid date time range ', () => {
+      const name = 'country';
+      const queryParams = {
+        'filter': [
+          'continent=eq.EU',
+        ],
+        'validDateTime': 'true',
+      };
+      const fakeDateTimeRangeObj = {
+        'hoursBehind': '2020-02-20T06:13:00.133Z',
+        'hoursAhead': '2020-02-20T18:13:00.133Z',
+      };
+      const expectedQueryObject = {
+        'queryString': `SELECT * FROM ${name} WHERE continent = $1 AND (validfrom>=$2 OR validfrom IS NULL) AND (validto<=$3 OR validto IS NULL)`,
+        'values': ['EU', fakeDateTimeRangeObj.hoursBehind, fakeDateTimeRangeObj.hoursAhead],
+      };
+
+      sinon.stub(helpers, 'dateTimeRange').returns(fakeDateTimeRangeObj);
+      const queryFilter = queryFilterDecodeV2({ name, queryParams });
+
+      expect(queryFilter).to.be.an('object');
+      expect(queryFilter).to.deep.equal(expectedQueryObject);
+    });
+
+    it('Should return a querystring with all columns selected, filtered by valid date time range ', () => {
+      const name = 'country';
+      const queryParams = {
+        'validDateTime': 'true',
+      };
+      const fakeDateTimeRangeObj = {
+        'hoursBehind': '2020-02-20T06:13:00.133Z',
+        'hoursAhead': '2020-02-20T18:13:00.133Z',
+      };
+      const expectedQueryObject = {
+        'queryString': `SELECT * FROM ${name} WHERE (validfrom>=$1 OR validfrom IS NULL) AND (validto<=$2 OR validto IS NULL)`,
+        'values': [fakeDateTimeRangeObj.hoursBehind, fakeDateTimeRangeObj.hoursAhead],
+      };
+
+      sinon.stub(helpers, 'dateTimeRange').returns(fakeDateTimeRangeObj);
       const queryFilter = queryFilterDecodeV2({ name, queryParams });
 
       expect(queryFilter).to.be.an('object');
