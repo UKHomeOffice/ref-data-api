@@ -1,5 +1,6 @@
 const config = require('../config/core');
 const logger = require('../config/logger')(__filename);
+const helpers = require('./helpers');
 
 // queryFilterDecode is a function that takes a string
 // with query parameters and decodes it to be used in a postgres database
@@ -231,7 +232,6 @@ function queryFilterDecodeV2({ name, queryParams }) {
         // therefore prepared statements are not allowed
         // hence adding the value in place of the index.
         placeholders = value;
-        index += 1;
       } else if (filter === 'neq' && !isNull) {
         // 'continent != \'Asia\''
         filter = '!=';
@@ -245,7 +245,6 @@ function queryFilterDecodeV2({ name, queryParams }) {
         // therefore prepared statements are not allowed
         // hence adding the value in place of the index.
         placeholders = value;
-        index += 1;
       } else {
         filter = 'IN';
         value = value.replace('(', '');
@@ -265,6 +264,17 @@ function queryFilterDecodeV2({ name, queryParams }) {
 
       conditions += conditions.includes('WHERE') ? ` AND ${field} ${filter} ${placeholders}` : ` WHERE ${field} ${filter} ${placeholders}`;
     });
+  }
+
+  if (queryParams.validDateTime) {
+    let { hoursBehind, hoursAhead } = helpers.dateTimeRange();
+
+    conditions += conditions.includes('WHERE') ? ` AND (validfrom>=$${index} OR validfrom IS NULL)` : ` WHERE (validfrom>=$${index} OR validfrom IS NULL)`;
+    index += 1;
+    values.push(hoursBehind);
+    conditions += ` AND (validto<=$${index} OR validto IS NULL)`;
+    index += 1;
+    values.push(hoursAhead);
   }
 
   queryString = `${select}${conditions}${order}${limit}`;
