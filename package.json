@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "NODE_ENV=testing mocha --recursive --exit",
+    "test": "NODE_ENV=testing mocha --recursive --exit --inline-diffs",
     "coverage": "nyc --reporter html --reporter text npm test",
     "start-dev": "nodemon app/server.js",
     "start": "node app/server.js",
