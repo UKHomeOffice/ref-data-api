@@ -9,16 +9,16 @@ const { getEntityDescription, getEntitySchema } = require('../db/entities');
 const { getItemData } = require('../db/items');
 
 const getItem = (req, res) => {
-  const { 'name': entityName, id } = req.params;
+  const { name: entityName, id } = req.params;
 
   const promise1 = getEntityDescription(entityName);
   const promise2 = getEntitySchema(res.locals.user.refdbrole, entityName);
   const promise3 = getItemData(res.locals.user.refdbrole, entityName, id);
   const dataObject = {
-    'status': 'success',
-    'code': 200,
-    'entityName': entityName,
-    'entitySchema': {},
+    status: 'success',
+    code: 200,
+    entityName,
+    entitySchema: {},
   };
 
   Promise.all([promise1, promise2, promise3])
@@ -30,7 +30,7 @@ const getItem = (req, res) => {
       dataObject.data = resultsArray[2];
       res.status(200).json(dataObject);
     })
-    .catch(error => res.status(400).json({ 'error': error.message }));
+    .catch(error => res.status(400).json({ error: error.message }));
 };
 
 const patchItemField = (req, res) => {
@@ -38,7 +38,7 @@ const patchItemField = (req, res) => {
 
   if (!errors.isEmpty()) {
     logger.error(errors.array);
-    return res.status(422).json({ 'errors': errors.array() });
+    return res.status(422).json({ errors: errors.array() });
   }
 
   const { body } = req;
@@ -48,26 +48,26 @@ const patchItemField = (req, res) => {
   const date = new Date();
   const utcTimeStampString = date.toUTCString();
   const updateItemField = {
-    'variables': {
-      'action': {
-        'value': 'PATCH',
-        'type': 'String',
+    variables: {
+      action: {
+        value: 'PATCH',
+        type: 'String',
       },
-      'object': {
-        'value': 'Item',
-        'type': 'String',
+      object: {
+        value: 'Item',
+        type: 'String',
       },
-      'entityName': {
-        'value': name,
-        'type': 'String',
+      entityName: {
+        value: name,
+        type: 'String',
       },
-      'requestedDateTime': {
-        'value': utcTimeStampString,
-        'type': 'String',
+      requestedDateTime: {
+        value: utcTimeStampString,
+        type: 'String',
       },
-      'changeRequested': {
-        'value': JSON.stringify(body),
-        'type': 'json',
+      changeRequested: {
+        value: JSON.stringify(body),
+        type: 'json',
       },
     },
   };
@@ -76,12 +76,10 @@ const patchItemField = (req, res) => {
     .then((response) => {
       logger.debug('Item field value update requested');
       logger.debug(response.data);
-      res.status(200).json(
-        {
-          'status': 200,
-          'requestId': response.data.id,
-        },
-      );
+      res.status(200).json({
+        status: 200,
+        requestId: response.data.id,
+      });
     })
     .catch((error) => {
       logger.error(error.stack);

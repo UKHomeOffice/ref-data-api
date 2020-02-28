@@ -4,6 +4,7 @@ const { expect } = require('chai');
 
 // local imports
 const app = require('../../app/routes');
+const config = require('../../app/config/core');
 
 describe('Test Index Router', () => {
   describe('Request Attempt /v1/entities/:name/items/:id', () => {
@@ -12,29 +13,31 @@ describe('Test Index Router', () => {
     expiryTime.setHours(expiryTime.getHours() - 2);
     expiryTime = Math.round(expiryTime / 1000);
     const payload = {
-      'name': 'Pedro Curado',
-      'email': 'pedro@mail.com',
-      'exp': expiryTime,
-      'refdbrole': 'refreadonly',
+      name: 'Pedro Curado',
+      email: 'pedro@mail.com',
+      exp: expiryTime,
+      refdbrole: 'refreadonly',
     };
     const secret = 'super-secret-19';
-    const token = jwtSimple.encode(payload, secret);
+    const token = jwtSimple.encode(payload, config.keycloakClientSecret);
 
-    it('Should return an unauthorized request error when passing an expired token', () => request(app)
-      .patch('/v1/entities/country/items/3')
-      .set('Authorization', `Bearer ${token}`)
-      .then((response) => {
-        expect(response.status).to.equal(401);
-        expect(response.body).to.be.an('object');
-        expect(response.body).to.deep.equal({ 'error': 'Unauthorized' });
-      }));
+    it('Should return an unauthorized request error when passing an expired token', () =>
+      request(app)
+        .patch('/v1/entities/country/items/3')
+        .set('Authorization', `Bearer ${token}`)
+        .then((response) => {
+          expect(response.status).to.equal(401);
+          expect(response.body).to.be.an('object');
+          expect(response.body).to.deep.equal({ error: 'Unauthorized' });
+        }));
 
-    it('Should return an unauthorized request error when no token is passed in request headers', () => request(app)
-      .patch('/v1/entities/country/items/3')
-      .then((response) => {
-        expect(response.status).to.equal(401);
-        expect(response.body).to.be.an('object');
-        expect(response.body).to.deep.equal({ 'error': 'Unauthorized' });
-      }));
+    it('Should return an unauthorized request error when no token is passed in request headers', () =>
+      request(app)
+        .patch('/v1/entities/country/items/3')
+        .then((response) => {
+          expect(response.status).to.equal(401);
+          expect(response.body).to.be.an('object');
+          expect(response.body).to.deep.equal({ error: 'Unauthorized' });
+        }));
   });
 });

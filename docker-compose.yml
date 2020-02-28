@@ -25,7 +25,7 @@ services:
     container_name: public_refdata_flyway
     command: >
       sh -c "/mnt/docker/run.sh &&
-             cd /mnt/private-refdata && 
+             cd /mnt/private-refdata &&
              /mnt/private-refdata/docker/run.sh"
     working_dir: /mnt
     environment:
@@ -70,6 +70,7 @@ services:
       PORT: 5001
       DB_CONNECTION_STRING: postgres://authenticatorreference:auth1234@postgres_refdata:5432/reference
       KEYCLOAK_CLIENT_ID: ${KEYCLOAK_CLIENT_ID}
+      KEYCLOAK_CLIENT_SECRET: ${KEYCLOAK_CLIENT_SECRET}
       KEYCLOAK_URL: ${KEYCLOAK_URL}
     depends_on:
       - postgres_refdata

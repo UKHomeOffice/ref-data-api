@@ -4,8 +4,8 @@ This API forms part of a Reference Data Service that is being developed by the U
 
 ## Requirements
 
-* npm 6.9.0 (minimum working version)
-* node v8.10.0 (minimum working version)
+- npm 6.9.0 (minimum working version)
+- node v8.10.0 (minimum working version)
 
 ## Usage
 
@@ -55,6 +55,7 @@ $ mocha --inspect-brk test/routes/entities.test.js
 ```
 
 #### Running linter
+
 To run the linter using the npm run lint command you have to specify at least the directory you want linter to run.
 
 To specify the directory and any additional arguments you need to add -- (double dash) before the arguments you want to pass, e.g.
@@ -115,19 +116,19 @@ npm run lint -- .
 
 To have a local copy of the reference data you can run the following which will start a postgres docker container which you can connect to and seed the data.
 
-* Clone the repo:
+- Clone the repo:
 
   ```bash
   git clone git@github.com:UKHomeOffice/RefData.git
   git clone PRIVATE_REF_DATA
   ```
 
-* Run the command to start docker
+- Run the command to start docker
 
 ```bash
 docker network create db
 docker network create web
-KEYCLOAK_URL=http://keycloak.lodev.xyz/auth/realms/dev KEYCLOAK_CLIENT_ID=refdata-api PUBLIC_REFDATA_FLYWAY=/Users/XXX/GIT/cop/RefData PRIVATE_REFDATA_FLYWAY=/Users/XXX/GIT/cop/private_refdata docker-compose up
+KEYCLOAK_URL=http://keycloak.lodev.xyz/auth/realms/dev KEYCLOAK_CLIENT_ID=refdata-api KEYCLOAK_CLIENT_SECRET=s0m3s3cr3t PUBLIC_REFDATA_FLYWAY=/Users/XXX/GIT/cop/RefData PRIVATE_REFDATA_FLYWAY=/Users/XXX/GIT/cop/private_refdata docker-compose up
 docker logs public_refdata_flyway -f
 ```
 
@@ -142,6 +143,7 @@ docker-compose rm -vs
 ```
 
 ## Endpoints
+
 The API interface uses OpenAPI 3.0 and is documented in Swagger
 
 https://api-spec.dev.refdata.homeoffice.gov.uk
@@ -152,39 +154,40 @@ https://github.com/UKHomeOffice/reference-data-governance-api-spec
 
 # Drone secrets
 
-Name|Example value
----|---
-api_ref_image|quay.io/ukhomeofficedigital/ref-data-api
-api_ref_keycloak_client_id|keycloak client name
-api_ref_name|ref-data-api
-api_ref_port|5001
-db_ref_options|?ssl=true
-db_ref_port|5432
-db_ref_reference_authenticator_username|xxx
-db_ref_reference_dbname|xxx
-db_ref_reference_schema|xxx
-dev_drone_aws_access_key_id|https://console.aws.amazon.com/iam/home?region=eu-west-2#/users/bf-it-devtest-drone?section=security_credentials
-dev_drone_aws_secret_access_key|https://console.aws.amazon.com/iam/home?region=eu-west-2#/users/bf-it-devtest-drone?section=security_credentials
-drone_public_token|Drone token (Global for all github repositories and environments)
-env_api_ref_kube_token|xxx
-env_api_ref_limit_rows|false
-env_api_ref_url|api.dev.refdata.homeoffice.gov.uk, api.staging.refdata.homeoffice.gov.uk, api.refdata.homeoffice.gov.uk
-env_db_ref_hostname|copreferencedev.notprod.acp.homeoffice.gov.uk, coprefdatastaging.crckizhiyjmt.eu-west-2.rds.amazonaws.com, coprefdataprod.crckizhiyjmt.eu-west-2.rds.amazonaws.com
-env_db_ref_reference_authenticator_password|xxx
-env_keycloak_realm|cop-dev, cop-staging, cop-prod
-env_keycloak_url|sso-dev.notprod.homeoffice.gov.uk/auth, sso.digital.homeoffice.gov.uk/auth
-env_kube_namespace_refdata|refdata-dev, cop-refdata-staging, cop-refdata
-env_kube_server|https://kube-api-notprod.notprod.acp.homeoffice.gov.uk, https://kube-api-prod.prod.acp.homeoffice.gov.uk
-log_level_debug|debug
-log_level_info|info
-nginx_image|quay.io/ukhomeofficedigital/nginx-proxy
-nginx_tag|latest
-production_drone_aws_access_key_id|https://console.aws.amazon.com/iam/home?region=eu-west-2#/users/bf-it-prod-drone?section=security_credentials
-production_drone_aws_secret_access_key|https://console.aws.amazon.com/iam/home?region=eu-west-2#/users/bf-it-prod-drone?section=security_credentials
-protocol_https|https://
-protocol_postgres|postgres://
-quay_password|xxx (Global for all repositories and environments)
-quay_username|docker (Global for all repositories and environments)
-slack_webhook|https://hooks.slack.com/services/xxx/yyy/zzz (Global for all repositories and environments)
-staging_drone_aws_access_key_id|https://console.aws.amazon.com/iam/home?region=eu-west-2#/users/bf-it-prod-drone?section=security_credentials
-staging_drone_aws_secret_access_key|https://console.aws.amazon.com/iam/home?region=eu-west-2#/users/bf-it-prod-drone?section=security_credentials
+| Name                                        | Example value                                                                                                                                                      |
+| ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| api_ref_image                               | quay.io/ukhomeofficedigital/ref-data-api                                                                                                                           |
+| api_ref_keycloak_client_id                  | keycloak client name                                                                                                                                               |
+| api_ref_keycloak_client_secret              | keycloak client secret                                                                                                                                             |
+| api_ref_name                                | ref-data-api                                                                                                                                                       |
+| api_ref_port                                | 5001                                                                                                                                                               |
+| db_ref_options                              | ?ssl=true                                                                                                                                                          |
+| db_ref_port                                 | 5432                                                                                                                                                               |
+| db_ref_reference_authenticator_username     | xxx                                                                                                                                                                |
+| db_ref_reference_dbname                     | xxx                                                                                                                                                                |
+| db_ref_reference_schema                     | xxx                                                                                                                                                                |
+| dev_drone_aws_access_key_id                 | https://console.aws.amazon.com/iam/home?region=eu-west-2#/users/bf-it-devtest-drone?section=security_credentials                                                   |
+| dev_drone_aws_secret_access_key             | https://console.aws.amazon.com/iam/home?region=eu-west-2#/users/bf-it-devtest-drone?section=security_credentials                                                   |
+| drone_public_token                          | Drone token (Global for all github repositories and environments)                                                                                                  |
+| env_api_ref_kube_token                      | xxx                                                                                                                                                                |
+| env_api_ref_limit_rows                      | false                                                                                                                                                              |
+| env_api_ref_url                             | api.dev.refdata.homeoffice.gov.uk, api.staging.refdata.homeoffice.gov.uk, api.refdata.homeoffice.gov.uk                                                            |
+| env_db_ref_hostname                         | copreferencedev.notprod.acp.homeoffice.gov.uk, coprefdatastaging.crckizhiyjmt.eu-west-2.rds.amazonaws.com, coprefdataprod.crckizhiyjmt.eu-west-2.rds.amazonaws.com |
+| env_db_ref_reference_authenticator_password | xxx                                                                                                                                                                |
+| env_keycloak_realm                          | cop-dev, cop-staging, cop-prod                                                                                                                                     |
+| env_keycloak_url                            | sso-dev.notprod.homeoffice.gov.uk/auth, sso.digital.homeoffice.gov.uk/auth                                                                                         |
+| env_kube_namespace_refdata                  | refdata-dev, cop-refdata-staging, cop-refdata                                                                                                                      |
+| env_kube_server                             | https://kube-api-notprod.notprod.acp.homeoffice.gov.uk, https://kube-api-prod.prod.acp.homeoffice.gov.uk                                                           |
+| log_level_debug                             | debug                                                                                                                                                              |
+| log_level_info                              | info                                                                                                                                                               |
+| nginx_image                                 | quay.io/ukhomeofficedigital/nginx-proxy                                                                                                                            |
+| nginx_tag                                   | latest                                                                                                                                                             |
+| production_drone_aws_access_key_id          | https://console.aws.amazon.com/iam/home?region=eu-west-2#/users/bf-it-prod-drone?section=security_credentials                                                      |
+| production_drone_aws_secret_access_key      | https://console.aws.amazon.com/iam/home?region=eu-west-2#/users/bf-it-prod-drone?section=security_credentials                                                      |
+| protocol_https                              | https://                                                                                                                                                           |
+| protocol_postgres                           | postgres://                                                                                                                                                        |
+| quay_password                               | xxx (Global for all repositories and environments)                                                                                                                 |
+| quay_username                               | docker (Global for all repositories and environments)                                                                                                              |
+| slack_webhook                               | https://hooks.slack.com/services/xxx/yyy/zzz (Global for all repositories and environments)                                                                        |
+| staging_drone_aws_access_key_id             | https://console.aws.amazon.com/iam/home?region=eu-west-2#/users/bf-it-prod-drone?section=security_credentials                                                      |
+| staging_drone_aws_secret_access_key         | https://console.aws.amazon.com/iam/home?region=eu-west-2#/users/bf-it-prod-drone?section=security_credentials                                                      |

@@ -102,6 +102,8 @@ pipeline:
         target: API_REF_IMAGE
       - source: DEV_API_REF_KEYCLOAK_CLIENT_ID
         target: API_REF_KEYCLOAK_CLIENT_ID
+      - source: DEV_API_REF_KEYCLOAK_CLIENT_SECRET
+        target: API_REF_KEYCLOAK_CLIENT_SECRET
       - source: DEV_KUBE_NAMESPACE_REFDATA
         target: KUBE_NAMESPACE
       - source: DEV_API_REF_KUBE_TOKEN
@@ -160,6 +162,8 @@ pipeline:
         target: API_REF_IMAGE
       - source: STAGING_API_REF_KEYCLOAK_CLIENT_ID
         target: API_REF_KEYCLOAK_CLIENT_ID
+      - source: STAGING_API_REF_KEYCLOAK_CLIENT_SECRET
+        target: API_REF_KEYCLOAK_CLIENT_SECRET
       - source: STAGING_KUBE_NAMESPACE_REFDATA
         target: KUBE_NAMESPACE
       - source: STAGING_API_REF_KUBE_TOKEN
@@ -218,6 +222,8 @@ pipeline:
         target: API_REF_IMAGE
       - source: PRODUCTION_API_REF_KEYCLOAK_CLIENT_ID
         target: API_REF_KEYCLOAK_CLIENT_ID
+      - source: PRODUCTION_API_REF_KEYCLOAK_CLIENT_SECRET
+        target: API_REF_KEYCLOAK_CLIENT_SECRET
       - source: PRODUCTION_KUBE_NAMESPACE_REFDATA
         target: KUBE_NAMESPACE
       - source: PRODUCTION_API_REF_KUBE_TOKEN

@@ -76,6 +76,8 @@ spec:
           value: "{{.KEYCLOAK_REALM}}"
         - name: API_REF_KEYCLOAK_CLIENT_ID
           value: "{{.API_REF_KEYCLOAK_CLIENT_ID}}"
+        - name: API_REF_KEYCLOAK_CLIENT_SECRET
+          value: "{{.API_REF_KEYCLOAK_CLIENT_SECRET}}"
         - name: API_REF_LOG_LEVEL
           value: "{{.API_REF_LOG_LEVEL}}"
         - name: API_REF_PORT

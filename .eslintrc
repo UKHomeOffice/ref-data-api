@@ -1,22 +1,23 @@
 {
+  "rules": {
+    "func-names": ["error", "never"],
+    "no-unused-expressions": "off",
+    "no-underscore-dangle": "off",
+    "no-unused-vars": "off",
+    "no-restricted-syntax": "off",
+    "no-param-reassign": "off",
+    "no-restricted-globals": "off",
+    "array-callback-return": "off",
+    "prefer-const": "off",
+    "consistent-return": "off",
+    "prefer-destructuring": "off",
+    "object-curly-newline": ["error", { "multiline": true }],
+    "no-loop-func": "off",
+    "max-len": 0,
+    "operator-assignment": "off"
+  },
   "extends": "airbnb/base",
   "env": {
     "mocha": true
-  },
-  "rules": {
-    "array-callback-return": "off",
-    "arrow-body-style": "off",
-    "consistent-return": "off",
-    "func-names": ["error", "never"],
-    "quote-props": ["error", "always"],
-    "max-len": ["error", { "code": 185 }],
-    "no-underscore-dangle": "off",
-    "no-param-reassign": "off",
-    "no-restricted-globals": "off",
-    "no-restricted-syntax": "off",
-    "no-unused-expressions": "off",
-    "no-unused-vars": "off",
-    "prefer-const": "off",
-    "prefer-destructuring": "off"
   }
 }

@@ -19,9 +19,9 @@ const {
 
 const getEntities = async (req, res) => {
   const data = {
-    'status': 'success',
-    'code': 200,
-    'data': [],
+    status: 'success',
+    code: 200,
+    data: [],
   };
 
   const entities = await getAllEntities();
@@ -29,7 +29,7 @@ const getEntities = async (req, res) => {
   if (entities.message) {
     // if an error occurs getting all entities we don't need to
     // proceed since we would expect entities to be an array
-    return res.status(400).json({ 'error': entities.message });
+    return res.status(400).json({ error: entities.message });
   }
 
   const promiseArray = entities.map(async (entity) => {
@@ -50,7 +50,7 @@ const getEntities = async (req, res) => {
 
   Promise.all(promiseArray)
     .then(() => res.status(200).json(data))
-    .catch(error => res.status(400).json({ 'error': error.message }));
+    .catch(error => res.status(400).json({ error: error.message }));
 };
 
 const getEntity = (req, res) => {
@@ -61,7 +61,7 @@ const getEntity = (req, res) => {
   let queryFilters = null;
 
   if (name.startsWith('pg_') || Boolean(name.match(/\W/))) {
-    return res.status(400).json({ 'error': 'Invalid entity' });
+    return res.status(400).json({ error: 'Invalid entity' });
   }
 
   if (schemaOnly === 'false' && queryParams) {
@@ -71,12 +71,12 @@ const getEntity = (req, res) => {
   const entityDescription = getEntityDescription(name);
   const entitySchema = getEntitySchema(res.locals.user.refdbrole, name);
   const dataObject = {
-    'status': 'success',
-    'code': 200,
-    'name': name,
-    'entitySchema': {
-      'required': {},
-      'properties': {},
+    status: 'success',
+    code: 200,
+    name,
+    entitySchema: {
+      required: {},
+      properties: {},
     },
   };
 
@@ -92,7 +92,7 @@ const getEntity = (req, res) => {
       })
       .catch((error) => {
         logger.error(error.stack);
-        res.status(400).json({ 'error': error.message });
+        res.status(400).json({ error: error.message });
       });
   } else {
     const entityData = getEntityData(res.locals.user.refdbrole, name, queryFilters);
@@ -107,7 +107,7 @@ const getEntity = (req, res) => {
       })
       .catch((error) => {
         logger.error(error.stack);
-        res.status(400).json({ 'error': error.message });
+        res.status(400).json({ error: error.message });
       });
   }
 };
@@ -120,7 +120,7 @@ const getEntityV2 = (req, res) => {
   const { name } = req.params;
 
   if (name.startsWith('pg_') || Boolean(name.match(/\W/))) {
-    return res.status(400).json({ 'error': 'Invalid entity' });
+    return res.status(400).json({ error: 'Invalid entity' });
   }
 
   // delete `mode` from `queryParams` since it does not need to be decoded
@@ -133,14 +133,14 @@ const getEntityV2 = (req, res) => {
   const { queryString, values } = queryFilterDecodeV2({ name, queryParams });
 
   if (!queryString) {
-    return res.status(400).json({ 'error': 'Invalid query parameters' });
+    return res.status(400).json({ error: 'Invalid query parameters' });
   }
 
   if (mode === 'dataOnly') {
     const dataObject = {
-      'status': 'success',
-      'code': 200,
-      'entityName': name,
+      status: 'success',
+      code: 200,
+      entityName: name,
     };
     const entityData = getEntityDataV2(res.locals.user.refdbrole, name, queryString, values);
 
@@ -151,16 +151,16 @@ const getEntityV2 = (req, res) => {
       })
       .catch((error) => {
         logger.error(error.stack);
-        res.status(400).json({ 'error': error.message });
+        res.status(400).json({ error: error.message });
       });
   } else if (mode === 'schemaOnly') {
     const dataObject = {
-      'status': 'success',
-      'code': 200,
-      'entityName': name,
-      'entitySchema': {
-        'required': {},
-        'properties': {},
+      status: 'success',
+      code: 200,
+      entityName: name,
+      entitySchema: {
+        required: {},
+        properties: {},
       },
     };
     const entityDescription = getEntityDescription(name);
@@ -175,16 +175,16 @@ const getEntityV2 = (req, res) => {
       })
       .catch((error) => {
         logger.error(error.stack);
-        res.status(400).json({ 'error': error.message });
+        res.status(400).json({ error: error.message });
       });
   } else {
     const dataObject = {
-      'status': 'success',
-      'code': 200,
-      'entityName': name,
-      'entitySchema': {
-        'required': {},
-        'properties': {},
+      status: 'success',
+      code: 200,
+      entityName: name,
+      entitySchema: {
+        required: {},
+        properties: {},
       },
     };
     const entityDescription = getEntityDescription(name);
@@ -201,7 +201,7 @@ const getEntityV2 = (req, res) => {
       })
       .catch((error) => {
         logger.error(error.stack);
-        res.status(400).json({ 'error': error.message });
+        res.status(400).json({ error: error.message });
       });
   }
 };
@@ -210,7 +210,7 @@ const patchEntitySchema = (req, res) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
-    return res.status(422).json({ 'errors': errors.array() });
+    return res.status(422).json({ errors: errors.array() });
   }
 
   const { body } = req;
@@ -218,26 +218,26 @@ const patchEntitySchema = (req, res) => {
   const date = new Date();
   const utcTimeStampString = date.toUTCString();
   const updateEntitySchema = {
-    'variables': {
-      'action': {
-        'value': 'PATCH',
-        'type': 'string',
+    variables: {
+      action: {
+        value: 'PATCH',
+        type: 'string',
       },
-      'object': {
-        'value': 'Schema',
-        'type': 'string',
+      object: {
+        value: 'Schema',
+        type: 'string',
       },
-      'entityName': {
-        'value': name,
-        'type': 'string',
+      entityName: {
+        value: name,
+        type: 'string',
       },
-      'requestedDateTime': {
-        'value': utcTimeStampString,
-        'type': 'string',
+      requestedDateTime: {
+        value: utcTimeStampString,
+        type: 'string',
       },
-      'changeRequested': {
-        'value': JSON.stringify(body),
-        'type': 'json',
+      changeRequested: {
+        value: JSON.stringify(body),
+        type: 'json',
       },
     },
   };
@@ -246,12 +246,10 @@ const patchEntitySchema = (req, res) => {
     .then((response) => {
       logger.debug('Schema field value update requested');
       logger.debug(response.data);
-      res.status(200).json(
-        {
-          'status': 200,
-          'requestId': response.data.id,
-        },
-      );
+      res.status(200).json({
+        status: 200,
+        requestId: response.data.id,
+      });
     })
     .catch((error) => {
       logger.error(error.stack);
@@ -266,33 +264,33 @@ const postEntityItem = (req, res) => {
   if (Object.entries(body).length === 0 && body.constructor === Object) {
     logger.error('Invalid JSON');
     logger.error(body);
-    return res.status(400).json({ 'error': 'Invalid JSON object' });
+    return res.status(400).json({ error: 'Invalid JSON object' });
   }
 
   const date = new Date();
   const utcTimestampString = date.toUTCString();
 
   const newEntityItem = {
-    'variables': {
-      'action': {
-        'value': 'POST',
-        'type': 'String',
+    variables: {
+      action: {
+        value: 'POST',
+        type: 'String',
       },
-      'object': {
-        'value': 'Item',
-        'type': 'String',
+      object: {
+        value: 'Item',
+        type: 'String',
       },
-      'entityName': {
-        'value': name,
-        'type': 'String',
+      entityName: {
+        value: name,
+        type: 'String',
       },
-      'requestedDateTime': {
-        'value': utcTimestampString,
-        'type': 'String',
+      requestedDateTime: {
+        value: utcTimestampString,
+        type: 'String',
       },
-      'changeRequested': {
-        'value': JSON.stringify(body),
-        'type': 'json',
+      changeRequested: {
+        value: JSON.stringify(body),
+        type: 'json',
       },
     },
   };
@@ -301,12 +299,10 @@ const postEntityItem = (req, res) => {
     .then((response) => {
       logger.debug('New entity item requested');
       logger.debug(response.data);
-      res.status(200).json(
-        {
-          'status': 200,
-          'requestId': response.data.id,
-        },
-      );
+      res.status(200).json({
+        status: 200,
+        requestId: response.data.id,
+      });
     })
     .catch((error) => {
       logger.error(error.stack);
