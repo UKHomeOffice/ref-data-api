@@ -472,7 +472,7 @@ describe('Test Database Utils', () => {
         'hoursAhead': '2020-02-20T18:13:00.133Z',
       };
       const expectedQueryObject = {
-        'queryString': `SELECT * FROM ${name} WHERE continent = $1 AND (validfrom>=$2 OR validfrom IS NULL) AND (validto<=$3 OR validto IS NULL)`,
+        'queryString': `SELECT * FROM ${name} WHERE continent = $1 AND ($2 >= validfrom OR validfrom IS NULL) AND ($3 <= validto OR validto IS NULL)`,
         'values': ['EU', fakeDateTimeRangeObj.hoursBehind, fakeDateTimeRangeObj.hoursAhead],
       };
 
@@ -493,7 +493,7 @@ describe('Test Database Utils', () => {
         'hoursAhead': '2020-02-20T18:13:00.133Z',
       };
       const expectedQueryObject = {
-        'queryString': `SELECT * FROM ${name} WHERE (validfrom>=$1 OR validfrom IS NULL) AND (validto<=$2 OR validto IS NULL)`,
+        'queryString': `SELECT * FROM ${name} WHERE ($1 >= validfrom OR validfrom IS NULL) AND ($2 <= validto OR validto IS NULL)`,
         'values': [fakeDateTimeRangeObj.hoursBehind, fakeDateTimeRangeObj.hoursAhead],
       };
 

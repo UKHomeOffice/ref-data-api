@@ -269,10 +269,10 @@ function queryFilterDecodeV2({ name, queryParams }) {
   if (queryParams.validDateTime) {
     let { hoursBehind, hoursAhead } = helpers.dateTimeRange();
 
-    conditions += conditions.includes('WHERE') ? ` AND (validfrom>=$${index} OR validfrom IS NULL)` : ` WHERE (validfrom>=$${index} OR validfrom IS NULL)`;
+    conditions += conditions.includes('WHERE') ? ` AND ($${index} >= validfrom OR validfrom IS NULL)` : ` WHERE ($${index} >= validfrom OR validfrom IS NULL)`;
     index += 1;
     values.push(hoursBehind);
-    conditions += ` AND (validto<=$${index} OR validto IS NULL)`;
+    conditions += ` AND ($${index} <= validto OR validto IS NULL)`;
     index += 1;
     values.push(hoursAhead);
   }
