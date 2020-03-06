@@ -8,6 +8,10 @@ const { expect } = require('chai');
 const app = require('../../app/routes');
 const config = require('../../app/config/core');
 
+config.keycloakClientPublicKey = 'keycloakClientPublicKey';
+config.iss = 'iss';
+config.keycloakClientId = 'keycloakClientId';
+
 describe('Test Item Routes', () => {
   describe('PATCH /v1/entities/:name/items/:id', () => {
     // create a token with an expiry date 1 hour in the future
@@ -20,10 +24,9 @@ describe('Test Item Routes', () => {
       exp: expiryTime,
       refdbrole: 'refreadonly',
       iss: config.iss,
-      aud: ['operational-data-api', 'api-ref'],
+      aud: ['operational-data-api', 'api-ref', config.keycloakClientId],
     };
-    const secret = 'super-secret-19';
-    const token = jwtSimple.encode(payload, secret);
+    const token = jwtSimple.encode(payload, config.keycloakClientPublicKey);
 
     it('Should return an array with errors if the payload is empty', () => {
       // create an empty payload

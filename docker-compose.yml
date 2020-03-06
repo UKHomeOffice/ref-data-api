@@ -70,7 +70,7 @@ services:
       PORT: 5001
       DB_CONNECTION_STRING: postgres://authenticatorreference:auth1234@postgres_refdata:5432/reference
       KEYCLOAK_CLIENT_ID: ${KEYCLOAK_CLIENT_ID}
-      KEYCLOAK_CLIENT_SECRET: ${KEYCLOAK_CLIENT_SECRET}
+      KEYCLOAK_CLIENT_PUBLIC_KEY: ${KEYCLOAK_CLIENT_PUBLIC_KEY}
       KEYCLOAK_URL: ${KEYCLOAK_URL}
     depends_on:
       - postgres_refdata

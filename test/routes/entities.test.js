@@ -9,6 +9,10 @@ const app = require('../../app/routes');
 const config = require('../../app/config/core');
 const { readPool } = require('../../app/db/index');
 
+config.keycloakClientPublicKey = 'keycloakClientPublicKey';
+config.iss = 'iss';
+config.keycloakClientId = 'keycloakClientId';
+
 describe('Test Entity Routes', () => {
   describe('GET /v1/entities', () => {
     const entities = {
@@ -71,10 +75,9 @@ describe('Test Entity Routes', () => {
       exp: expiryTime,
       refdbrole: 'refreadonly',
       iss: config.iss,
-      aud: ['operational-data-api', 'api-ref'],
+      aud: ['operational-data-api', 'api-ref', config.keycloakClientId],
     };
-    const secret = 'super-secret-19';
-    const token = jwtSimple.encode(payload, secret);
+    const token = jwtSimple.encode(payload, config.keycloakClientPublicKey);
 
     it('Should return all entities on success', () => {
       const queryStub = sinon.stub(readPool, 'query');
@@ -110,10 +113,9 @@ describe('Test Entity Routes', () => {
       exp: expiryTime,
       refdbrole: 'refreadonly',
       iss: config.iss,
-      aud: ['operational-data-api', 'api-ref'],
+      aud: ['operational-data-api', 'api-ref', config.keycloakClientId],
     };
-    const secret = 'super-secret-19';
-    const token = jwtSimple.encode(payload, secret);
+    const token = jwtSimple.encode(payload, config.keycloakClientPublicKey);
 
     it('Should return an array with errors if the payload is empty', () => {
       // create an empty payload
@@ -241,10 +243,9 @@ describe('Test Entity Routes', () => {
       exp: expiryTime,
       refdbrole: 'refreadonly',
       iss: config.iss,
-      aud: ['operational-data-api', 'api-ref'],
+      aud: ['operational-data-api', 'api-ref', config.keycloakClientId],
     };
-    const secret = 'super-secret-19';
-    const token = jwtSimple.encode(payload, secret);
+    const token = jwtSimple.encode(payload, config.keycloakClientPublicKey);
 
     it('Should return error if the payload is not an object', () => {
       // create an invalid JSON object

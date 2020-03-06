@@ -1,4 +1,4 @@
-qconst { expect } = require('chai');
+const { expect } = require('chai');
 const sinon = require('sinon');
 
 // local imports
@@ -472,8 +472,8 @@ describe('Test Database Utils', () => {
         hoursAhead: '2020-02-20T18:13:00.133Z',
       };
       const expectedQueryObject = {
-        'queryString': `SELECT * FROM ${name} WHERE continent = $1 AND ($2 >= validfrom OR validfrom IS NULL) AND ($3 <= validto OR validto IS NULL)`,
-        'values': ['EU', fakeDateTimeRangeObj.hoursBehind, fakeDateTimeRangeObj.hoursAhead],
+        queryString: `SELECT * FROM ${name} WHERE continent = $1 AND ($2 >= validfrom OR validfrom IS NULL) AND ($3 <= validto OR validto IS NULL)`,
+        values: ['EU', fakeDateTimeRangeObj.hoursBehind, fakeDateTimeRangeObj.hoursAhead],
       };
 
       sinon.stub(helpers, 'dateTimeRange').returns(fakeDateTimeRangeObj);
@@ -491,8 +491,8 @@ describe('Test Database Utils', () => {
         hoursAhead: '2020-02-20T18:13:00.133Z',
       };
       const expectedQueryObject = {
-        'queryString': `SELECT * FROM ${name} WHERE ($1 >= validfrom OR validfrom IS NULL) AND ($2 <= validto OR validto IS NULL)`,
-        'values': [fakeDateTimeRangeObj.hoursBehind, fakeDateTimeRangeObj.hoursAhead],
+        queryString: `SELECT * FROM ${name} WHERE ($1 >= validfrom OR validfrom IS NULL) AND ($2 <= validto OR validto IS NULL)`,
+        values: [fakeDateTimeRangeObj.hoursBehind, fakeDateTimeRangeObj.hoursAhead],
       };
 
       sinon.stub(helpers, 'dateTimeRange').returns(fakeDateTimeRangeObj);

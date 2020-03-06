@@ -128,7 +128,7 @@ To have a local copy of the reference data you can run the following which will 
 ```bash
 docker network create db
 docker network create web
-KEYCLOAK_URL=http://keycloak.lodev.xyz/auth/realms/dev KEYCLOAK_CLIENT_ID=refdata-api KEYCLOAK_CLIENT_SECRET=s0m3s3cr3t PUBLIC_REFDATA_FLYWAY=/Users/XXX/GIT/cop/RefData PRIVATE_REFDATA_FLYWAY=/Users/XXX/GIT/cop/private_refdata docker-compose up
+KEYCLOAK_URL=http://keycloak.lodev.xyz/auth/realms/dev KEYCLOAK_CLIENT_ID=refdata-api KEYCLOAK_CLIENT_PUBLIC_KEY=s0m3s3cr3t PUBLIC_REFDATA_FLYWAY=/Users/XXX/GIT/cop/RefData PRIVATE_REFDATA_FLYWAY=/Users/XXX/GIT/cop/private_refdata docker-compose up
 docker logs public_refdata_flyway -f
 ```
 
@@ -158,7 +158,7 @@ https://github.com/UKHomeOffice/reference-data-governance-api-spec
 | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | api_ref_image                               | quay.io/ukhomeofficedigital/ref-data-api                                                                                                                           |
 | api_ref_keycloak_client_id                  | keycloak client name                                                                                                                                               |
-| api_ref_keycloak_client_secret              | keycloak client secret                                                                                                                                             |
+| api_ref_keycloak_client_public_key              | keycloak client public key                                                                                                                                             |
 | api_ref_name                                | ref-data-api                                                                                                                                                       |
 | api_ref_port                                | 5001                                                                                                                                                               |
 | db_ref_options                              | ?ssl=true                                                                                                                                                          |
