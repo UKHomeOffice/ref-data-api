@@ -4,13 +4,9 @@ const { Pool } = require('pg');
 const logger = require('../config/logger')(__filename);
 const config = require('../config/core');
 
-const readPool = new Pool({
-  'connectionString': config.dbConnectionString,
-});
+const readPool = new Pool({ connectionString: config.dbConnectionString });
 
-const writePool = new Pool({
-  'connectionString': config.dbConnectionString,
-});
+const writePool = new Pool({ connectionString: config.dbConnectionString });
 
 readPool.on('connect', (client) => {
   client.query(`SET search_path TO "${config.dbSchema}";`);

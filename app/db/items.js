@@ -6,8 +6,8 @@ const { getPool } = require('./index');
 const getItemData = (role, tableName, objId) => new Promise((resolve, reject) => {
   const pool = getPool(role);
   const query = {
-    'text': `SELECT * FROM ${tableName} WHERE id=$1;`,
-    'values': [objId],
+    text: `SELECT * FROM ${tableName} WHERE id=$1;`,
+    values: [objId],
   };
 
   pool.query(query)

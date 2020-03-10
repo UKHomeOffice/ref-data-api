@@ -13,17 +13,17 @@ describe('Test Item Queries', () => {
   describe('getItemData', () => {
     it('Should resolve items data ', () => {
       const obj = {
-        'rows': [
+        rows: [
           {
-            'id': 175,
-            'iso31661alpha2': 'PT',
-            'iso31661alpha3': 'PRT',
-            'name': 'Portugal',
-            'continent': 'EU',
-            'dial': '351',
-            'iso31661numeric': 620,
-            'validfrom': null,
-            'validto': null,
+            id: 175,
+            iso31661alpha2: 'PT',
+            iso31661alpha3: 'PRT',
+            name: 'Portugal',
+            continent: 'EU',
+            dial: '351',
+            iso31661numeric: 620,
+            validfrom: null,
+            validto: null,
           },
         ],
       };

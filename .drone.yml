@@ -10,8 +10,10 @@ pipeline:
 
   unit_tests:
     image: quay.io/ukhomeofficedigital/drone-docker
+    secrets:
+      - DEV_API_REF_KEYCLOAK_CLIENT_PUBLIC_KEY
     commands:
-      - docker run -t ref-data-api:$${DRONE_COMMIT_SHA} sh -c "npm run test"
+      - docker run -e API_REF_KEYCLOAK_CLIENT_PUBLIC_KEY=$DEV_API_REF_KEYCLOAK_CLIENT_PUBLIC_KEY -t ref-data-api:$${DRONE_COMMIT_SHA} sh -c "npm test"
     when:
       event: push
 
@@ -102,6 +104,8 @@ pipeline:
         target: API_REF_IMAGE
       - source: DEV_API_REF_KEYCLOAK_CLIENT_ID
         target: API_REF_KEYCLOAK_CLIENT_ID
+      - source: DEV_API_REF_KEYCLOAK_CLIENT_PUBLIC_KEY
+        target: API_REF_KEYCLOAK_CLIENT_PUBLIC_KEY
       - source: DEV_KUBE_NAMESPACE_REFDATA
         target: KUBE_NAMESPACE
       - source: DEV_API_REF_KUBE_TOKEN
@@ -160,6 +164,8 @@ pipeline:
         target: API_REF_IMAGE
       - source: STAGING_API_REF_KEYCLOAK_CLIENT_ID
         target: API_REF_KEYCLOAK_CLIENT_ID
+      - source: STAGING_API_REF_KEYCLOAK_CLIENT_PUBLIC_KEY
+        target: API_REF_KEYCLOAK_CLIENT_PUBLIC_KEY
       - source: STAGING_KUBE_NAMESPACE_REFDATA
         target: KUBE_NAMESPACE
       - source: STAGING_API_REF_KUBE_TOKEN
@@ -218,6 +224,8 @@ pipeline:
         target: API_REF_IMAGE
       - source: PRODUCTION_API_REF_KEYCLOAK_CLIENT_ID
         target: API_REF_KEYCLOAK_CLIENT_ID
+      - source: PRODUCTION_API_REF_KEYCLOAK_CLIENT_PUBLIC_KEY
+        target: API_REF_KEYCLOAK_CLIENT_PUBLIC_KEY
       - source: PRODUCTION_KUBE_NAMESPACE_REFDATA
         target: KUBE_NAMESPACE
       - source: PRODUCTION_API_REF_KUBE_TOKEN

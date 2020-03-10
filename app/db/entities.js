@@ -3,17 +3,17 @@ const logger = require('../config/logger')(__filename);
 const config = require('../config/core');
 const { getPool } = require('./index');
 
-
 const getEntityDescription = tableName => new Promise((resolve, reject) => {
   const pool = getPool();
   const query = {
-    'text': `SELECT obj_description($1::regclass, 'pg_class')
+    text: `SELECT obj_description($1::regclass, 'pg_class')
             AS description;`,
-    'values': [tableName],
+    values: [tableName],
   };
 
-  pool.query(query)
-    .then(data => resolve({ 'description': JSON.parse(data.rows[0].description) }))
+  pool
+    .query(query)
+    .then(data => resolve({ description: JSON.parse(data.rows[0].description) }))
     .catch((error) => {
       const errorMsg = `Unable to retrieve description from table ${tableName}`;
       logger.error(errorMsg);
@@ -25,7 +25,8 @@ const getEntityDescription = tableName => new Promise((resolve, reject) => {
 const getEntitySchema = (role, entityName) => {
   const pool = getPool(role);
 
-  return pool.query(`SELECT column_name, is_nullable, data_type, character_maximum_length,
+  return pool
+    .query(`SELECT column_name, is_nullable, data_type, character_maximum_length,
       col_description((table_schema||'.'||table_name)::regclass::oid, ordinal_position) AS description
       FROM information_schema.columns WHERE table_name='${entityName}';`)
     .then((data) => {
@@ -37,10 +38,10 @@ const getEntitySchema = (role, entityName) => {
           required.push(obj.column_name);
         }
         properties[obj.column_name] = {
-          'maxLength': obj.character_maximum_length,
-          'format': obj.data_type,
-          'type': obj.data_type,
-          'description': JSON.parse(obj.description),
+          maxLength: obj.character_maximum_length,
+          format: obj.data_type,
+          type: obj.data_type,
+          description: JSON.parse(obj.description),
         };
       });
       return { required, properties };
@@ -56,7 +57,8 @@ const getEntitySchema = (role, entityName) => {
 const getAllEntities = () => {
   const pool = getPool();
 
-  return pool.query(`SELECT * FROM pg_catalog.pg_tables WHERE schemaname = '${config.dbSchema}';`)
+  return pool
+    .query(`SELECT * FROM pg_catalog.pg_tables WHERE schemaname = '${config.dbSchema}';`)
     .then((data) => {
       const entitiesData = [];
       data.rows.map(obj => entitiesData.push(obj.tablename));
@@ -84,7 +86,8 @@ const getEntityData = (role, entityName, filters) => new Promise((resolve, rejec
 
   logger.info('Running query - 1');
   logger.debug(`Running query: ${text}, values: ${filterValues}`);
-  pool.query(text, filterValues)
+  pool
+    .query(text, filterValues)
     .then((data) => {
       resolve(data.rows);
     })
@@ -102,10 +105,12 @@ const getEntityDataV2 = (role, entityName, queryString, values) => new Promise((
 
   logger.info('Running query - 3');
   logger.debug(`Running query: ${queryString}, values: ${values}`);
-  pool.query(queryString, values)
+  pool
+    .query(queryString, values)
     .then(data => resolve(data.rows))
     .catch((error) => {
       const errorMsg = `Unable to retrieve data from table ${entityName}`;
+
       logger.error(errorMsg);
       logger.error(error.stack);
       error.message = errorMsg;

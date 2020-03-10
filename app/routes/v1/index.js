@@ -28,8 +28,8 @@ app.patch(
   [
     check('field').not().isEmpty().trim(),
     check('newValue').not().isEmpty().trim(),
-    check('validFrom').optional({ 'nullable': true }).trim(),
-    check('validTo').optional({ 'nullable': true }).trim(),
+    check('validFrom').optional({ nullable: true }).trim(),
+    check('validTo').optional({ nullable: true }).trim(),
   ],
   items.patchItemField,
 );
