@@ -1,8 +1,8 @@
 const sinon = require('sinon');
 const jwtSimple = require('jwt-simple');
 
-const config = require('../../app/config/core');
-const authMiddleware = require('../../app/routes/authMiddleware');
+const config = require('../../../app/config/core');
+const authMiddleware = require('../../../app/routes/middlewares/auth');
 
 // create a token with an expiry date 1 hour in the future
 let expiryTime = new Date();

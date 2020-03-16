@@ -4,7 +4,6 @@ const { check } = require('express-validator/check');
 // local imports
 const entities = require('../entities');
 const items = require('../items');
-const logger = require('../../config/logger')(__filename);
 
 const app = express();
 

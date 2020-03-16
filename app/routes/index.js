@@ -1,12 +1,13 @@
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const express = require('express');
+const containsSqlMiddleware = require('./middlewares/contains-sql');
 
 // local imports
 const health = require('./health');
 const v1 = require('./v1');
 const v2 = require('./v2');
-const authMiddleware = require('./authMiddleware');
+const authMiddleware = require('./middlewares/auth');
 
 const corsConfiguration = {
   origin: '*',
@@ -24,6 +25,7 @@ app.options('*', cors(corsConfiguration));
 
 // check each request for authorization token
 app.use(authMiddleware);
+app.use(containsSqlMiddleware);
 
 app.use('/v1', v1);
 app.use('/v2', v2);
