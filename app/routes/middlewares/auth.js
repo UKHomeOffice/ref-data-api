@@ -31,7 +31,7 @@ const authMiddleware = (req, res, next) => {
 
       const tokenExpiry = moment(token.exp * ONE_SECOND);
 
-      logger.info(
+      logger.debug(
         `${req.method} - ${req.url} - Request by ${token.name}, ${
           token.email
         } - Token valid until - ${tokenExpiry.format()}`,

@@ -84,7 +84,7 @@ const getEntityData = (role, entityName, filters) => new Promise((resolve, rejec
     text = `SELECT * FROM ${entityName} WHERE ${filters.queryString}${limit}`;
   }
 
-  logger.info('Running query - 1');
+  logger.debug('Running query - 1');
   logger.debug(`Running query: ${text}, values: ${filterValues}`);
   pool
     .query(text, filterValues)
@@ -103,7 +103,7 @@ const getEntityData = (role, entityName, filters) => new Promise((resolve, rejec
 const getEntityDataV2 = (role, entityName, queryString, values) => new Promise((resolve, reject) => {
   const pool = getPool(role);
 
-  logger.info('Running query - 3');
+  logger.debug('Running query - 3');
   logger.debug(`Running query: ${queryString}, values: ${values}`);
   pool
     .query(queryString, values)
