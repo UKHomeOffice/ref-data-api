@@ -1,4 +1,5 @@
 const axios = require('axios');
+const moment = require('moment');
 const { validationResult } = require('express-validator/check');
 
 // local imports
@@ -91,7 +92,12 @@ const getEntity = (req, res) => {
         res.status(200).json(dataObject);
       })
       .catch((error) => {
-        logger.error(error.stack);
+        logger.error('Error in getting entity', {
+          stack: error.stack,
+          error: error.message,
+          timestamp: moment().utc().format('D/MMM/YYYY:HH:mm:ss ZZ'),
+        });
+
         res.status(400).json({ error: error.message });
       });
   } else {
@@ -106,7 +112,12 @@ const getEntity = (req, res) => {
         res.status(200).json(dataObject);
       })
       .catch((error) => {
-        logger.error(error.stack);
+        logger.error('Error in getting entity', {
+          stack: error.stack,
+          error: error.message,
+          timestamp: moment().utc().format('D/MMM/YYYY:HH:mm:ss ZZ'),
+        });
+
         res.status(400).json({ error: error.message });
       });
   }
@@ -150,7 +161,12 @@ const getEntityV2 = (req, res) => {
         res.status(200).json(dataObject);
       })
       .catch((error) => {
-        logger.error(error.stack);
+        logger.error('Error in getting entity', {
+          stack: error.stack,
+          error: error.message,
+          timestamp: moment().utc().format('D/MMM/YYYY:HH:mm:ss ZZ'),
+        });
+
         res.status(400).json({ error: error.message });
       });
   } else if (mode === 'schemaOnly') {
@@ -174,7 +190,12 @@ const getEntityV2 = (req, res) => {
         res.status(200).json(dataObject);
       })
       .catch((error) => {
-        logger.error(error.stack);
+        logger.error('Error in getting entity', {
+          stack: error.stack,
+          error: error.message,
+          timestamp: moment().utc().format('D/MMM/YYYY:HH:mm:ss ZZ'),
+        });
+
         res.status(400).json({ error: error.message });
       });
   } else {
@@ -200,7 +221,12 @@ const getEntityV2 = (req, res) => {
         res.status(200).json(dataObject);
       })
       .catch((error) => {
-        logger.error(error.stack);
+        logger.error('Error in getting entity', {
+          stack: error.stack,
+          error: error.message,
+          timestamp: moment().utc().format('D/MMM/YYYY:HH:mm:ss ZZ'),
+        });
+
         res.status(400).json({ error: error.message });
       });
   }
@@ -252,7 +278,12 @@ const patchEntitySchema = (req, res) => {
       });
     })
     .catch((error) => {
-      logger.error(error.stack);
+      logger.error('Error in posting request to camunda', {
+        stack: error.stack,
+        error: error.message,
+        timestamp: moment().utc().format('D/MMM/YYYY:HH:mm:ss ZZ'),
+      });
+
       res.status(400).json({});
     });
 };
@@ -262,8 +293,8 @@ const postEntityItem = (req, res) => {
   const { name } = req.params;
 
   if (Object.entries(body).length === 0 && body.constructor === Object) {
-    logger.error('Invalid JSON');
-    logger.error(body);
+    logger.error('Invalid JSON', { body });
+
     return res.status(400).json({ error: 'Invalid JSON object' });
   }
 
@@ -305,8 +336,12 @@ const postEntityItem = (req, res) => {
       });
     })
     .catch((error) => {
-      logger.error(error.stack);
-      logger.error(error.message);
+      logger.error('Error in posting submit request to camunda', {
+        stack: error.stack,
+        error: error.message,
+        timestamp: moment().utc().format('D/MMM/YYYY:HH:mm:ss ZZ'),
+      });
+
       res.status(400).json({});
     });
 };

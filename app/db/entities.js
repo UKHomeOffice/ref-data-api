@@ -1,4 +1,4 @@
-// local imports
+const moment = require('moment');
 const logger = require('../config/logger')(__filename);
 const config = require('../config/core');
 const { getPool } = require('./index');
@@ -15,10 +15,14 @@ const getEntityDescription = tableName => new Promise((resolve, reject) => {
     .query(query)
     .then(data => resolve({ description: JSON.parse(data.rows[0].description) }))
     .catch((error) => {
-      const errorMsg = `Unable to retrieve description from table ${tableName}`;
-      logger.error(errorMsg);
-      logger.error(error.stack);
-      reject(new Error(errorMsg));
+      const errorMessage = `Unable to retrieve description from table ${tableName}`;
+
+      logger.error(errorMessage, {
+        stack: error.stack,
+        timestamp: moment().utc().format('D/MMM/YYYY:HH:mm:ss ZZ'),
+      });
+
+      reject(new Error(errorMessage));
     });
 });
 
@@ -47,10 +51,14 @@ const getEntitySchema = (role, entityName) => {
       return { required, properties };
     })
     .catch((error) => {
-      const errorMsg = `Unable to retrieve schema from table ${entityName}`;
-      logger.error(errorMsg);
-      logger.error(error.stack);
-      return new Error(errorMsg);
+      const errorMessage = `Unable to retrieve schema from table ${entityName}`;
+
+      logger.error(errorMessage, {
+        stack: error.stack,
+        timestamp: moment().utc().format('D/MMM/YYYY:HH:mm:ss ZZ'),
+      });
+
+      return new Error(errorMessage);
     });
 };
 
@@ -65,10 +73,14 @@ const getAllEntities = () => {
       return entitiesData;
     })
     .catch((error) => {
-      const errorMsg = 'Unable to retrieve tables from database';
-      logger.error(errorMsg);
-      logger.error(error.stack);
-      return new Error(errorMsg);
+      const errorMessage = 'Unable to retrieve tables from database';
+
+      logger.error(errorMessage, {
+        stack: error.stack,
+        timestamp: moment().utc().format('D/MMM/YYYY:HH:mm:ss ZZ'),
+      });
+
+      return new Error(errorMessage);
     });
 };
 
@@ -92,11 +104,14 @@ const getEntityData = (role, entityName, filters) => new Promise((resolve, rejec
       resolve(data.rows);
     })
     .catch((error) => {
-      const errorMsg = `Unable to retrieve data from table ${entityName}`;
-      logger.error(errorMsg);
-      logger.error(error.stack);
-      error.message = errorMsg;
-      reject(new Error(errorMsg));
+      const errorMessage = `Unable to retrieve data from table ${entityName}`;
+
+      logger.error(errorMessage, {
+        stack: error.stack,
+        timestamp: moment().utc().format('D/MMM/YYYY:HH:mm:ss ZZ'),
+      });
+
+      reject(new Error(errorMessage));
     });
 });
 
@@ -109,12 +124,14 @@ const getEntityDataV2 = (role, entityName, queryString, values) => new Promise((
     .query(queryString, values)
     .then(data => resolve(data.rows))
     .catch((error) => {
-      const errorMsg = `Unable to retrieve data from table ${entityName}`;
+      const errorMessage = `Unable to retrieve data from table ${entityName}`;
 
-      logger.error(errorMsg);
-      logger.error(error.stack);
-      error.message = errorMsg;
-      reject(new Error(errorMsg));
+      logger.error(errorMessage, {
+        stack: error.stack,
+        timestamp: moment().utc().format('D/MMM/YYYY:HH:mm:ss ZZ'),
+      });
+
+      reject(new Error(errorMessage));
     });
 });
 
