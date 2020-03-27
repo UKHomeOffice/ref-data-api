@@ -40,9 +40,14 @@ const authMiddleware = (req, res, next) => {
       next();
     } catch (error) {
       const { name, message } = error;
-      logger.error(
-        `${req.method} - ${req.url} - Token not valid for our SSO endpoint - ${name} - ${message}`,
-      );
+
+      logger.error('Token not valid for our SSO endpoint', {
+        timestamp: moment().utc().format('D/MMM/YYYY:HH:mm:ss ZZ'),
+        method: req.method,
+        url: req.url,
+        errorName: name,
+        errorMessage: message,
+      });
       res.status(401).json({ error: 'Unauthorized' });
     }
   } else {

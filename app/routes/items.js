@@ -1,10 +1,10 @@
 const axios = require('axios');
 const { validationResult } = require('express-validator/check');
+const moment = require('moment');
 
 // local imports
 const config = require('../config/core');
 const logger = require('../config/logger')(__filename);
-const pool = require('../db/index');
 const { getEntityDescription, getEntitySchema } = require('../db/entities');
 const { getItemData } = require('../db/items');
 
@@ -82,8 +82,12 @@ const patchItemField = (req, res) => {
       });
     })
     .catch((error) => {
-      logger.error(error.stack);
-      logger.error(error.message);
+      logger.error('Error posting to camunda submit request', {
+        stack: error.stack,
+        error: error.message,
+        timestamp: moment().utc().format('D/MMM/YYYY:HH:mm:ss ZZ'),
+      });
+
       res.status(400).json({});
     });
 };
