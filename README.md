@@ -15,13 +15,18 @@ To use this API first clone this repo
 git@github.com:UKHomeOffice/ref-data-api.git
 ```
 
-### Development without Docker
+## Setting environment variables
 
 Once you've cloned the project, set the following environment variables
 
 ```sh
-export DB_CONNECTION_STRING=postgres://username:password@localhost:5433/dbname
+export DB_CONNECTION_STRING=postgres://<username>:<password>@localhost:5433/<dbname>
+
+# set the value of the following environment variable to the keycloak public key
+export API_REF_KEYCLOAK_CLIENT_PUBLIC_KEY
 ```
+
+## Development without Docker
 
 Install project dependencies
 
@@ -101,10 +106,7 @@ If you prefer to run tests or linter from within the container
 2. go into the container by opening a new terminal tab and execute `docker exect -it <docker_container_id> sh`
 
 Once inside the container to run tests execute
-
-```sh
-npm run test
-```
+```sh npm run test ```
 
 And to run linter execute
 
