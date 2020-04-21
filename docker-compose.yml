@@ -1,16 +1,16 @@
 version: '3.7'
 
 services:
-  postgres_refdata:
+  db_ref:
     image: postgres:10-alpine
     restart: on-failure
-    container_name: postgres_refdata
+    container_name: db_ref
     environment:
       POSTGRES_DB: postgres
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: mysecretpassword
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test: ["CMD-SHELL", "pg_isready -U ${DB_REF_DEFAULT_USERNAME} ${DB_REF_DEFAULT_DBNAME}"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -21,7 +21,7 @@ services:
       - db
 
   public_refdata_flyway:
-    image: quay.io/ukhomeofficedigital/docker-flyway:0c81630decc5d7f6c6ec9070d7475b3f3f084153
+    image: quay.io/ukhomeofficedigital/docker-flyway:9b4c62ed90c599a9bc3282ef06b58818b24762f9
     container_name: public_refdata_flyway
     command: >
       sh -c "/mnt/docker/run.sh &&
@@ -29,37 +29,41 @@ services:
              /mnt/private-refdata/docker/run.sh"
     working_dir: /mnt
     environment:
-      POSTGRES_DB: postgres
-      POSTGRES_SERVER: postgres_refdata
-      POSTGRES_PORT: 5432
-      FLYWAY_INIT_USER: postgres
-      FLYWAY_INIT_PASSWORD: mysecretpassword
-      FLYWAY_PLACEHOLDERS_REFERENCE_DB_NAME: reference
-      FLYWAY_PLACEHOLDERS_REFERENCE_OWNER_NAME: ownerreference
-      FLYWAY_PLACEHOLDERS_REFERENCE_OWNER_PASSWORD: mysecretpassword
-      FLYWAY_PLACEHOLDERS_REFERENCE_SCHEMA: reference
-      FLYWAY_PLACEHOLDERS_GOVERNANCE_OWNER_NAME: ownergovernance
-      FLYWAY_PLACEHOLDERS_GOVERNANCE_OWNER_PASSWORD: mysecretpassword
-      FLYWAY_PLACEHOLDERS_GOVERNANCE_SCHEMA: governance
-      FLYWAY_PLACEHOLDERS_REFERENCE_AUTHENTICATOR_USER: authenticatorreference
-      FLYWAY_PLACEHOLDERS_REFERENCE_AUTHENTICATOR_PASSWORD: auth1234
-      FLYWAY_PLACEHOLDERS_REFERENCE_ANON_USER: webanon
-      FLYWAY_PLACEHOLDERS_REFERENCE_SERVICE_USER: servicereference
-      FLYWAY_PLACEHOLDERS_REFERENCE_READONLY_USER: refreadonly
-      FLYWAY_PLACEHOLDERS_GOVERNANCE_AUTHENTICATOR_USER: authenticatorgovernance
-      FLYWAY_PLACEHOLDERS_GOVERNANCE_AUTHENTICATOR_PASSWORD: auth1234
-      FLYWAY_PLACEHOLDERS_GOVERNANCE_ANON_USER: webanongovernance
-      FLYWAY_PLACEHOLDERS_GOVERNANCE_SERVICE_USER: servicegovernance
-      FLYWAY_PLACEHOLDERS_GOVERNANCE_READONLY_USER: readonlygovernance
+      DB_REF_DEFAULT_DBNAME: postgres
+      DB_REF_DEFAULT_USERNAME: postgres
+      DB_REF_DEFAULT_PASSWORD: mysecretpassword
+      DB_REF_OPTIONS: ""
+      DB_REF_HOSTNAME: db_ref
+      DB_REF_PORT: 5432
+      DB_REF_REFERENCE_DBNAME: reference
+      DB_REF_REFERENCE_SCHEMA: reference
+      DB_REF_REFERENCE_OWNER_USERNAME: ownerreference
+      DB_REF_REFERENCE_OWNER_PASSWORD: mysecretpassword
+      DB_REF_REFERENCE_AUTHENTICATOR_USERNAME: postgres
+      DB_REF_REFERENCE_AUTHENTICATOR_PASSWORD: mysecretpassword
+      DB_REF_REFERENCE_ANON_USERNAME: webanon
+      DB_REF_REFERENCE_SERVICE_USERNAME: servicereference
+      DB_REF_REFERENCE_READONLY_USERNAME: refreadonly
+      DB_REF_GOVERNANCE_SCHEMA: governance
+      DB_REF_GOVERNANCE_OWNER_USERNAME: ownergovernance
+      DB_REF_GOVERNANCE_OWNER_PASSWORD: mysecretpassword
+      DB_REF_GOVERNANCE_AUTHENTICATOR_USERNAME: authenticatorgovernance
+      DB_REF_GOVERNANCE_AUTHENTICATOR_PASSWORD: mysecretpassword
+      DB_REF_GOVERNANCE_ANON_USERNAME: webanongovernance
+      DB_REF_GOVERNANCE_SERVICE_USERNAME: servicegovernance
+      DB_REF_GOVERNANCE_READONLY_USERNAME: readonlygovernance
+
     volumes:
-      - ${PUBLIC_REFDATA_FLYWAY}:/mnt
-      - ${PRIVATE_REFDATA_FLYWAY}:/mnt/private-refdata
+      - ~/Viable/flyway_ref_public:/mnt
+      - ~/Viable/flyway_ref_public:/mnt/private-refdata
+
     depends_on:
-      - postgres_refdata
+      - db_ref
     networks:
       - db
 
   ref_data_api:
+    container_name: ref_data_api
     build: .
     image: quay.io/ukhomeofficedigital/ref-data-api:dev
     command: npm run start-dev
@@ -73,7 +77,7 @@ services:
       KEYCLOAK_CLIENT_PUBLIC_KEY: ${KEYCLOAK_CLIENT_PUBLIC_KEY}
       KEYCLOAK_URL: ${KEYCLOAK_URL}
     depends_on:
-      - postgres_refdata
+      - db_ref
       - public_refdata_flyway
     healthcheck:
       test: ["CMD-SHELL", "node", "/src/app/healthcheck.js"]
