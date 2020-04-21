@@ -1,16 +1,18 @@
-# Development without Docker
+# Development outside Docker
 
-Install project dependencies
+* [Install required libraries](#install-project-dependencies)
+* [Setup environment variables](./environment-variables.md)
+* [Run API server](#run-the-api-server)
+* [Run Tests](#running-tests)
+* [Run Linter](#running-linter)
 
-```sh
-$ npm install
-```
+## Install project dependencies
 
-Run the API server
+```sh npm install```
 
-```sh
-npm run start-dev
-```
+## Run the API server
+
+```sh npm run start-dev```
 
 ## Running tests
 

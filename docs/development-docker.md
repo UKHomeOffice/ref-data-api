@@ -28,13 +28,11 @@ If you prefer to run tests or linter from within the container
 
 1. run the Docker container with `docker run -p 5000:5000 ref-data-api`
 
-2. go into the container by opening a new terminal tab and execute `docker exect -it <docker_container_id> sh`
+2. go into the container by opening a new terminal tab and execute `docker exec -it <docker_container_id> sh`
 
 Once inside the container to run tests execute
 ```sh npm run test ```
 
 And to run linter execute
 
-```sh
-npm run lint -- .
-```
+```sh npm run lint -- .```

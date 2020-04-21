@@ -2,19 +2,13 @@
 
 Once you've cloned the project, set the following environment variables
 
-```sh
-export DB_CONNECTION_STRING=postgres://<username>:<password>@localhost:5433/<dbname>
-
-# set the value of the following environment variable to the keycloak public key
-export API_REF_KEYCLOAK_CLIENT_PUBLIC_KEY
-```
-
-## Key environment variables to set
+## Required environment variables for integration with Keycloak
 
 1. `KEYCLOAK_URL` - You will want to use the correct instance of Keycloak
 1. `KEYCLOAK_REALM` - You will want to use the correct realm for the key you have generated, this must match what is found in your JWT.
-1. `DB_REF_HOSTNAME` - If you are using a local instance, you may want to use the docker container IP specifically, or `localhost` or `0.0.0.0` depending on your configuration.
 1. `API_REF_KEYCLOAK_CLIENT_PUBLIC_KEY` - This is the Keycloak client's public key - the one that was used to encode your JWT - it should be Base64 encoded as some special characters in a JWT cannot be passed in easily through environment variables. It helps to ensure validity of the JWT used.
+
+For using local data you may wish to change the database used, you can do this by changing the `DB_REF_HOSTNAME` - If you are using a local instance, you may want to use the docker container IP specifically, or `localhost` or `0.0.0.0` depending on your configuration.
 
 ## Full list of environment variables
 
