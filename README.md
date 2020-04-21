@@ -7,40 +7,34 @@ This API forms part of a Reference Data Service that is being developed by the U
 - npm 6.9.0 (minimum working version)
 - node v8.10.0 (minimum working version)
 
-## Usage
+## Setup
 
-To use this API first clone this repo
-
-```sh
+### Clone repo
+```
 git@github.com:UKHomeOffice/ref-data-api.git
 ```
 
+### Setup database
+* [Setup a local ref-data database for use with the API](docs/setup.md#setup-a-local-ref-data-database-for-use-with-the-api)
 
-## Setup
+### Environment variables
+* [Keycloak integration variables](docs/environment-variables.md#required-environment-variables-for-integration-with-keycloak)
+* [Full list](docs/environment-variables.md#full-list-of-environmnent-variables)
 
-### [Setup a local ref-data database for use with the API](docs/setup.md)
+### Development outside Docker
+* [Install required libraries](docs/development.md#install-project-dependencies)
+* [Setup environment variables](docs/environment-variables.md)
+* [Run API server](docs/development.md#run-the-api-server)
+* [Run Tests](docs/development.md#running-tests)
+* [Run Linter](docs/development.md#running-linter)
 
-### [Environment variables](docs/environment-variables.md)
-* Keycloak integration variables
-* Full list
-
-### [Development outside Docker](docs/development.md)
-* Install required libraries
-* Setup environment variables
-* Run API server
-* Run Tests
-* Run Linter
-
-### [Development with Docker](docs/development-docker.md)
-* Build container
-* Run container
-* Run Tests
-* Run Linter
+### Development with Docker
+* [Build container](docs/development-docker.md#build-the-docker-container)
+* [Run container](docs/development-docker.md#run-the-docker-container)
+* [Run Tests](docs/development-docker.md#run-tests)
+* [Run Linter](docs/development-docker.md#run-linter)
 
 ### [Drone Secrets](docs/drone-secrets.md)
-* full list of secret
-* example values
-* etc.
 
 ## Endpoints
 

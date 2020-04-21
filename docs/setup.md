@@ -1,9 +1,3 @@
-# Setup
-
-To install, start, test and lint, check out the [development documentation](./development.md).
-
-_**NOTE:** See [Environment Variables](docs/environment-variables.md) for required environment variables._
-
 ## Setup a local ref-data database for use with the API
 
 To have a local copy of the reference data you can run the following which will start a postgres docker container which you can connect to and seed the data.
