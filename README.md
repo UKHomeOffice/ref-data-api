@@ -2,7 +2,7 @@
 
 This API forms part of a Reference Data Service that is being developed by the UK Home Office. It provides a private API for integration with web applications and other systems.
 
-## Requirements
+## System Requirements
 
 - npm 6.9.0 (minimum working version)
 - node v8.10.0 (minimum working version)
@@ -15,15 +15,32 @@ To use this API first clone this repo
 git@github.com:UKHomeOffice/ref-data-api.git
 ```
 
-1. [Setup](docs/setup.md) (setup local data, install dependencies, get it running)
 
-1. [Environment Variables](docs/environment-variables.md) (full list, and important ones)
+## Setup
 
-1. [Development guide](docs/development.md) (outside of docker)
+### [Setup a local ref-data database for use with the API](docs/setup.md)
 
-1. [Development with Docker](docs/development-docker.md) (running scripts within the container)
+### [Environment variables](docs/environment-variables.md)
+* Keycloak integration variables
+* Full list
 
-1. [Drone secrets](docs/drone-secrets.md) (full list of secrets, example values, etc.)
+### [Development outside Docker](docs/development.md)
+* Install required libraries
+* Setup environment variables
+* Run API server
+* Run Tests
+* Run Linter
+
+### [Development with Docker](docs/development-docker.md)
+* Build container
+* Run container
+* Run Tests
+* Run Linter
+
+### [Drone Secrets](docs/drone-secrets.md)
+* full list of secret
+* example values
+* etc.
 
 ## Endpoints
 
