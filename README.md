@@ -19,7 +19,7 @@ git@github.com:UKHomeOffice/ref-data-api.git
 
 ### Environment variables
 * [Keycloak integration variables](docs/environment-variables.md#required-environment-variables-for-integration-with-keycloak)
-* [Full list](docs/environment-variables.md#full-list-of-environmnent-variables)
+* [Full list](docs/environment-variables.md#full-list-of-environment-variables)
 
 ### Development outside Docker
 * [Install required libraries](docs/development.md#install-project-dependencies)
