@@ -115,4 +115,4 @@ spec:
       volumes:
       - name: certs
         secret:
-          secretName: "{{.API_REF_NAME}}-pod-tls"
+          secretName: "{{.API_REF_NAME}}-pod-cmio"

@@ -22,4 +22,4 @@ spec:
   tls:
   - hosts:
     - {{.API_REF_URL}}
-    secretName: {{.API_REF_NAME}}-tls
+    secretName: {{.API_REF_NAME}}-cmio
