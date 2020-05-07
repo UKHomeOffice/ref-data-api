@@ -1,11 +1,11 @@
-apiVersion: certmanager.k8s.io/v1alpha1
+apiVersion: cert-manager.io/v1alpha2
 kind: Certificate
 metadata:
-  name: {{.API_REF_NAME}}-pod-tls
+  name: {{.API_REF_NAME}}-pod-cmio
 spec:
-  secretName: {{.API_REF_NAME}}-pod-tls
+  secretName: {{.API_REF_NAME}}-pod-cmio
   issuerRef:
-    name: platform-tls
+    name: platform-ca
     kind: ClusterIssuer
   commonName: {{.API_REF_NAME}}.{{.KUBE_NAMESPACE}}.svc.cluster.local
   dnsNames:
