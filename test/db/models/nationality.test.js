@@ -1,20 +1,20 @@
 const { expect } = require('chai');
 const { Sequelize, DataTypes } = require('sequelize');
 
-const { Country } = require('../../../app/db/models/country');
+const { Nationality } = require('../../../app/db/models/nationality');
 
-describe('Given the Country model', () => {
+describe('Given the Nationality model', () => {
   before(() => {
     this.sequelize = new Sequelize('database', 'username', 'password', { dialect: 'postgres' });
   });
 
   describe('when initialized', () => {
     before(() => {
-      Country.init(this.sequelize, DataTypes);
+      Nationality.init(this.sequelize, DataTypes);
     });
 
     it('should have the correct table name', () => {
-      expect(Country.getTableName()).to.eql('country');
+      expect(Nationality.getTableName()).to.eql('nationality');
     });
   });
 });
