@@ -32,6 +32,7 @@
     "nock": "^10.0.6",
     "pg": "^7.10.0",
     "request": "^2.88.0",
+    "sequelize": "^5.21.11",
     "winston": "^3.2.1"
   },
   "devDependencies": {
@@ -39,12 +40,27 @@
     "eslint": "^5.16.0",
     "eslint-config-airbnb": "^17.1.1",
     "eslint-plugin-import": "^2.18.2",
+    "husky": "^4.2.5",
     "jwt-simple": "^0.5.6",
+    "lint-staged": "^10.2.7",
     "mocha": "^6.1.4",
     "node-mocks-http": "^1.7.3",
     "nodemon": "^2.0.2",
     "nyc": "^15.0.0",
+    "prettier": "^2.0.5",
     "sinon": "^9.0.0",
     "supertest": "^4.0.2"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "pre-push": "npm test"
+    }
+  },
+  "lint-staged": {
+    "*.js": [
+      "npm run lint -- .",
+      "git add"
+    ]
   }
 }
