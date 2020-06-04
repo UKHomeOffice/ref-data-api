@@ -1,38 +1,46 @@
-const { Sequelize, DataTypes, Model } = require('sequelize');
-const sequelize = new Sequelize('sqlite::memory');
+const { Model } = require('sequelize');
 
-class DogRole extends Model {}
-
-DogRole.init({
-  id: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    comment: '{"label": "Identifier", "description": "Unique identifying column.", "summaryview": "false"}'
-  },
-  code: {
-    type: DataTypes.STRING(2),
-    allowNull: false,
-    comment: '{"label": "Code", "description": "A list of codes associated with the dog role.", "summaryview": "true"}'
-  },
-  description: {
-    type: DataTypes.STRING(60),
-    allowNull: true,
-    comment: '{"label": "Short description", "description": "A description of the dog role.", "summaryview": "true"}'
-  },
-  validfrom: {
-    type: DataTypes.BOOLEAN,
-    allowNull: true,
-    comment: '{"label": "Valid from date", "description": "Item valid from date.", "summaryview" : "false"}'
-  },
-  validto: {
-    type: DataTypes.BOOLEAN,
-    allowNull: true,
-    comment: '{"label": "Valid to date", "description": "Item valid to date.", "summaryview" : "false"}'
+class DogRole extends Model {
+  static init(sequelize, DataTypes){
+    return Model.init({
+      id: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+      },
+      code: {
+        type: DataTypes.STRING(2),
+        allowNull: false
+      },
+      description: {
+        type: DataTypes.STRING(60),
+        allowNull: true
+      },
+      validfrom: {
+        type: DataTypes.BOOLEAN,
+        allowNull: true
+      },
+      validto: {
+        type: DataTypes.BOOLEAN,
+        allowNull: true
+      }
+    },
+    {
+      sequelize,
+      tableName: 'dogrole'
+    }
+    );
   }
-},
-{
-  sequelize,
-  TableName: 'documenttype',
-  index: [{ unique: true, fields: ['id']}]
 }
-);
+
+const schemaComments = {
+  table: '{"label": "Dog role", "description": "A description of the role played by dog team.", "schemalastupdated": "06/03/2019", "dataversion": 1}',
+  columns: {
+    id: '{"label": "Identifier", "description": "Unique identifying column.", "summaryview": "false"}',
+    code: '{"label": "Code", "description": "A list of codes associated with the dog role.", "summaryview": "true"}',
+    description: '{"label": "Short description", "description": "A description of the dog role.", "summaryview": "true"}',
+    validfrom: '{"label": "Valid from date", "description": "Item valid from date.", "summaryview" : "false"}',
+    validto: '{"label": "Valid to date", "description": "Item valid to date.", "summaryview" : "false"}'
+  }
+};
+
+module.exports = { DogRole, schemaComments }

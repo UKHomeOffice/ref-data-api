@@ -1,44 +1,47 @@
-const { DataTypes, Sequelize, Model } = require("sequelize");
-const sequelize = new Sequelize('sqlite::memory');
+const { Model } = require('sequelize');
 
-class CrewRole extends Model {}
-
-CrewRole.init({
-    id: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      allowNull: false,
-      comment:'{"label": "Identifier", "description": "Unique identifying column.", "summaryview": "false"}'
+class CrewRole extends Model {
+  static init(sequelize, DataTypes){
+    return Model.init({
+      id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        allowNull: false
+      },
+      name: {
+        type: DataTypes.STRING(40),
+        allowNul: false
+      },
+      description: {
+        type: DataTypes.STRING(60),
+        allowNul: true
+      },
+      validfrom: {
+        type: DataTypes.DATE,
+        allowNul: true
+      }, 
+      vlaidto: {
+        type: DataTypes.DATE,
+        allowNull: true
+      }
     },
-
-    name: {
-      type: DataTypes.STRING(40),
-      allowNul: false,
-      comment: '{"label": "Name", "description": "The name of the crew position.", "summaryview": "true"}'
-    },
-
-    description: {
-      type: DataTypes.STRING(60),
-      allowNul: true,
-      comment: '{"label": "Description", "description": "A Description of the role.", "summaryview": "true"}'
-    },
-
-    validfrom: {
-      type: DataTypes.DATE,
-      allowNul: true,
-      comment: '{"label": "Valid from date", "description": "Item valid from date.", "summaryview" : "false"}'
-    }, 
-
-    vlaidto: {
-      type: DataTypes.DATE,
-      allowNull: true,
-      comment: '{"label": "Valid to date", "description": "Item valid to date.", "summaryview" : "false"}'
+    {
+      sequelize, 
+      tableName: 'crewrole'
     }
-  },
-  {
-    sequilize,
-    TableName: 'crewrole',
-    indexes: [{ unique: true, fields: ['id']}]
+    );
   }
-);
+}
 
+const schemaComments = {
+  table: '{"label": "Crew role", "description": "Crew position and role description.", "schemalastupdated": "04/06/2020", "dataversion": 1}',
+  columns: {
+    id: '{"label": "Identifier", "description": "Unique identifying column.", "summaryview": "false"}',
+    name: '{"label": "Name", "description": "The name of the crew position.", "summaryview": "true"}', 
+    description: '{"label": "Description", "description": "A Description of the role.", "summaryview": "true"}',
+    validfrom: '{"label": "Valid from date", "description": "Item valid from date.", "summaryview" : "false"}',
+    validto: '{"label": "Valid to date", "description": "Item valid to date.", "summaryview" : "false"}'
+  }
+};
+
+module.exports = { CrewRole, schemaComments };
