@@ -16,7 +16,7 @@
     "max-len": 0,
     "operator-assignment": "off"
   },
-  "extends": "airbnb/base",
+  "extends": ["airbnb/base", "prettier"],
   "env": {
     "mocha": true
   }
