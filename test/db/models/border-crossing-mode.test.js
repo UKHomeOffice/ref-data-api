@@ -16,7 +16,7 @@ describe('Given the BorderCrossingMode model', () => {
     });
 
     beforeEach(() => {
-      this.borderCrossingMode = new BorderCrossingMode();
+      this.modelInstance = new BorderCrossingMode();
     });
 
     it('should have the correct table name', () => {
@@ -25,7 +25,7 @@ describe('Given the BorderCrossingMode model', () => {
 
     tableColumns.forEach((column) => {
       it(`should have a "${column}" column`, () => {
-        expect(this.borderCrossingMode).to.have.property(column);
+        expect(this.modelInstance).to.have.property(column);
       });
     });
   });
