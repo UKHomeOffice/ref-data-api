@@ -8,7 +8,8 @@
     "coverage": "nyc --reporter html --reporter text npm test",
     "start-dev": "nodemon app/server.js",
     "start": "node app/server.js",
-    "lint": "eslint -f table"
+    "lint": "eslint -f table",
+    "lint:fix": "npm run lint -- . --fix"
   },
   "repository": {
     "type": "git",
