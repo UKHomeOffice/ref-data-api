@@ -3,12 +3,7 @@ const sinon = require('sinon');
 
 // local imports
 const { readPool } = require('../../app/db/index');
-const {
-  getAllEntities,
-  getEntityDescription,
-  getEntitySchema,
-  getEntityData,
-} = require('../../app/db/entities');
+const { getAllEntities, getEntityDescription, getEntitySchema, getEntityData } = require('../../app/db/entities');
 
 describe('Test Entity Queries', () => {
   afterEach(() => {
@@ -17,31 +12,23 @@ describe('Test Entity Queries', () => {
 
   describe('getEntityDescription', () => {
     it('Should resolve table description', () => {
-      const obj = {
-        rows: [
-          { description: '{"description": "Countries", "schemalastupdated": "10/03/2019", "dataversion": 1}' },
-        ],
-      };
+      const obj = { rows: [{ description: '{"description": "Countries", "schemalastupdated": "10/03/2019", "dataversion": 1}' }] };
       sinon.stub(readPool, 'query').resolves(obj);
 
-      return getEntityDescription('country')
-        .then((result) => {
-          expect(result).to.be.an('object');
-          expect(result).to.be.an('object').to.include.all.keys('description');
-          expect(result.description).to.be.an('object').to.include.all.keys(
-            'description',
-            'schemalastupdated',
-            'dataversion',
-          );
-        });
+      return getEntityDescription('country').then((result) => {
+        expect(result).to.be.an('object');
+        expect(result).to.be.an('object').to.include.all.keys('description');
+        expect(result.description)
+          .to.be.an('object')
+          .to.include.all.keys('description', 'schemalastupdated', 'dataversion');
+      });
     });
 
     it('Should reject with an error if the table does not exist', () => {
       const expectedMsg = 'Unable to retrieve description from table country';
       sinon.stub(readPool, 'query').rejects();
 
-      return getEntityDescription('country')
-        .catch(error => expect(error.message).to.eql(expectedMsg));
+      return getEntityDescription('country').catch(error => expect(error.message).to.eql(expectedMsg));
     });
   });
 
@@ -54,7 +41,8 @@ describe('Test Entity Queries', () => {
             is_nullable: 'NO',
             data_type: 'integer',
             character_maximum_length: null,
-            description: '{"label": "Identifier", "description": "database unique identity record", "summaryview": "false"}',
+            description:
+              '{"label": "Identifier", "description": "database unique identity record", "summaryview": "false"}',
           },
           {
             column_name: 'nationality',
@@ -68,49 +56,56 @@ describe('Test Entity Queries', () => {
             is_nullable: 'YES',
             data_type: 'character varying',
             character_maximum_length: 3,
-            description: '{"label": "3 digit alpha code", "description": "Country 3 Character alpha code", "summaryview": "true"}',
+            description:
+              '{"label": "3 digit alpha code", "description": "Country 3 Character alpha code", "summaryview": "true"}',
           },
           {
             column_name: 'iso31661alpha2',
             is_nullable: 'YES',
             data_type: 'character varying',
             character_maximum_length: 2,
-            description: '{"label": "2 digit alpha code", "description": "Country 2 Character alpha code", "summaryview": "true"}',
+            description:
+              '{"label": "2 digit alpha code", "description": "Country 2 Character alpha code", "summaryview": "true"}',
           },
           {
             column_name: 'visarequired',
             is_nullable: 'NO',
             data_type: 'boolean',
             character_maximum_length: null,
-            description: '{"label": "Visa required", "description": "Is VISA required to visit UK", "summaryview": "false"}',
+            description:
+              '{"label": "Visa required", "description": "Is VISA required to visit UK", "summaryview": "false"}',
           },
           {
             column_name: 'evwoptional',
             is_nullable: 'NO',
             data_type: 'boolean',
             character_maximum_length: null,
-            description: '{"label": "Optional - EVW", "description": "Is Electronic Visa Waver optional to visit UK", "summaryview": "false"}',
+            description:
+              '{"label": "Optional - EVW", "description": "Is Electronic Visa Waver optional to visit UK", "summaryview": "false"}',
           },
           {
             column_name: 'diplomaticexception',
             is_nullable: 'NO',
             data_type: 'boolean',
             character_maximum_length: null,
-            description: '{"label": "Exception - Diplomatic", "description": "Are there diplomatic exceptions for visiting the UK", "summaryview": "false"}',
+            description:
+              '{"label": "Exception - Diplomatic", "description": "Are there diplomatic exceptions for visiting the UK", "summaryview": "false"}',
           },
           {
             column_name: 'specialexception',
             is_nullable: 'NO',
             data_type: 'boolean',
             character_maximum_length: null,
-            description: '{"label": "Exception - Special", "description": "Are there special exceptions for visiting the UK", "summaryview": "false"}',
+            description:
+              '{"label": "Exception - Special", "description": "Are there special exceptions for visiting the UK", "summaryview": "false"}',
           },
           {
             column_name: 'countryid',
             is_nullable: 'YES',
             data_type: 'integer',
             character_maximum_length: null,
-            description: '{"label": "Linked country id", "description": "Country link to Country dataset", "summaryview": "false"}',
+            description:
+              '{"label": "Linked country id", "description": "Country link to Country dataset", "summaryview": "false"}',
           },
           {
             column_name: 'validfrom',
@@ -129,14 +124,7 @@ describe('Test Entity Queries', () => {
         ],
       };
       const expectedData = {
-        required: [
-          'id',
-          'nationality',
-          'visarequired',
-          'evwoptional',
-          'diplomaticexception',
-          'specialexception',
-        ],
+        required: ['id', 'nationality', 'visarequired', 'evwoptional', 'diplomaticexception', 'specialexception'],
         properties: {
           id: {
             maxLength: null,
@@ -252,11 +240,12 @@ describe('Test Entity Queries', () => {
       };
       sinon.stub(readPool, 'query').resolves(obj);
 
-      return getEntitySchema('refreadonly', 'nationality')
-        .then((result) => {
-          expect(result).to.be.an('object');
-          expect(result).to.deep.equal(expectedData);
-          expect(result.properties).to.be.an('object').to.include.all.keys(
+      return getEntitySchema('refreadonly', 'nationality').then((result) => {
+        expect(result).to.be.an('object');
+        expect(result).to.deep.equal(expectedData);
+        expect(result.properties)
+          .to.be.an('object')
+          .to.include.all.keys(
             'id',
             'nationality',
             'iso31661alpha3',
@@ -269,48 +258,47 @@ describe('Test Entity Queries', () => {
             'validfrom',
             'validto',
           );
-        });
+      });
     });
 
     it('Should reject with an error if the table or the role do not exist', () => {
       const expectedMsg = 'Unable to retrieve schema from table nationality';
       sinon.stub(readPool, 'query').rejects();
 
-      return getEntitySchema('refreadonly', 'nationality')
-        .catch(error => expect(error.message).to.eql(expectedMsg));
+      return getEntitySchema('refreadonly', 'nationality').catch(error => expect(error.message).to.eql(expectedMsg));
     });
   });
 
   describe('getAllEntities', () => {
     it('Should resolve all database entities', () => {
       const obj = {
-        rows: [{
-          schemaname: 'reference',
-          tablename: 'currency',
-          tableowner: 'ownerreference',
-          tablespace: null,
-          hasindexes: true,
-          hasrules: false,
-          hastriggers: false,
-          rowsecurity: false,
-        }],
+        rows: [
+          {
+            schemaname: 'reference',
+            tablename: 'currency',
+            tableowner: 'ownerreference',
+            tablespace: null,
+            hasindexes: true,
+            hasrules: false,
+            hastriggers: false,
+            rowsecurity: false,
+          },
+        ],
       };
       sinon.stub(readPool, 'query').resolves(obj);
 
-      return getAllEntities()
-        .then((result) => {
-          expect(result).to.be.an('array');
-          expect(result).to.have.lengthOf(1);
-          expect(result).to.eql(['currency']);
-        });
+      return getAllEntities().then((result) => {
+        expect(result).to.be.an('array');
+        expect(result).to.have.lengthOf(1);
+        expect(result).to.eql(['currency']);
+      });
     });
 
     it('Should reject with an error if the schemaname does not exist', () => {
       const expectedMsg = 'Unable to retrieve tables from database';
       sinon.stub(readPool, 'query').rejects();
 
-      return getAllEntities()
-        .catch(error => expect(error.message).to.eql(expectedMsg));
+      return getAllEntities().catch(error => expect(error.message).to.eql(expectedMsg));
     });
   });
 
@@ -344,11 +332,12 @@ describe('Test Entity Queries', () => {
       };
       sinon.stub(readPool, 'query').resolves(obj);
 
-      return getEntityData('refreadonly', 'country', null)
-        .then((result) => {
-          expect(result).to.be.an('array');
-          expect(result).to.deep.equal(obj.rows);
-          expect(result[0]).to.be.an('object').to.include.all.keys(
+      return getEntityData('refreadonly', 'country', null).then((result) => {
+        expect(result).to.be.an('array');
+        expect(result).to.deep.equal(obj.rows);
+        expect(result[0])
+          .to.be.an('object')
+          .to.include.all.keys(
             'id',
             'iso31661alpha2',
             'iso31661alpha3',
@@ -359,15 +348,14 @@ describe('Test Entity Queries', () => {
             'validfrom',
             'validto',
           );
-        });
+      });
     });
 
     it('Should reject with an error if the table does not exist', () => {
       const expectedMsg = 'Unable to retrieve data from table addresss';
       sinon.stub(readPool, 'query').rejects();
 
-      return getEntityData('refreadonly', 'addresss', '')
-        .catch(error => expect(error.message).to.eql(expectedMsg));
+      return getEntityData('refreadonly', 'addresss', '').catch(error => expect(error.message).to.eql(expectedMsg));
     });
   });
 });

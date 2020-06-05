@@ -1,7 +1,7 @@
 const { expect } = require('chai');
 const { Sequelize, DataTypes } = require('sequelize');
 
-const { UNLOCODE } = require('../../../app/db/models/unlocode');
+const { UNLOCODE } = require('../../models/unlocode');
 
 const sequelize = new Sequelize('database', 'username', 'password', { dialect: 'postgres' });
 

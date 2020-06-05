@@ -1,26 +1,26 @@
 const { expect } = require('chai');
 const { Sequelize, DataTypes } = require('sequelize');
 
-const { Title } = require('../../../app/db/models/title');
+const { CrewRole } = require('../../models/crew-role');
 
 const sequelize = new Sequelize('database', 'username', 'password', { dialect: 'postgres' });
 
-describe('Given a Title model', () => {
+describe('Given a CrewRole model', () => {
   describe('when it is initialised', () => {
     before(() => {
-      Title.init(sequelize, DataTypes);
+      CrewRole.init(sequelize, DataTypes);
     });
 
     beforeEach(() => {
-      this.modelInstance = new Title();
+      this.crewRole = new CrewRole();
     });
     it('should have the correct tableName', () => {
-      expect(Title.getTableName()).to.eql('title');
+      expect(CrewRole.getTableName()).to.eql('crewrole');
     });
 
-    ['id', 'title', 'validfrom', 'validto'].forEach((column) => {
+    ['id', 'name', 'description', 'validfrom', 'validto'].forEach((column) => {
       it(`should have the column: ${column}`, () => {
-        expect(this.modelInstance).to.have.property(column);
+        expect(this.crewRole).to.have.property(column);
       });
     });
   });

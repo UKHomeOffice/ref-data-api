@@ -1,26 +1,26 @@
 const { expect } = require('chai');
 const { Sequelize, DataTypes } = require('sequelize');
 
-const { DogRole } = require('../../../app/db/models/dog-role');
+const { Title } = require('../../models/title');
 
 const sequelize = new Sequelize('database', 'username', 'password', { dialect: 'postgres' });
 
-describe('Given a DogRole model', () => {
+describe('Given a Title model', () => {
   describe('when it is initialised', () => {
     before(() => {
-      DogRole.init(sequelize, DataTypes);
+      Title.init(sequelize, DataTypes);
     });
 
     beforeEach(() => {
-      this.dogRole = new DogRole();
+      this.modelInstance = new Title();
     });
     it('should have the correct tableName', () => {
-      expect(DogRole.getTableName()).to.eql('dogrole');
+      expect(Title.getTableName()).to.eql('title');
     });
 
-    ['id', 'code', 'description', 'validfrom', 'validto'].forEach((column) => {
+    ['id', 'title', 'validfrom', 'validto'].forEach((column) => {
       it(`should have the column: ${column}`, () => {
-        expect(this.dogRole).to.have.property(column);
+        expect(this.modelInstance).to.have.property(column);
       });
     });
   });

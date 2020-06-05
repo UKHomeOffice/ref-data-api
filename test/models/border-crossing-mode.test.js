@@ -1,7 +1,7 @@
 const { expect } = require('chai');
 const { Sequelize, DataTypes } = require('sequelize');
 
-const { BorderCrossingMode } = require('../../../app/db/models/border-crossing-mode');
+const { BorderCrossingMode } = require('../../models/border-crossing-mode');
 
 describe('Given the BorderCrossingMode model', () => {
   const tableColumns = ['id', 'border', 'type', 'personorfreight', 'validfrom', 'validto'];

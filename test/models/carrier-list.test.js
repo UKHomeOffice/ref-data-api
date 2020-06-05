@@ -1,7 +1,7 @@
 const { expect } = require('chai');
 const { Sequelize, DataTypes } = require('sequelize');
 
-const { CarrierList } = require('../../../app/db/models/carrier-list');
+const { CarrierList } = require('../../models/carrier-list');
 
 const sequelize = new Sequelize('database', 'username', 'password', { dialect: 'postgres' });
 
@@ -18,8 +18,20 @@ describe('Given a CarrierList model', () => {
       expect(CarrierList.getTableName()).to.eql('carrierlist');
     });
 
-    ['id', 'name', 'twolettercode', 'threelettercode', 'designator', 'alliance',
-      'aviation', 'sea', 'land', 'rail', 'validfrom', 'validto'].forEach((column) => {
+    [
+      'id',
+      'name',
+      'twolettercode',
+      'threelettercode',
+      'designator',
+      'alliance',
+      'aviation',
+      'sea',
+      'land',
+      'rail',
+      'validfrom',
+      'validto',
+    ].forEach((column) => {
       it(`should have the column: ${column}`, () => {
         expect(this.carrierList).to.have.property(column);
       });
