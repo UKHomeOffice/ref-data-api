@@ -17,30 +17,31 @@ describe('Given a UNLOCODE model', () => {
     it('should have the correct tableName', () => {
       expect(UNLOCODE.getTableName()).to.eql('unlocode');
     });
-    it('should have the correct columns', () => {
-      [
-        'id',
-        'iso31661alpha2',
-        'geolong',
-        'geolat',
-        'name',
-        'namewodiacritics',
-        'iata',
-        'locode',
-        'seaport',
-        'railterminal',
-        'airport',
-        'postexchange',
-        'multimodal',
-        'fixedtransport',
-        'bordercrossing',
-        'subdivision',
-        'roadterminal',
-        'countryid',
-        'validfrom',
-        'validto',
-      ].forEach((prop) => {
-        expect(this.unlocode).to.have.property(prop);
+
+    [
+      'id',
+      'iso31661alpha2',
+      'geolong',
+      'geolat',
+      'name',
+      'namewodiacritics',
+      'iata',
+      'locode',
+      'seaport',
+      'railterminal',
+      'airport',
+      'postexchange',
+      'multimodal',
+      'fixedtransport',
+      'bordercrossing',
+      'subdivision',
+      'roadterminal',
+      'countryid',
+      'validfrom',
+      'validto',
+    ].forEach((column) => {
+      it(`should have the ${column} column`, () => {
+        expect(this.unlocode).to.have.property(column);
       });
     });
   });

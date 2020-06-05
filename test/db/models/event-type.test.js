@@ -18,9 +18,9 @@ describe('Given an EventType model', () => {
       expect(EventType.getTableName()).to.eql('eventtype');
     });
 
-    it('should have the correct columns', () => {
-      ['id', 'type', 'useofforce', 'validfrom', 'validto'].forEach((prop) => {
-        expect(this.eventType).to.have.property(prop);
+    ['id', 'type', 'useofforce', 'validfrom', 'validto'].forEach((column) => {
+      it(`should have the ${column} column`, () => {
+        expect(this.eventType).to.have.property(column);
       });
     });
   });
