@@ -1,34 +1,25 @@
 const { Model } = require('sequelize');
 
 class DogRole extends Model {
-  static init(sequelize, DataTypes){
+  static init(sequelize, DataTypes) {
     return Model.init({
       id: {
         type: DataTypes.INTEGER,
-        allowNull: false
+        primaryKey: true,
+        allowNull: false,
       },
       code: {
         type: DataTypes.STRING(2),
-        allowNull: false
+        allowNull: false,
       },
-      description: {
-        type: DataTypes.STRING(60),
-        allowNull: true
-      },
-      validfrom: {
-        type: DataTypes.BOOLEAN,
-        allowNull: true
-      },
-      validto: {
-        type: DataTypes.BOOLEAN,
-        allowNull: true
-      }
+      description: { type: DataTypes.STRING(60) },
+      validfrom: { type: DataTypes.BOOLEAN },
+      validto: { type: DataTypes.BOOLEAN },
     },
     {
       sequelize,
-      tableName: 'dogrole'
-    }
-    );
+      tableName: 'dogrole',
+    });
   }
 }
 
@@ -39,8 +30,8 @@ const schemaComments = {
     code: '{"label": "Code", "description": "A list of codes associated with the dog role.", "summaryview": "true"}',
     description: '{"label": "Short description", "description": "A description of the dog role.", "summaryview": "true"}',
     validfrom: '{"label": "Valid from date", "description": "Item valid from date.", "summaryview" : "false"}',
-    validto: '{"label": "Valid to date", "description": "Item valid to date.", "summaryview" : "false"}'
-  }
+    validto: '{"label": "Valid to date", "description": "Item valid to date.", "summaryview" : "false"}',
+  },
 };
 
-module.exports = { DogRole, schemaComments }
+module.exports = { DogRole, schemaComments };

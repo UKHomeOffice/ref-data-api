@@ -1,62 +1,44 @@
 const { Model } = require('sequelize');
 
 class CarrierList extends Model {
-  static init(squelize, DataTypes){
+  static init(sequelize, DataTypes) {
     return Model.init({
       id: {
         type: DataTypes.INTEGER,
-        allowNull: false
+        primaryKey: true,
+        allowNull: false,
       },
       name: {
         type: DataTypes.STRING(40),
-        allowNull: false
+        allowNull: false,
       },
-      twolettercode: {
-        type: DataTypes.STRING(2),
-        allowNull: true
-      },
-      threelettercode: {
-        type: DataTypes.STRING(3),
-        allowNull: true
-      },
-      designator: {
-        type: DataTypes.INT(4),
-        allowNull: true
-      },
-      alliance: {
-        type: DataTypes.STRING(60),
-        allowNull: true
-      },
+      twolettercode: { type: DataTypes.STRING(2) },
+      threelettercode: { type: DataTypes.STRING(3) },
+      designator: { type: DataTypes.INTEGER(4) },
+      alliance: { type: DataTypes.STRING(60) },
       aviation: {
         type: DataTypes.BOOLEAN,
-        allowNull: false
+        allowNull: false,
       },
       sea: {
         type: DataTypes.BOOLEAN,
-        allowNull: false
+        allowNull: false,
       },
       land: {
-        types: DataTypes.BOOLEAN,
-        allowNull: false
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
       },
       rail: {
         type: DataTypes.BOOLEAN,
-        allowNull: false
+        allowNull: false,
       },
-      validfrom: {
-        type: DataTypes.BOOLEAN,
-        allowNull: true
-      },
-      validto: {
-        type: DataTypes.BOOLEAN,
-        allowNull: true
-      }
-    }, 
+      validfrom: { type: DataTypes.BOOLEAN },
+      validto: { type: DataTypes.BOOLEAN },
+    },
     {
-      sequelize, 
-      tableName: 'carrierlist'
-    }
-    );
+      sequelize,
+      tableName: 'carrierlist',
+    });
   }
 }
 
@@ -75,7 +57,7 @@ const schemaComments = {
     rail: '{"label": "Rail", "description": "Rail carrier?", "summaryview": "true"}',
     validfrom: '{"label": "Valid from date", "description": "Item valid from date.", "summaryview" : "false"}',
     validto: '{"label": "Valid to date", "description": "Item valid to date.", "summaryview" : "false"}',
-  }
+  },
 };
 
 module.exports = { CarrierList, schemaComments };
