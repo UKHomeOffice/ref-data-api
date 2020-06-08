@@ -13,8 +13,8 @@ class DogRole extends Model {
         allowNull: false,
       },
       description: { type: DataTypes.STRING(60) },
-      validfrom: { type: DataTypes.BOOLEAN },
-      validto: { type: DataTypes.BOOLEAN },
+      validfrom: { type: DataTypes.DATE },
+      validto: { type: DataTypes.DATE },
     },
     {
       sequelize,

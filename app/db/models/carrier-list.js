@@ -9,12 +9,12 @@ class CarrierList extends Model {
         allowNull: false,
       },
       name: {
-        type: DataTypes.STRING(40),
+        type: DataTypes.STRING(60),
         allowNull: false,
       },
       twolettercode: { type: DataTypes.STRING(2) },
       threelettercode: { type: DataTypes.STRING(3) },
-      designator: { type: DataTypes.INTEGER(4) },
+      designator: { type: DataTypes.INTEGER },
       alliance: { type: DataTypes.STRING(60) },
       aviation: {
         type: DataTypes.BOOLEAN,
@@ -32,8 +32,8 @@ class CarrierList extends Model {
         type: DataTypes.BOOLEAN,
         allowNull: false,
       },
-      validfrom: { type: DataTypes.BOOLEAN },
-      validto: { type: DataTypes.BOOLEAN },
+      validfrom: { type: DataTypes.DATE },
+      validto: { type: DataTypes.DATE },
     },
     {
       sequelize,

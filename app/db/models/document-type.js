@@ -13,12 +13,12 @@ class DocumentType extends Model {
         allowNull: false,
       },
       shortdescription: {
-        type: DataTypes.STRING(50),
+        type: DataTypes.STRING(40),
         allowNull: false,
       },
       longdescription: { type: DataTypes.STRING(100) },
-      validfrom: { type: DataTypes.BOOLEAN },
-      validto: { type: DataTypes.BOOLEAN },
+      validfrom: { type: DataTypes.DATE },
+      validto: { type: DataTypes.DATE },
     },
     {
       sequelize,
