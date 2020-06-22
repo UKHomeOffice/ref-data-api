@@ -10,6 +10,11 @@ WORKDIR /src
 
 COPY app /src/app
 COPY test /src/test
+COPY models /src/models
+COPY migrations /src/migrations
+COPY seeders /src/seeders
+COPY config /src/config
+COPY .sequelizerc /src/
 COPY package* /src/
 COPY .eslint* /src/
 

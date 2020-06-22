@@ -1,32 +1,20 @@
 const { expect } = require('chai');
 const { Sequelize, DataTypes } = require('sequelize');
 
-const { Country } = require('../../../app/db/models/country');
+const { Nationality } = require('../../models/nationality');
 
-describe('Given the Country model', () => {
+describe('Given the Nationality model', () => {
   const tableColumns = [
     'id',
+    'nationality',
+    'description',
     'iso31661alpha3',
     'iso31661alpha2',
-    'name',
-    'continent',
-    'dial',
-    'iso31661numeric',
-    'wicucode',
-    'unm49code',
-    'sovereignfcorecognisedstate',
-    'linkedcountryiso3code',
-    'relationshipwithlinkedcountry',
-    'fullname',
-    'un',
-    'nato',
-    'interpolcode',
-    'visaregime',
-    'commonwealth',
-    'eu',
-    'eea',
-    'euoutermost',
-    'euoverseasassociation',
+    'visarequired',
+    'evwoptional',
+    'diplomaticexception',
+    'specialexception',
+    'countryid',
     'validfrom',
     'validto',
   ];
@@ -37,15 +25,15 @@ describe('Given the Country model', () => {
 
   describe('when initialized', () => {
     before(() => {
-      Country.init(this.sequelize, DataTypes);
+      Nationality.init(this.sequelize, DataTypes);
     });
 
     beforeEach(() => {
-      this.modelInstance = new Country();
+      this.modelInstance = new Nationality();
     });
 
     it('should have the correct table name', () => {
-      expect(Country.getTableName()).to.eql('country');
+      expect(Nationality.getTableName()).to.eql('nationality');
     });
 
     tableColumns.forEach((column) => {
