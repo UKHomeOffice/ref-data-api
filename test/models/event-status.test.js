@@ -1,7 +1,7 @@
 const { expect } = require('chai');
 const { Sequelize, DataTypes } = require('sequelize');
 
-const { EventStatus } = require('../../../app/db/models/event-status');
+const { EventStatus } = require('../../models/event-status');
 
 const sequelize = new Sequelize('database', 'username', 'password', { dialect: 'postgres' });
 
