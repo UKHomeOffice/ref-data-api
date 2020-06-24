@@ -23,5 +23,13 @@ describe('Given a Command model', () => {
         expect(this.modelInstance).to.have.property(column);
       });
     });
+
+    context('associations', () => {
+      const Division = {};
+
+      it('should define a `belongsTo` association with Division', () => {
+        expect(Command.belongsTo).to.have.been.calledWith(Division, { foreignKey: 'divisionid' });
+      });
+    });
   });
 });
