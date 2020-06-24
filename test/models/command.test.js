@@ -1,4 +1,5 @@
 const { expect } = require('chai');
+const sinon = require('sinon');
 const { Sequelize, DataTypes } = require('sequelize');
 
 const { Command } = require('../../models/command');
@@ -24,11 +25,17 @@ describe('Given a Command model', () => {
       });
     });
 
-    context('associations', () => {
-      const Division = {};
+    describe('associations', () => {
+      class Division extends Sequelize.Model {}
+
+      before(() => {
+        sinon.spy(Command, 'belongsTo');
+
+        Command.associate({ Division });
+      });
 
       it('should define a `belongsTo` association with Division', () => {
-        expect(Command.belongsTo).to.have.been.calledWith(Division, { foreignKey: 'divisionid' });
+        expect(Command.belongsTo.calledWith(Division)).to.be.ok;
       });
     });
   });
