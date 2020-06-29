@@ -54,7 +54,7 @@ Export the variables
 
 ```
 export API_REF_KEYCLOAK_CLIENT_PUBLIC_KEY='a base64 encoded string of the keycloak realm public key'
-export KEYCLOAK_URL='xxx.xxx.homeoffice.gov.uk/auth
+export KEYCLOAK_URL='xxx.xxx.homeoffice.gov.uk/auth'
 ```
 
 ### Schemas
