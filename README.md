@@ -40,7 +40,7 @@ git@github.com:UKHomeOffice/ref-data-api.git
 
 The API interface uses OpenAPI 3.0 and is documented in [Swagger](https://api-spec.dev.refdata.homeoffice.gov.uk) and [on GitHub](https://github.com/UKHomeOffice/reference-data-governance-api-spec)
 
-## Modelling the schema
+## Making Models and Migrations
 
 ### Setup
 
@@ -49,6 +49,7 @@ Install all the required packages
 ```
 npm install
 ```
+**NB**: Make sure you are using Node version v.13.7.0 to avoid issues with connecting to the database docker container. 
 
 Export the variables
 
@@ -57,13 +58,12 @@ export API_REF_KEYCLOAK_CLIENT_PUBLIC_KEY='a base64 encoded string of the keyclo
 export KEYCLOAK_URL='xxx.xxx.homeoffice.gov.uk/auth'
 ```
 
+Run the database with Docker
+
+```
+docker-compose up db_ref
+```
+
 ### Schemas
 
 Schemas can be found at https://github.com/UKHomeOffice/RefData/tree/master/schemas/reference
-You need to write a js class in `models` and a unit test in `test/models`
-
-### Running the unit test
-
-```
-npm run test
-```
