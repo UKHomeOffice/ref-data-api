@@ -6,6 +6,7 @@ This API forms part of a Reference Data Service that is being developed by the U
 
 - npm 6.9.0 (minimum working version)
 - node v8.10.0 (minimum working version)
+- pg v.8.2.0 (minimum working version)
 
 ## Setup
 
@@ -40,30 +41,3 @@ git@github.com:UKHomeOffice/ref-data-api.git
 
 The API interface uses OpenAPI 3.0 and is documented in [Swagger](https://api-spec.dev.refdata.homeoffice.gov.uk) and [on GitHub](https://github.com/UKHomeOffice/reference-data-governance-api-spec)
 
-## Modelling the schema
-
-### Setup
-
-Install all the required packages
-
-```
-npm install
-```
-
-Export the variables
-
-```
-export API_REF_KEYCLOAK_CLIENT_PUBLIC_KEY='a base64 encoded string of the keycloak realm public key'
-export KEYCLOAK_URL='xxx.xxx.homeoffice.gov.uk/auth'
-```
-
-### Schemas
-
-Schemas can be found at https://github.com/UKHomeOffice/RefData/tree/master/schemas/reference
-You need to write a js class in `models` and a unit test in `test/models`
-
-### Running the unit test
-
-```
-npm run test
-```
