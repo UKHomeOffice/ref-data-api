@@ -6,7 +6,6 @@ This API forms part of a Reference Data Service that is being developed by the U
 
 - npm 6.9.0 (minimum working version)
 - node v8.10.0 (minimum working version)
-- pg v.8.2.0 (minimum working version)
 
 ## Setup
 
