@@ -30,7 +30,8 @@ const db = {
 };
 
 const dbConnectionString = `${db.protocol}${db.username}:${db.password}@${db.hostname}:${db.port}/${db.dbname}${db.options}`;
-const decodedKey = Buffer.from(process.env.API_REF_KEYCLOAK_CLIENT_PUBLIC_KEY, 'base64').toString();
+const keycloakClientPublicKey = process.env.API_REF_KEYCLOAK_CLIENT_PUBLIC_KEY || 'dummykey';
+const decodedKey = Buffer.from(keycloakClientPublicKey, 'base64').toString();
 
 
 const config = {
