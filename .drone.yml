@@ -350,7 +350,7 @@ pipeline:
       status: [ success, failure ]
 
   matrix:                 # setup some common env vars
-  SNOW_DESC_FILE:
-    - /mnt/change-desc.txt
-  SNOW_INT_ID_FILE:
-    - /mnt/internal-id
+    SNOW_DESC_FILE:
+      - /mnt/change-desc.txt
+    SNOW_INT_ID_FILE:
+      - /mnt/internal-id
