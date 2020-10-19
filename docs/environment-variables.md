@@ -10,6 +10,8 @@ Once you've cloned the project, set the following environment variables
 
 For using local data you may wish to change the database used, you can do this by changing the `DB_REF_HOSTNAME` - If you are using a local instance, you may want to use the docker container IP specifically, or `localhost` or `0.0.0.0` depending on your configuration.
 
+If your ref data repos are in a different directory than `../flyway_ref_public` and `../flyway_ref_private` then you might consider overriding them with `PUBLIC_REFDATA_FLYWAY` and `PRIVATE_REFDATA_FLYWAY` variables. 
+
 ## Full list of environment variables
 
 ```sh
@@ -34,5 +36,7 @@ LIMIT_ROWS
 API_REF_LOG_LEVEL
 API_REF_PORT
 API_REF_KEYCLOAK_CLIENT_PUBLIC_KEY
+PUBLIC_REFDATA_FLYWAY
+PRIVATE_REFDATA_FLYWAY
 ```
 

@@ -26,7 +26,7 @@ const db = {
   dbname: process.env.DB_REF_REFERENCE_DBNAME || 'reference',
   schema: process.env.DB_REF_REFERENCE_SCHEMA || 'reference',
   username: process.env.DB_REF_REFERENCE_AUTHENTICATOR_USERNAME || 'authenticatorreference',
-  password: process.env.DB_REF_REFERENCE_AUTHENTICATOR_PASSWORD || 'auth1234',
+  password: process.env.DB_REF_REFERENCE_AUTHENTICATOR_PASSWORD || 'mysecretpassword',
 };
 
 const dbConnectionString = `${db.protocol}${db.username}:${db.password}@${db.hostname}:${db.port}/${db.dbname}${db.options}`;
