@@ -110,8 +110,6 @@ steps:
     LOCAL_IMAGE: true
     SERVICE_URL: http://anchore-submission-server:10080
     TOLERATE: low
-    dockerfile: Dockerfile
-    local_image: true
   when:
     branch:
     - master
