@@ -117,8 +117,7 @@ steps:
     - push
 
 - name: image_to_quay
-  pull: if-not-exists
-  image: quay.io/ukhomeofficedigital/drone-docker
+  image: plugins/docker
   settings:
     registry: quay.io
     repo: quay.io/ukhomeofficedigital/ref-data-api
