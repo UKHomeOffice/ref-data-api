@@ -110,7 +110,7 @@ steps:
     LOCAL_IMAGE: true
     SERVICE_URL: http://anchore-submission-server:10080
     TOLERATE: low
-    WHITELIST_FILE: whitelist.csv
+    WHITELIST_FILE: whitelist
   when:
     branch:
     - master
