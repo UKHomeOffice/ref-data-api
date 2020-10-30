@@ -1,4 +1,4 @@
-FROM node:10-alpine
+FROM node:12-alpine
 
 ENV USERMAP_UID 1000
 ENV PORT 5001

@@ -12,13 +12,11 @@ To have a local copy of the reference data you can run the following which will 
 - Run the command to start docker
 
 ```bash
-docker network create db
-docker network create web
 PUBLIC_REFDATA_FLYWAY=/path/to/RefData PRIVATE_REFDATA_FLYWAY=/path/to/private-refdata docker-compose up
 docker logs public_refdata_flyway -f
 ```
 
-Upon completion the database will be up and accessible via port tcp/5433. The docker compose file contains the different users and secrets which allow connecting to the different roles. An example to connect as the main root owner (not advised for service accounts which should use the authenticator user and switch role):
+Upon completion the database will be up and accessible via port tcp/5433 and the API on port tcp/5001. The docker compose file contains the different users and secrets which allow connecting to the different roles. An example to connect as the main root owner (not advised for service accounts which should use the authenticator user and switch role):
 
 ## Note
 
