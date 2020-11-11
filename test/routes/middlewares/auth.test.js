@@ -1,5 +1,7 @@
 const sinon = require('sinon');
+const { expect } = require('chai');
 const jwtSimple = require('jwt-simple');
+const Hawk = require('@hapi/hawk');
 
 const config = require('../../../app/config/core');
 const authMiddleware = require('../../../app/routes/middlewares/auth');
@@ -12,6 +14,16 @@ expiryTime = Math.round(expiryTime / 1000);
 config.keycloakClientPublicKey = 'keycloakClientPublicKey';
 config.iss = 'iss';
 config.keycloakClientId = 'keycloakClientId';
+
+config.hawkCredentials = [
+  {
+    user: 'Test Service',
+    id: 'some id',
+    key: 'some key',
+    algorithm: 'sha256',
+    role: 'some role',
+  },
+];
 
 const payload = {
   name: 'John',
@@ -89,6 +101,53 @@ describe('authMiddleware', () => {
         sinon.assert.calledWith(response.status, 401);
         sinon.assert.calledWith(json, { error: 'Unauthorized' });
       });
+    });
+  });
+
+  describe("when it's called with Hawk credentials", () => {
+    it('should call next and store the user when the credentials are valid', async () => {
+      const json = sinon.spy();
+      const hawkHeader = Hawk.client.header(
+        'http://localhost:5001',
+        'GET',
+        { credentials: config.hawkCredentials[0] },
+      );
+      const requestObject = {
+        headers: { authorization: hawkHeader.header, host: 'localhost:5001' },
+        method: 'GET',
+        url: '/',
+      };
+      const status = sinon.stub().returns({ json });
+      const response = { status, locals: { user: null } };
+      const next = sinon.spy();
+
+      await authMiddleware(requestObject, response, next);
+
+      sinon.assert.notCalled(status);
+      sinon.assert.notCalled(json);
+      sinon.assert.calledWith(next);
+      expect(response.locals.user).to.deep.equal({
+        name: 'Test Service',
+        refdbrole: 'some role',
+      });
+    });
+
+    it('should send 401 when the credentials are invalid', async () => {
+      const json = sinon.spy();
+      const requestObject = {
+        headers: { authorization: 'Hawk some-incorrect-mac', host: 'localhost:5001' },
+        method: 'GET',
+        url: '/',
+      };
+      const status = sinon.stub().returns({ json });
+      const response = { status, locals: { user: null } };
+      const next = sinon.spy();
+
+      await authMiddleware(requestObject, response, next);
+
+      sinon.assert.notCalled(next);
+      sinon.assert.calledWith(response.status, 401);
+      sinon.assert.calledWith(json, { error: 'Unauthorized' });
     });
   });
 });

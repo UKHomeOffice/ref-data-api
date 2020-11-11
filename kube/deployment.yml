@@ -68,6 +68,10 @@ spec:
           value: "{{.DB_REF_REFERENCE_AUTHENTICATOR_USERNAME}}"
         - name: DB_REF_REFERENCE_AUTHENTICATOR_PASSWORD
           value: "{{.DB_REF_REFERENCE_AUTHENTICATOR_PASSWORD}}"
+        - name: HAWK_SGMR_ACCESS_KEY_ID
+          value: "{{.HAWK_SGMR_ACCESS_KEY_ID}}"
+        - name: HAWK_SGMR_SECRET_ACCESS_KEY
+          value: "{{.HAWK_SGMR_SECRET_ACCESS_KEY}}"
         - name: KEYCLOAK_URL
           value: "{{.KEYCLOAK_URL}}"
         - name: KEYCLOAK_PROTOCOL
