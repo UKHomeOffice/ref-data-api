@@ -501,5 +501,19 @@ describe('Test Database Utils', () => {
       expect(queryFilter).to.be.an('object');
       expect(queryFilter).to.deep.equal(expectedQueryObject);
     });
+
+    it('Should resolve single "contains" filtering using string value', () => {
+      const name = 'country';
+      const queryParams = { filter: ['country=contains.pol'] };
+      const expectedQueryObject = {
+        queryString: 'SELECT * FROM country WHERE country ILIKE $1',
+        values: ['%pol%'],
+      };
+
+      const queryFilter = queryFilterDecodeV2({ name, queryParams });
+
+      expect(queryFilter).to.be.an('object');
+      expect(queryFilter).to.deep.equal(expectedQueryObject);
+    });
   });
 });
