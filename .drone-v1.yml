@@ -39,8 +39,9 @@ steps:
 
 - name: lint_checks
   pull: if-not-exists
-  image: quay.io/ukhomeofficedigital/drone-docker
+  image: docker:19.03.12-dind
   commands:
+  - n=0; while [ "$n" -lt 60 ] && [ ! -e /var/run/docker.sock ]; do n=$(( n + 1 )); sleep 1; done
   - docker run -t ref-data-api:$${DRONE_COMMIT_SHA} sh -c "npm run lint -- app/"
   volumes:
   - name: dockersock
