@@ -19,6 +19,8 @@
 | env_api_ref_limit_rows                      | false                                                                                                                                                              |
 | env_api_ref_url                             | api.dev.refdata.homeoffice.gov.uk, api.staging.refdata.homeoffice.gov.uk, api.refdata.homeoffice.gov.uk                                                            |
 | env_db_ref_hostname                         | copreferencedev.notprod.acp.homeoffice.gov.uk, coprefdatastaging.crckizhiyjmt.eu-west-2.rds.amazonaws.com, coprefdataprod.crckizhiyjmt.eu-west-2.rds.amazonaws.com |
+| env_hawk_sgmr_access_key_id                 | 5f9e24b4-904c-4f89-9e4b-8dc134f7bbba                                                                                                                               |
+| env_hawk_sgmr_secret_access_key             | fcabc957-810c-4184-bb12-3d228540f82e                                                                                                                               |
 | env_db_ref_reference_authenticator_password | xxx                                                                                                                                                                |
 | env_keycloak_realm                          | cop-dev, cop-staging, cop-prod                                                                                                                                     |
 | env_keycloak_url                            | sso-dev.notprod.homeoffice.gov.uk/auth, sso.digital.homeoffice.gov.uk/auth                                                                                         |

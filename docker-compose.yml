@@ -69,6 +69,8 @@ services:
       KEYCLOAK_URL: ${KEYCLOAK_URL}
       DB_REF_HOSTNAME: db_ref
       DB_REF_PORT: 5432
+      HAWK_SGMR_ACCESS_KEY_ID: sgmr_key_id
+      HAWK_SGMR_SECRET_ACCESS_KEY: sgmr_secret_access_key
     depends_on:
       - db_ref
       - refdata_flyway

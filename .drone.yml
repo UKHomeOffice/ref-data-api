@@ -148,6 +148,10 @@ pipeline:
         target: NGINX_IMAGE
       - source: NGINX_TAG
         target: NGINX_TAG
+      - source: DEV_HAWK_SGMR_ACCESS_KEY_ID
+        target: HAWK_SGMR_ACCESS_KEY_ID
+      - source: DEV_HAWK_SGMR_ACCESS_KEY_ID
+        target: HAWK_SGMR_SECRET_ACCESS_KEY
     commands:
       - export API_REF_TAG=$${DRONE_COMMIT_SHA}
       - export DB_REF_READ_ROLE="refreadonly"
@@ -208,6 +212,10 @@ pipeline:
         target: NGINX_IMAGE
       - source: NGINX_TAG
         target: NGINX_TAG
+      - source: STAGING_HAWK_SGMR_ACCESS_KEY_ID
+        target: HAWK_SGMR_ACCESS_KEY_ID
+      - source: STAGING_HAWK_SGMR_ACCESS_KEY_ID
+        target: HAWK_SGMR_SECRET_ACCESS_KEY
     commands:
       - export API_REF_TAG=$${DRONE_COMMIT_SHA}
       - export DB_REF_READ_ROLE="refreadonly"
@@ -268,6 +276,10 @@ pipeline:
         target: NGINX_IMAGE
       - source: NGINX_TAG
         target: NGINX_TAG
+      - source: PRODUCTION_HAWK_SGMR_ACCESS_KEY_ID
+        target: HAWK_SGMR_ACCESS_KEY_ID
+      - source: PRODUCTION_HAWK_SGMR_ACCESS_KEY_ID
+        target: HAWK_SGMR_SECRET_ACCESS_KEY
     commands:
       - export API_REF_TAG=$${DRONE_COMMIT_SHA}
       - export DB_REF_READ_ROLE="refreadonly"

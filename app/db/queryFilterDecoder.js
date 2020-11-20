@@ -245,6 +245,13 @@ function queryFilterDecodeV2({ name, queryParams }) {
         // therefore prepared statements are not allowed
         // hence adding the value in place of the index.
         placeholders = value;
+      } else if (filter === 'contains' && !isNull) {
+        // country ILIKE '%pol%'
+        filter = 'ILIKE';
+        value = `%${value}%`;
+        values.push(value);
+        placeholders = `$${index}`;
+        index += 1;
       } else {
         filter = 'IN';
         value = value.replace('(', '');
