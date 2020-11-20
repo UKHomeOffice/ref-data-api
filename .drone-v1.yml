@@ -330,7 +330,14 @@ steps:
   pull: if-not-exists
   image: docker:git
   commands:
+  - n=0; while [ "$n" -lt 60 ] && [ ! -e /var/run/docker.sock ]; do n=$(( n + 1 )); sleep 1; done
   - git show --name-only >> $SNOW_DESC_FILE
+  volumes:
+  - name: dockersock
+    path: /var/run
+  environment:
+    SNOW_DESC_FILE: /drone/src/change-desc.txt
+    SNOW_INT_ID_FILE: /drone/src/internal-id
   when:
     event:
     - promote
@@ -341,6 +348,8 @@ steps:
   pull: if-not-exists
   image: quay.io/ukhomeofficedigital/snowtify:latest
   environment:
+    SNOW_DESC_FILE: /drone/src/change-desc.txt
+    SNOW_INT_ID_FILE: /drone/src/internal-id
     SNOW_ENDPOINT:
       from_secret: PRODUCTION_SERVICE_NOW_URL
     SNOW_EXTERNAL_ID: ${DRONE_REPO}:${DRONE_COMMIT_SHA}
@@ -361,6 +370,8 @@ steps:
     comments: Successful deployment of ${DRONE_REPO}:${DRONE_COMMIT_SHA}
     deployment_outcome: success
   environment:
+    SNOW_DESC_FILE: /drone/src/change-desc.txt
+    SNOW_INT_ID_FILE: /drone/src/internal-id
     SNOW_ENDPOINT:
       from_secret: PRODUCTION_SERVICE_NOW_URL
     SNOW_PROD_PASS:
@@ -382,6 +393,8 @@ steps:
     comments: Failed deployment of ${DRONE_REPO}:${DRONE_COMMIT_SHA}
     deployment_outcome: fail
   environment:
+    SNOW_DESC_FILE: /drone/src/change-desc.txt
+    SNOW_INT_ID_FILE: /drone/src/internal-id
     SNOW_ENDPOINT:
       from_secret: PRODUCTION_SERVICE_NOW_URL
     SNOW_PROD_PASS:
