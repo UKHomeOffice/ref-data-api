@@ -1,7 +1,7 @@
 const sinon = require('sinon');
 const { expect } = require('chai');
 const jwtSimple = require('jwt-simple');
-const Hawk = require('@hapi/hawk');
+const Hawk = require('hawk');
 
 const config = require('../../../app/config/core');
 const authMiddleware = require('../../../app/routes/middlewares/auth');
