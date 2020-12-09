@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const moment = require('moment');
-const Hawk = require('@hapi/hawk');
+const Hawk = require('hawk');
 
 const config = require('../../config/core');
 const logger = require('../../config/logger')(__filename);
