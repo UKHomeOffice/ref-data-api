@@ -32,7 +32,7 @@ describe('Test Index Router', () => {
       .then((response) => {
         expect(response.status).to.equal(401);
         expect(response.body).to.be.an('object');
-        expect(response.body).to.deep.equal({ error: 'Unauthorized' });
+        expect(response.body).to.deep.equal({ error: 'Unauthorized: Incorrect JWT token' });
       }));
 
     it('Should return an unauthorized request error when no token is passed in request headers', () => request(app)
@@ -40,7 +40,7 @@ describe('Test Index Router', () => {
       .then((response) => {
         expect(response.status).to.equal(401);
         expect(response.body).to.be.an('object');
-        expect(response.body).to.deep.equal({ error: 'Unauthorized' });
+        expect(response.body).to.deep.equal({ error: 'Unauthorized: No auth method specified' });
       }));
   });
 });

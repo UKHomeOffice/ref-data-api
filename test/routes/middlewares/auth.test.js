@@ -67,7 +67,7 @@ describe('authMiddleware', () => {
           authMiddleware(requestObject, response, next);
 
           sinon.assert.calledWith(response.status, 401);
-          sinon.assert.calledWith(json, { error: 'Unauthorized' });
+          sinon.assert.calledWith(json, { error: 'Unauthorized: Incorrect JWT token' });
         });
       });
     });
@@ -99,7 +99,7 @@ describe('authMiddleware', () => {
 
         sinon.assert.notCalled(next);
         sinon.assert.calledWith(response.status, 401);
-        sinon.assert.calledWith(json, { error: 'Unauthorized' });
+        sinon.assert.calledWith(json, { error: 'Unauthorized: No auth method specified' });
       });
     });
   });
@@ -147,7 +147,7 @@ describe('authMiddleware', () => {
 
       sinon.assert.notCalled(next);
       sinon.assert.calledWith(response.status, 401);
-      sinon.assert.calledWith(json, { error: 'Unauthorized' });
+      sinon.assert.calledWith(json, { error: 'Unauthorized: Incorrect HAWK credentials' });
     });
   });
 });
