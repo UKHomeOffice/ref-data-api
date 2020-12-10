@@ -86,6 +86,8 @@ spec:
           value: "{{.API_REF_LOG_LEVEL}}"
         - name: API_REF_PORT
           value: "{{.API_REF_PORT}}"
+        - name: API_REF_URL
+          value: "{{.API_REF_URL}}"
         ports:
           - name: api
             containerPort: {{.API_REF_PORT}}
