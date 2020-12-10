@@ -51,22 +51,6 @@ const jwtAuthMiddleware = (req, res, next) => {
 const hawkAuthMiddleware = async (req, res, next) => {
   try {
     const credentialsFunc = id => config.hawkCredentials.find(credential => credential.id === id);
-    const request = {
-      method: req.method,
-      url: req.originalUrl,
-      headers: req.headers,
-      port: req.port,
-      host: req.hostname,
-    };
-    logger.info(request);
-    logger.info(req);
-    logger.info({
-      method: req.method,
-      host: req.host,
-      port: req.port,
-      resource: req.url,
-    });
-    logger.info(Hawk.utils.parseRequest(req, {}));
     const { credentials, artifacts } = await Hawk.server.authenticate(
       req,
       credentialsFunc,
