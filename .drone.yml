@@ -20,29 +20,23 @@ steps:
 
 - name: unit_tests
   pull: if-not-exists
-  image: docker:19.03.12-dind
+  image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/dind
   commands:
   - n=0; while [ "$n" -lt 60 ] && [ ! docker stats --no-stream ]; do n=$(( n + 1 )); sleep 1; done
   - docker run -e API_REF_KEYCLOAK_CLIENT_PUBLIC_KEY=$DEV_API_REF_KEYCLOAK_CLIENT_PUBLIC_KEY -t ref-data-api:$${DRONE_COMMIT_SHA} sh -c "npm test"
   environment:
     DEV_API_REF_KEYCLOAK_CLIENT_PUBLIC_KEY:
       from_secret: DEV_API_REF_KEYCLOAK_CLIENT_PUBLIC_KEY
-  volumes:
-  - name: dockersock
-    path: /var/run
   when:
     event:
     - push
 
 - name: lint_checks
   pull: if-not-exists
-  image: docker:19.03.12-dind
+  image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/dind
   commands:
   - n=0; while [ "$n" -lt 60 ] && [ ! docker stats --no-stream ]; do n=$(( n + 1 )); sleep 1; done
   - docker run -t ref-data-api:$${DRONE_COMMIT_SHA} sh -c "npm run lint -- app/"
-  volumes:
-  - name: dockersock
-    path: /var/run
   when:
     event:
     - push
