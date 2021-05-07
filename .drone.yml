@@ -60,6 +60,25 @@ steps:
     target:
     - secrets
 
+- name: synch_sit_secrets
+  pull: if-not-exists
+  image: quay.io/ukhomeofficedigital/cop-secrets
+  environment:
+    AWS_ACCESS_KEY_ID:
+      from_secret: DEV_DRONE_AWS_ACCESS_KEY_ID
+    AWS_SECRET_ACCESS_KEY:
+      from_secret: DEV_DRONE_AWS_SECRET_ACCESS_KEY
+    DEPLOY_ENV: sit
+    DRONE_SERVER: https://drone-gh.acp.homeoffice.gov.uk
+    DRONE_TOKEN:
+      from_secret: DRONE_V1_PUBLIC_TOKEN
+    DRONE_VERSION: ${DRONE_SYSTEM_VERSION}
+  when:
+    event:
+    - promote
+    target:
+    - secrets
+
 - name: synch_staging_secrets
   pull: if-not-exists
   image: quay.io/ukhomeofficedigital/cop-secrets
@@ -187,6 +206,73 @@ steps:
       from_secret: DEV_API_REF_KUBE_TOKEN
     LIMIT_ROWS:
       from_secret: DEV_API_REF_LIMIT_ROWS
+    NGINX_IMAGE:
+      from_secret: NGINX_IMAGE
+    NGINX_TAG:
+      from_secret: NGINX_TAG
+  when:
+    branch:
+    - master
+    event:
+    - push
+
+- name: deploy_to_sit
+  pull: if-not-exists
+  image: quay.io/ukhomeofficedigital/kd
+  commands:
+  - export API_REF_TAG=$${DRONE_COMMIT_SHA}
+  - export DB_REF_READ_ROLE="refreadonly"
+  - export DB_REF_WRITE_ROLE="refservice"
+  - kd --insecure-skip-tls-verify -f kube/cert.yml -f kube/deployment.yml -f kube/service.yml -f kube/ingress.yml -f kube/network-policy.yml
+  environment:
+    API_REF_IMAGE:
+      from_secret: SIT_API_REF_IMAGE
+    API_REF_KEYCLOAK_CLIENT_ID:
+      from_secret: SIT_API_REF_KEYCLOAK_CLIENT_ID
+    API_REF_KEYCLOAK_CLIENT_PUBLIC_KEY:
+      from_secret: SIT_API_REF_KEYCLOAK_CLIENT_PUBLIC_KEY
+    API_REF_LOG_LEVEL:
+      from_secret: LOG_LEVEL_DEBUG
+    API_REF_NAME:
+      from_secret: SIT_API_REF_NAME
+    API_REF_PORT:
+      from_secret: SIT_API_REF_PORT
+    API_REF_URL:
+      from_secret: SIT_API_REF_URL
+    DB_REF_HOSTNAME:
+      from_secret: SIT_DB_REF_HOSTNAME
+    DB_REF_OPTIONS:
+      from_secret: DB_REF_OPTIONS
+    DB_REF_PORT:
+      from_secret: DB_REF_PORT
+    DB_REF_PROTOCOL:
+      from_secret: PROTOCOL_POSTGRES
+    DB_REF_REFERENCE_AUTHENTICATOR_PASSWORD:
+      from_secret: SIT_DB_REF_REFERENCE_AUTHENTICATOR_PASSWORD
+    DB_REF_REFERENCE_AUTHENTICATOR_USERNAME:
+      from_secret: DB_REF_REFERENCE_AUTHENTICATOR_USERNAME
+    DB_REF_REFERENCE_DBNAME:
+      from_secret: DB_REF_REFERENCE_DBNAME
+    DB_REF_REFERENCE_SCHEMA:
+      from_secret: DB_REF_REFERENCE_SCHEMA
+    HAWK_SGMR_ACCESS_KEY_ID:
+      from_secret: SIT_HAWK_SGMR_ACCESS_KEY_ID
+    HAWK_SGMR_SECRET_ACCESS_KEY:
+      from_secret: SIT_HAWK_SGMR_SECRET_ACCESS_KEY
+    KEYCLOAK_PROTOCOL:
+      from_secret: PROTOCOL_HTTPS
+    KEYCLOAK_REALM:
+      from_secret: SIT_KEYCLOAK_REALM
+    KEYCLOAK_URL:
+      from_secret: SIT_KEYCLOAK_URL
+    KUBE_NAMESPACE:
+      from_secret: SIT_KUBE_NAMESPACE_REFDATA
+    KUBE_SERVER:
+      from_secret: SIT_KUBE_SERVER
+    KUBE_TOKEN:
+      from_secret: SIT_API_REF_KUBE_TOKEN
+    LIMIT_ROWS:
+      from_secret: SIT_API_REF_LIMIT_ROWS
     NGINX_IMAGE:
       from_secret: NGINX_IMAGE
     NGINX_TAG:
