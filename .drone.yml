@@ -278,10 +278,10 @@ steps:
     NGINX_TAG:
       from_secret: NGINX_TAG
   when:
-    branch:
-    - master
     event:
-    - push
+    - promote
+    target:
+    - sit
 
 - name: deploy_to_staging
   pull: if-not-exists
