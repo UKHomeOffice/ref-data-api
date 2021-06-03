@@ -54,6 +54,10 @@ const hawkAuthMiddleware = async (req, res, next) => {
     const { credentials, artifacts } = await Hawk.server.authenticate(
       req,
       credentialsFunc,
+      {
+        host: req.headers['x-forwarded-host'] || req.host,
+        port: req.headers['x-forwarded-port'] || req.port,
+      },
     );
 
     res.locals.user = {
