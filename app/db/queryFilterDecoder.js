@@ -113,7 +113,7 @@ function isPositiveInteger(stringValue) {
   return number !== Infinity && String(number) === stringValue && number >= 0;
 }
 
-function queryFilterDecodeV2({ name, queryParams }) {
+function queryFilterDecodeV2({ name, queryParams = {} }) {
   let columns = '';
   let conditions = '';
   let index = 1;
@@ -124,6 +124,7 @@ function queryFilterDecodeV2({ name, queryParams }) {
   let queryString = '';
   let select = '';
   let values = [];
+  let { validDateTime = true } = queryParams;
 
   // check if select and limit are arrays
   if ((queryParams.select || queryParams.limit)
@@ -273,7 +274,7 @@ function queryFilterDecodeV2({ name, queryParams }) {
     });
   }
 
-  if (queryParams.validDateTime) {
+  if (String(validDateTime) === 'true') {
     let { hoursBehind, hoursAhead } = helpers.dateTimeRange();
 
     conditions += conditions.includes('WHERE') ? ` AND ($${index} >= validfrom OR validfrom IS NULL)` : ` WHERE ($${index} >= validfrom OR validfrom IS NULL)`;
