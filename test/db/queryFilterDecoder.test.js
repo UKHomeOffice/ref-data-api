@@ -151,6 +151,7 @@ describe('Test Database Utils', () => {
     it('Should return a querystring with all columns selected filtered by greater then value', () => {
       const name = 'team';
       const queryParams = {
+        validDateTime: 'false',
         filter: [
           'id=gt.3',
         ],
@@ -168,6 +169,7 @@ describe('Test Database Utils', () => {
     it('Should return a querystring with all columns selected filtered by greater or equal then value', () => {
       const name = 'team';
       const queryParams = {
+        validDateTime: 'false',
         filter: [
           'id=gte.3',
         ],
@@ -185,6 +187,7 @@ describe('Test Database Utils', () => {
     it('Should return a querystring with all columns selected filtered by less then value', () => {
       const name = 'team';
       const queryParams = {
+        validDateTime: 'false',
         filter: [
           'id=lt.3',
         ],
@@ -203,6 +206,7 @@ describe('Test Database Utils', () => {
     it('Should return a querystring with all columns selected filtered by less or equal then value', () => {
       const name = 'team';
       const queryParams = {
+        validDateTime: 'false',
         filter: [
           'id=lte.3',
         ],
@@ -220,6 +224,7 @@ describe('Test Database Utils', () => {
     it('Should return a querystring with all columns selected filtered by equal to value (integer)', () => {
       const name = 'team';
       const queryParams = {
+        validDateTime: 'false',
         filter: [
           'id=eq.3',
         ],
@@ -237,6 +242,7 @@ describe('Test Database Utils', () => {
     it('Should return a querystring with all columns selected filtered by equal to value (string)', () => {
       const name = 'country';
       const queryParams = {
+        validDateTime: 'false',
         filter: [
           'name=eq.Portugal',
         ],
@@ -254,6 +260,7 @@ describe('Test Database Utils', () => {
     it('Should return a querystring with all columns selected filtered by value is null', () => {
       const name = 'nationality';
       const queryParams = {
+        validDateTime: 'false',
         filter: [
           'validfrom=eq.null',
         ],
@@ -271,6 +278,7 @@ describe('Test Database Utils', () => {
     it('Should return a querystring with all columns selected filtered by not equal to value', () => {
       const name = 'country';
       const queryParams = {
+        validDateTime: 'false',
         filter: [
           'name=neq.Spain',
         ],
@@ -288,6 +296,7 @@ describe('Test Database Utils', () => {
     it('Should return a querystring with all columns selected filtered by not null value', () => {
       const name = 'country';
       const queryParams = {
+        validDateTime: 'false',
         filter: [
           'name=neq.null',
         ],
@@ -306,6 +315,7 @@ describe('Test Database Utils', () => {
     it('Should return a querystring with all columns selected filtered by any value provided', () => {
       const name = 'country';
       const queryParams = {
+        validDateTime: 'false',
         filter: [
           'region=in.(EU)',
         ],
@@ -324,6 +334,7 @@ describe('Test Database Utils', () => {
     it('Should return a querystring with all columns selected filtered by value equal to, and any value in tuple', () => {
       const name = 'country';
       const queryParams = {
+        validDateTime: 'false',
         filter: [
           'name=eq.Portugal',
           'region=in.(EU, AS)',
@@ -342,6 +353,7 @@ describe('Test Database Utils', () => {
     it('Should return a querystring with all columns selected filtered by value equal to, and a limit of 5 rows', () => {
       const name = 'roles';
       const queryParams = {
+        validDateTime: 'false',
         filter: [
           'name=eq.Tilbury 1',
           'city=eq.London',
@@ -360,7 +372,7 @@ describe('Test Database Utils', () => {
 
     it('Should return a querystring with all columns and a limit of 1 row', () => {
       const name = 'roles';
-      const queryParams = { limit: '1' };
+      const queryParams = { validDateTime: 'false', limit: '1' };
       const expectedQueryObject = {
         queryString: `SELECT * FROM ${name} LIMIT $1`,
         values: ['1'],
@@ -392,6 +404,7 @@ describe('Test Database Utils', () => {
     it('Should return an empty querystring if there is more than one select in the query params', () => {
       const name = 'roles';
       const queryParams = {
+        validDateTime: 'false',
         limit: ['3', '77'],
         select: ['name,age', 'location'],
       };
@@ -404,6 +417,7 @@ describe('Test Database Utils', () => {
     it('Should return an empty querystring if there is more than one select in the query params', () => {
       const name = 'users';
       const queryParams = {
+        validDateTime: 'false',
         limit: '3',
         select: 'name,age',
         filter: [
@@ -424,6 +438,7 @@ describe('Test Database Utils', () => {
     it('Should return a querystring with a column selected ordered by column ascending', () => {
       const name = 'country';
       const queryParams = {
+        validDateTime: 'false',
         limit: '3',
         select: 'name',
         sort: 'name.asc',
@@ -441,6 +456,7 @@ describe('Test Database Utils', () => {
     it('Should return a querystring with all columns selected, filtered by name and age, sorted by name asc, age desc, and a limit of 3 rows', () => {
       const name = 'country';
       const queryParams = {
+        validDateTime: 'false',
         limit: '3',
         filter: [
           'name=eq.John',
@@ -448,7 +464,6 @@ describe('Test Database Utils', () => {
         ],
         sort: 'name.asc,age.desc',
       };
-      const expectedQueryFilter = `SELECT * FROM ${name} WHERE name = 'John' AND age IS NULL ORDER BY name ASC, age DESC LIMIT 3;`;
       const expectedQueryObject = {
         queryString: `SELECT * FROM ${name} WHERE name = $2 AND age IS NULL ORDER BY name ASC, age DESC LIMIT $1`,
         values: ['3', 'John'],
@@ -459,13 +474,31 @@ describe('Test Database Utils', () => {
       expect(queryFilter).to.deep.equal(expectedQueryObject);
     });
 
+    it('Should return a querystring with all columns selected for a query with no params ', () => {
+      const name = 'country';
+      const fakeDateTimeRangeObj = {
+        hoursBehind: '2020-02-20T06:13:00.133Z',
+        hoursAhead: '2020-02-20T18:13:00.133Z',
+      };
+      const expectedQueryObject = {
+        queryString: `SELECT * FROM ${name} WHERE ($1 >= validfrom OR validfrom IS NULL) AND ($2 <= validto OR validto IS NULL)`,
+        values: [fakeDateTimeRangeObj.hoursBehind, fakeDateTimeRangeObj.hoursAhead],
+      };
+
+      sinon.stub(helpers, 'dateTimeRange').returns(fakeDateTimeRangeObj);
+      const queryFilter = queryFilterDecodeV2({ name });
+
+      expect(queryFilter).to.be.an('object');
+      expect(queryFilter).to.deep.equal(expectedQueryObject);
+    });
+
     it('Should return a querystring with all columns selected, filtered by continent and valid date time range ', () => {
       const name = 'country';
       const queryParams = {
+        validDateTime: 'true',
         filter: [
           'continent=eq.EU',
         ],
-        validDateTime: 'true',
       };
       const fakeDateTimeRangeObj = {
         hoursBehind: '2020-02-20T06:13:00.133Z',
@@ -504,7 +537,10 @@ describe('Test Database Utils', () => {
 
     it('Should resolve single "contains" filtering using string value', () => {
       const name = 'country';
-      const queryParams = { filter: ['country=contains.pol'] };
+      const queryParams = {
+        validDateTime: 'false',
+        filter: ['country=contains.pol'],
+      };
       const expectedQueryObject = {
         queryString: 'SELECT * FROM country WHERE country ILIKE $1',
         values: ['%pol%'],
